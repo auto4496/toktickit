@@ -1,0 +1,28 @@
+{
+  "name": "toktickit-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TokTickIT Lab 1 Initial Project Setup",
+  "scripts": {
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prisma:generate": "npx prisma generate",
+    "prisma:studio": "npx prisma studio"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "@types/supertest": "^6.0.2",
+    "prisma": "^6.2.1",
+    "supertest": "^7.0.0",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.2.1"
+  }
+}
