@@ -14,14 +14,14 @@ TokTickIT/
 │   └── vite.config.ts
 ├── server/              # Backend API Server (Express + TypeScript)
 │   ├── src/             # Source code ของ Express (app.ts, index.ts)
+│   ├── prisma/          # Database Schema & Prisma Client configuration
+│   │   └── schema.prisma# PostgreSQL Schema
+│   ├── tests/           # Test files สำหรับการทดสอบ
+│   │   └── lab-01/      # Lab 01 test cases (Vitest + Supertest)
+│   │       └── server.test.ts
 │   ├── package.json
 │   └── tsconfig.json
-├── prisma/              # Database Schema & Prisma Client configuration
-│   └── schema.prisma    # PostgreSQL Schema
 ├── src/                 # โฟลเดอร์หลักประจำโปรเจกต์ตามข้อกำหนด
-├── tests/               # Test files สำหรับการทดสอบ
-│   └── lab-01/          # Lab 01 test cases (Vitest + Supertest)
-│       └── server.test.ts
 ├── docs/                # เอกสารประกอบ Lab
 │   └── lab-01/          # เอกสารของ Lab 01
 │       ├── ai_use.md    # บันทึกการใช้งาน AI
@@ -90,7 +90,7 @@ npm run dev:client
 ```bash
 npm test
 ```
-คำสั่งนี้จะรันการทดสอบทั้งหมดภายใต้ `tests/lab-01/` ด้วย Vitest และ Supertest
+คำสั่งนี้จะรันการทดสอบทั้งหมดภายใต้ `server/tests/lab-01/` ด้วย Vitest และ Supertest
 
 ---
 
