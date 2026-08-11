@@ -9,3 +9,4 @@ Datasource "db": PostgreSQL database "neondb", schema "public" at "ep-hidden-moo
 
 🚀 Your database is now in sync with your Prisma schema.
 ✔ Generated Prisma Client
+```
