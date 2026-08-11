@@ -1,6 +1,6 @@
 # TokTickIT - Lab 01
 
-TokTickIT is the Lab 1 full-stack starter for an IT service desk. The current implementation through Issue 3 includes a React/Vite/Bootstrap client, an Express/TypeScript API, a PostgreSQL database through Prisma, the health-check feature, and repeatable seed data for four IT request categories.
+TokTickIT is the Lab 1 full-stack vertical slice for an IT service desk. The React client checks the Express API and displays request categories loaded from PostgreSQL through Prisma.
 
 ## Technology Stack
 
@@ -123,6 +123,7 @@ Default URLs:
 
 - Frontend: `http://localhost:3000`
 - Health endpoint: `http://localhost:5000/api/health`
+- Category endpoint: `http://localhost:5000/api/categories`
 
 The health endpoint returns:
 
@@ -132,6 +133,19 @@ The health endpoint returns:
   "service": "TokTickIT API"
 }
 ```
+
+The category endpoint returns the seeded categories in ID order:
+
+```json
+[
+  { "id": 1, "name": "Account and Access" },
+  { "id": 2, "name": "Hardware" },
+  { "id": 3, "name": "Software" },
+  { "id": 4, "name": "Network" }
+]
+```
+
+Select **Check System** in the frontend to request both endpoints. The page shows a loading state, the Online status and category list on success, or a useful Offline message when either request fails.
 
 ## Tests and Builds
 
@@ -148,4 +162,4 @@ npm run build:server
 npm run build:client
 ```
 
-The current frontend displays the Issue 2 health-check state. The category API and category-list UI are intentionally deferred to Issue 4.
+The test suite covers the server foundation, health endpoint, category endpoint, heading, loading-to-success behavior, and API failure state.

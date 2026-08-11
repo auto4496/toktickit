@@ -14,7 +14,7 @@ I used OpenAI Codex in the Codex desktop application with a GPT-5 model. I used 
 | Implement my Issue 3 | "เคของเพื่อนผ่านมาต่อที่ของผม" after updating `lab1-staging` and creating `feature/3-category-seed`. | Supplying the current branch and terminal output made it possible to continue without repeating completed Git steps. |
 | Diagnose PostgreSQL and Docker | "`npx prisma migrate status` returns P1001: Can't reach database server at `localhost:5432`." | The exact error and Docker container output made the difference between a Prisma schema problem and a stopped or conflicting database service clear. |
 | Fix Issue 3 root `.env` handling | "These migration and seed commands run with `server/` as the working directory, but the README instructs users to put `DATABASE_URL` in the repository-root `.env`... แก้ให้เลยได้ไหม" | Quoting the peer's exact review comment kept the fix focused on environment loading and supported a precise re-review response. |
-| Audit Lab documentation through Issue 3 | "ช่วยดูไฟล์ที่อาจารย์ให้ใส่ข้อมูล... ไปทีละ Issue... เช็ค GitHub ผมได้ไหมว่าขาดอะไรไป ยกเว้น Issue 4" | Stating the cutoff prevented unfinished Issue 4 evidence from being invented and made the documentation incremental. |
+| Implement and verify Issue 4 | "ช่วยทำ issue 4 ให้เสร็จเลยได้ไหมเอาแบบเรียบร้อยนะ" | Before coding, the agent checked that Issue 3 was approved and merged it into staging. The implementation then added a Prisma-backed category endpoint, API and UI tests, and loading, success, and error states without hard-coding category values in the React component. |
 
 ## Reflection
 
