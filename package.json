@@ -14,9 +14,12 @@
     "prisma:studio": "npx prisma studio --schema=server/prisma/schema.prisma"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1",
     "@types/supertest": "^6.0.2",
+    "jsdom": "^29.1.1",
     "prisma": "^6.2.1",
     "supertest": "^7.0.0",
     "typescript": "^5.7.2",
