@@ -1,99 +1,151 @@
 # TokTickIT - Lab 01
 
-โปรเจกต์ตั้งค่าโครงสร้างเริ่มต้นสำหรับ **TokTickIT** (Lab 01) ประกอบด้วย Frontend (React + TypeScript + Vite + Bootstrap), Backend (Node.js + Express + TypeScript), Database (PostgreSQL + Prisma), และ Test Suite (Vitest + Supertest)
+TokTickIT is the Lab 1 full-stack starter for an IT service desk. The current implementation through Issue 3 includes a React/Vite/Bootstrap client, an Express/TypeScript API, a PostgreSQL database through Prisma, the health-check feature, and repeatable seed data for four IT request categories.
 
----
+## Technology Stack
 
-## 📁 โครงสร้างโฟลเดอร์ (Folder Structure)
+- Frontend: React, TypeScript, Vite, Bootstrap
+- Backend: Node.js, Express, TypeScript
+- Database: PostgreSQL and Prisma
+- Testing: Vitest and Supertest
+
+## Repository Structure
 
 ```text
-TokTickIT/
-├── client/              # Frontend Application (React + TypeScript + Vite + Bootstrap)
-│   ├── src/             # Source code ของ React
+toktickit/
+├── client/
+│   ├── src/
 │   ├── package.json
 │   └── vite.config.ts
-├── server/              # Backend API Server (Express + TypeScript)
-│   ├── src/             # Source code ของ Express (app.ts, index.ts)
-│   ├── prisma/          # Database Schema & Prisma Client configuration
-│   │   └── schema.prisma# PostgreSQL Schema
-│   ├── tests/           # Test files สำหรับการทดสอบ
-│   │   └── lab-01/      # Lab 01 test cases (Vitest + Supertest)
-│   │       └── server.test.ts
-│   ├── package.json
-│   └── tsconfig.json
-├── src/                 # โฟลเดอร์หลักประจำโปรเจกต์ตามข้อกำหนด
-├── docs/                # เอกสารประกอบ Lab
-│   └── lab-01/          # เอกสารของ Lab 01
-│       ├── ai_use.md    # บันทึกการใช้งาน AI
-│       └── reviewer.md  # เอกสารสำหรับผู้ตรวจทาน
-├── .env.example         # เทมเพลตตัวแปรสภาพแวดล้อม
-├── .gitignore           # ซ่อน node_modules, .env, dist, build ฯลฯ
-├── package.json         # Root package.json สำหรับรันสคริปต์รวม
-├── vitest.config.ts     # การตั้งค่า Vitest
-└── README.md            # คู่มือการติดตั้งและการรันโปรเจกต์
+├── server/
+│   ├── prisma/
+│   │   ├── migrations/
+│   │   ├── schema.prisma
+│   │   └── seed.ts
+│   ├── src/
+│   ├── tests/
+│   │   └── lab-01/
+│   └── package.json
+├── docs/
+│   └── lab-01/
+│       ├── ai_use.md
+│       ├── db-evidence.md
+│       ├── reviewer.md
+│       └── tests.md
+├── .env.example
+├── .gitignore
+├── package.json
+└── vitest.config.ts
 ```
 
----
+## Prerequisites
 
-## 🚀 ขั้นตอนการติดตั้งและการใช้งาน (Installation & Setup)
+- Node.js and npm
+- PostgreSQL 17, either installed locally or running in Docker
+- Git
 
-### 1. ติดตั้ง Dependencies
-รันคำสั่งติดตั้ง dependencies ทั้งหมดในโปรเจกต์:
+## Installation
+
+From the repository root, install the dependencies:
 
 ```bash
-npm install
-cd server && npm install
-cd ../client && npm install
-cd ..
+npm ci
+npm --prefix client ci
+npm --prefix server ci
 ```
 
-### 2. ตั้งค่า Environment Variables
-คัดลอกไฟล์ `.env.example` เป็น `.env` และแก้ไขค่าคอนฟิกตามต้องการ:
+Create the local environment file. Do not commit this file.
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+macOS/Linux:
 
 ```bash
 cp .env.example .env
 ```
 
-ตัวอย่างการตั้งค่า PostgreSQL ใน `.env`:
-```env
-PORT=5000
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/toktickit_db?schema=public"
-VITE_API_URL="http://localhost:5000"
-```
+The default template expects PostgreSQL at `localhost:5432`, database `toktickit_db`, username `postgres`, and password `postgres`. Adjust the local `.env` if your database configuration is different.
 
-### 3. ตั้งค่า Prisma (Database)
-รันคำสั่งเพื่อ Generate Prisma Client:
+### Optional PostgreSQL Docker Container
+
+If port 5432 is free, start a local PostgreSQL container with:
 
 ```bash
-npx prisma generate
+docker run --name toktickit-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=toktickit_db -p 5432:5432 -d postgres:17-alpine
 ```
 
-*(หมายเหตุ: หากต้องการย้าย Schema ลงฐานข้อมูล PostgreSQL จริง ให้ใช้คำสั่ง `npx prisma db push` หรือ `npx prisma migrate dev`)*
+For an existing stopped container, use:
 
----
+```bash
+docker start toktickit-postgres
+```
 
-## 🧪 การรันโปรเจกต์และการทดสอบ (Running & Testing)
+## Database Setup
 
-### 1. รัน Backend Server
+The Prisma scripts run from `server/` and explicitly load the repository-root `.env`.
+
+```bash
+cd server
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+cd ..
+```
+
+The seed is idempotent and can be run repeatedly. It creates exactly these category names:
+
+1. Account and Access
+2. Hardware
+3. Software
+4. Network
+
+## Run the Application
+
+Open two terminals at the repository root.
+
+Backend:
+
 ```bash
 npm run dev:server
 ```
-- Server จะทำงานที่: `http://localhost:5000`
 
-### 2. รัน Frontend Client
+Frontend:
+
 ```bash
 npm run dev:client
 ```
-- Frontend จะทำงานที่: `http://localhost:3000`
 
-### 3. รัน Test Suite (Vitest + Supertest)
+Default URLs:
+
+- Frontend: `http://localhost:3000`
+- Health endpoint: `http://localhost:5000/api/health`
+
+The health endpoint returns:
+
+```json
+{
+  "status": "ok",
+  "service": "TokTickIT API"
+}
+```
+
+## Tests and Builds
+
+Run all currently implemented automated tests:
+
 ```bash
 npm test
 ```
-คำสั่งนี้จะรันการทดสอบทั้งหมดภายใต้ `server/tests/lab-01/` ด้วย Vitest และ Supertest
 
----
+Build both applications:
 
-## ⚠️ ข้อระวังและการควบคุมขอบเขต (Scope Constraints)
-- โครงสร้างโปรเจกต์นี้เป็นการตั้งค่าโครงสร้างพื้นฐานสำหรับ Lab 01 เท่านั้น
-- ไม่มีฟีเจอร์ทางธุรกิจ, API Endpoints เพิ่มเติม, หรือ UI นอกเหนือจากตัวอย่างการแสดงผล Bootstrap
+```bash
+npm run build:server
+npm run build:client
+```
+
+The current frontend displays the Issue 2 health-check state. The category API and category-list UI are intentionally deferred to Issue 4.
