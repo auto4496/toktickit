@@ -21,7 +21,14 @@ Run from the repository root:
 npm test
 ```
 
-Record the final passing terminal output here after executing the complete suite on the finished branch and again on `main`.
+Final feature-branch result:
+
+```text
+Test Files  4 passed (4)
+Tests       6 passed (6)
+```
+
+The complete suite was run from the repository root on `feature/4-category-list`. It will be run once more on `main` after the final Lab 1 merge.
 
 ## Database and Build Verification
 
@@ -33,3 +40,5 @@ Record the final passing terminal output here after executing the complete suite
 | Count Category rows and distinct names | 4 rows and 4 distinct names |
 | `npm run build:server` from repository root | Express TypeScript build succeeds |
 | `npm run build:client` from repository root | React/Vite production build succeeds |
+
+Both production build commands passed on the completed Issue 4 implementation.

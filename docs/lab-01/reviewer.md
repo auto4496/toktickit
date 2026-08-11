@@ -6,7 +6,7 @@
 
 **Peer repository:** https://github.com/Datakung/toktickit
 
-This record includes all four Lab 1 Issues. The authored Issue 4 PR remains pending final verification and peer review.
+This record includes all four Lab 1 Issues. The authored Issue 4 implementation is verified and ready for peer review.
 
 ## Pull Requests I Authored
 
@@ -15,7 +15,7 @@ This record includes all four Lab 1 Issues. The authored Issue 4 PR remains pend
 | Issue 1 - Project Foundation | [PR #5](https://github.com/auto4496/toktickit/pull/5) | `feature/1-project-foundation` | Approved and merged |
 | Issue 2 - API Health Check | [PR #6](https://github.com/auto4496/toktickit/pull/6) | `feature/2-health-check` | Approved and merged |
 | Issue 3 - Category Seed | [PR #7](https://github.com/auto4496/toktickit/pull/7) | `feature/3-category-seed` | Approved and merged |
-| Issue 4 - Category List | [PR #8](https://github.com/auto4496/toktickit/pull/8) | `feature/4-category-list` | Draft; final verification pending |
+| Issue 4 - Category List | [PR #8](https://github.com/auto4496/toktickit/pull/8) | `feature/4-category-list` | Ready for peer review |
 
 ### Issue 1 - Project Foundation
 
@@ -49,7 +49,9 @@ This record includes all four Lab 1 Issues. The authored Issue 4 PR remains pend
 
 **Implementation submitted:** [PR #8](https://github.com/auto4496/toktickit/pull/8) adds the Prisma-backed category endpoint, predictable ID ordering, Supertest coverage, API-driven React category list, loading/Online/Offline states, and Vitest UI coverage.
 
-**Current status:** The PR is a draft until the complete Vitest suite and both production builds are rerun from the normal local terminal. Peer review will be requested only after those commands pass.
+**Verification:** The complete Vitest suite passes with four test files and six tests. Both production builds also pass. The React test dependencies are aligned with the client version, and Vitest deduplicates React so the UI tests use a single instance.
+
+**Current status:** Ready for peer review.
 
 ## Pull Requests I Reviewed for My Partner
 
