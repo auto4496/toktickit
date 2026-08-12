@@ -1,36 +1,44 @@
 # Lab 1 - Test Record
 
-This record is current through Issue 3. Every automated test listed below exists under `server/tests/lab-01/`.
+Every automated test listed below exists in a `tests/lab-01/` folder.
 
 ## Automated Tests
 
-| Test ID | Test file | Tool | Test description | Introduced in | Latest result |
-|---|---|---|---|---|---|
-| API-00 | `server/tests/lab-01/server.test.ts` | Vitest + Supertest | `GET /` returns HTTP 200, `status: ok`, and the TokTickIT backend message | Issue 1 | Passed |
-| API-01 | `server/tests/lab-01/health.test.ts` | Vitest + Supertest | `GET /api/health` returns HTTP 200 and the exact JSON `{ status: "ok", service: "TokTickIT API" }` | Issue 2 | Passed |
+| Test ID | Test file | Tool | Test description | Issue |
+|---|---|---|---|---|
+| API-00 | `server/tests/lab-01/server.test.ts` | Vitest + Supertest | `GET /` returns HTTP 200, `status: ok`, and the TokTickIT backend message | Issue 1 |
+| API-01 | `server/tests/lab-01/health.test.ts` | Vitest + Supertest | `GET /api/health` returns HTTP 200 and the exact health JSON | Issue 2 |
+| API-02 | `server/tests/lab-01/categories.test.ts` | Vitest + Supertest | `GET /api/categories` returns the four seeded categories in ID order | Issue 4 |
+| UI-01 | `client/tests/lab-01/App.test.tsx` | Vitest + Testing Library | The TokTickIT heading renders | Issue 4 |
+| UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest + Testing Library | Loading changes to Online status and the API-provided category list | Issue 4 |
+| UI-03 | `client/tests/lab-01/App.test.tsx` | Vitest + Testing Library | An API failure displays Offline status and a useful error message | Issue 4 |
 
-## Latest Automated Test Run
+## Automated Test Command
 
-Command executed from the repository root:
+Run from the repository root:
 
 ```text
 npm test
-
-Test Files  2 passed (2)
-Tests       2 passed (2)
 ```
 
-## Issue 3 Database Verification
+Final feature-branch result:
 
-The following are verification commands rather than automated test files:
+```text
+Test Files  4 passed (4)
+Tests       6 passed (6)
+```
 
-| Verification | Expected result | Result |
-|---|---|---|
-| `npm run prisma:generate` from `server/` | Prisma Client generated using the root `.env` | Passed |
-| `npm run prisma:migrate` from `server/` | Migration applies and schema is up to date | Passed |
-| Run `npm run prisma:seed` twice | Both runs finish without duplicate categories | Passed |
-| Count Category rows and distinct names | 4 rows and 4 distinct names | Passed |
-| `npm run build` from `server/` | TypeScript build succeeds | Passed |
-| `npm run build:client` from repository root | React/Vite production build succeeds | Passed |
+The complete suite was run from the repository root on `feature/4-category-list`. It will be run once more on `main` after the final Lab 1 merge.
 
-Issue 4 must extend this file with the category API test and required React UI tests after those test files have been implemented and executed.
+## Database and Build Verification
+
+| Verification | Expected result |
+|---|---|
+| `npm run prisma:generate` from `server/` | Prisma Client is generated using the root `.env` |
+| `npm run prisma:migrate` from `server/` | Migration applies and the schema is up to date |
+| Run `npm run prisma:seed` twice | Both runs finish without duplicate categories |
+| Count Category rows and distinct names | 4 rows and 4 distinct names |
+| `npm run build:server` from repository root | Express TypeScript build succeeds |
+| `npm run build:client` from repository root | React/Vite production build succeeds |
+
+Both production build commands passed on the completed Issue 4 implementation.

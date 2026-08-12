@@ -5,31 +5,65 @@ type HealthResponse = {
   service: string;
 };
 
+type Category = {
+  id: number;
+  name: string;
+};
+
+const isCategory = (value: unknown): value is Category => {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+
+  const category = value as Record<string, unknown>;
+  return typeof category.id === 'number' && typeof category.name === 'string';
+};
+
 export default function App() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'online' | 'offline' | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const checkHealth = async () => {
+  const checkSystem = async () => {
     setLoading(true);
     setStatus(null);
+    setCategories([]);
     setErrorMessage(null);
 
     const apiUrl = import.meta.env.VITE_API_URL ?? '';
 
     try {
-      const response = await fetch(`${apiUrl}/api/health`);
+      const [healthResponse, categoriesResponse] = await Promise.all([
+        fetch(`${apiUrl}/api/health`),
+        fetch(`${apiUrl}/api/categories`),
+      ]);
 
-      if (!response.ok) {
-        throw new Error(`Health check failed with HTTP ${response.status}`);
+      if (!healthResponse.ok) {
+        throw new Error(`Health check failed with HTTP ${healthResponse.status}`);
       }
 
-      const data = (await response.json()) as HealthResponse;
+      if (!categoriesResponse.ok) {
+        throw new Error(
+          `Category request failed with HTTP ${categoriesResponse.status}`,
+        );
+      }
 
-      if (data.status !== 'ok' || data.service !== 'TokTickIT API') {
+      const healthData = (await healthResponse.json()) as HealthResponse;
+      const categoryData = (await categoriesResponse.json()) as unknown;
+
+      if (
+        healthData.status !== 'ok' ||
+        healthData.service !== 'TokTickIT API'
+      ) {
         throw new Error('Unexpected health-check response');
       }
 
+      if (!Array.isArray(categoryData) || !categoryData.every(isCategory)) {
+        throw new Error('Unexpected category response');
+      }
+
+      setCategories(categoryData);
       setStatus('online');
     } catch {
       setStatus('offline');
@@ -54,7 +88,7 @@ export default function App() {
             <button
               className="btn btn-primary btn-lg"
               type="button"
-              onClick={checkHealth}
+              onClick={checkSystem}
               disabled={loading}
               id="check-system-btn"
             >
@@ -69,9 +103,24 @@ export default function App() {
           )}
 
           {status === 'online' && (
-            <div className="alert alert-success" role="status">
-              <strong>System Status: Online</strong>
-            </div>
+            <>
+              <div className="alert alert-success" role="status">
+                <strong>System Status: Online</strong>
+              </div>
+
+              <section aria-labelledby="category-list-heading">
+                <h2 id="category-list-heading" className="h4 mb-3">
+                  Supported Request Categories
+                </h2>
+                <ol className="list-group list-group-numbered">
+                  {categories.map((category) => (
+                    <li className="list-group-item" key={category.id}>
+                      {category.name}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </>
           )}
 
           {status === 'offline' && (
