@@ -4,83 +4,80 @@
 
 **Peer reviewer:** Pitchai Chadchuangchot - 67070501068 - GitHub: [@Datakung](https://github.com/Datakung)
 
-**Peer repository:** https://github.com/Datakung/toktickit
+**Peer repository:** [Datakung/toktickit](https://github.com/Datakung/toktickit)
 
-This record includes all four Lab 1 Issues. All four authored feature Pull Requests were approved by the peer reviewer.
+This record covers both directions of the peer review: feedback my partner gave on my Pull Requests, and feedback I gave on my partner's Pull Requests.
 
 ## Pull Requests I Authored
 
-| Issue | Pull Request | Branch | Current verdict |
-|---|---|---|---|
-| Issue 1 - Project Foundation | [PR #5](https://github.com/auto4496/toktickit/pull/5) | `feature/1-project-foundation` | Approved and merged |
-| Issue 2 - API Health Check | [PR #6](https://github.com/auto4496/toktickit/pull/6) | `feature/2-health-check` | Approved and merged |
-| Issue 3 - Category Seed | [PR #7](https://github.com/auto4496/toktickit/pull/7) | `feature/3-category-seed` | Approved and merged |
-| Issue 4 - Category List | [PR #8](https://github.com/auto4496/toktickit/pull/8) | `feature/4-category-list` | Approved; ready to merge |
+| Issue | Pull Request | Review result |
+|---|---|---|
+| Issue 1 - Project Foundation | [PR #5](https://github.com/auto4496/toktickit/pull/5) | [Approved](https://github.com/auto4496/toktickit/pull/5#pullrequestreview-4889168152) and merged |
+| Issue 2 - API Health Check | [PR #6](https://github.com/auto4496/toktickit/pull/6) | [Approved](https://github.com/auto4496/toktickit/pull/6#pullrequestreview-4892219457) and merged |
+| Issue 3 - Category Seed | [PR #7](https://github.com/auto4496/toktickit/pull/7) | [Approved](https://github.com/auto4496/toktickit/pull/7#pullrequestreview-4906573910) and merged |
+| Issue 4 - Category List | [PR #8](https://github.com/auto4496/toktickit/pull/8) | [Approved](https://github.com/auto4496/toktickit/pull/8#pullrequestreview-4913008861) and merged |
 
-### Issue 1 - Project Foundation
+### Feedback on My Pull Requests and My Responses
 
-**Reviewer feedback:** The reviewer requested that the Prisma schema and backend test be moved to the required `server/prisma/` and `server/tests/lab-01/` paths, that the README be updated, and that sanitized evidence of a real PostgreSQL connection be added. A follow-up review found duplicate root-level copies of the schema and test.
+#### Issue 1
 
-**My response and correction:** I moved the files to the required server paths, updated imports and configuration, added `docs/lab-01/db-evidence.md`, removed the duplicate root-level files, and reran dependency installation, the test suite, both builds, and Prisma Client generation.
+**Partner's feedback:** Move the Prisma schema and backend test into the required `server/` paths, update the README, add sanitized PostgreSQL evidence, and remove duplicate root-level copies.
 
-**Final approval:** [The reviewer re-reviewed commit `6e6302d` and approved the Issue 1 scope.](https://github.com/auto4496/toktickit/pull/5#pullrequestreview-4889168152)
+**My response:** I moved and removed the files, updated the imports and documentation, added `docs/lab-01/db-evidence.md`, and reran installation, Prisma generation, tests, and both builds. My partner re-reviewed the corrected commit and approved it.
 
-### Issue 2 - API Health Check
+#### Issue 2
 
-**Initial reviewer feedback:** PR #6 was based on the old `b780509` commit and conflicted with the updated `lab1-staging`. The reviewer asked me to recreate the feature from the latest staging branch, preserve all Issue 1 files, keep the PR limited to Issue 2, and change `Tok TickIT API` to the exact required value `TokTickIT API`.
+**Partner's feedback:** Recreate the branch from the latest `lab1-staging`, preserve Issue 1 files, keep the diff limited to Issue 2, and use the exact service value `TokTickIT API`. A follow-up review found that Vite did not load the repository-root `.env`.
 
-**My response and correction:** I recreated `feature/2-health-check` from the latest `lab1-staging`, preserved the Issue 1 files, corrected the health response and Supertest expectation, and verified both builds and the test suite.
+**My response:** I rebuilt the feature from the correct base, fixed the health response and test, then configured Vite to load the root environment values and derive the proxy target from them. I reran both builds and all tests before requesting another review.
 
-**Follow-up reviewer feedback:** The branch and response issues were fixed, but Vite did not load the repository-root `.env`, so `VITE_API_URL` could be ignored. The reviewer requested a consistent environment-loading path. Unrestricted CORS and missing frontend tests were recorded as non-blocking suggestions.
+#### Issue 3
 
-**My response and correction:** I configured Vite with `envDir` and `loadEnv`. The development proxy now derives its target from `VITE_API_URL` or `PORT`. I reran the client build and all tests.
+**Partner's feedback:** The model, migration, unique name, four seed values, and repeatable upsert were correct, but the documented root `.env` was not loaded by commands run from `server/`.
 
-**Final approval:** [The reviewer re-reviewed commit `58ce1de` and approved PR #6.](https://github.com/auto4496/toktickit/pull/6#pullrequestreview-4892219457)
+**My response:** I added `dotenv-cli`, changed the Prisma scripts to load `../.env`, and verified generation, migration, two seed runs, both builds, and all tests using only the root environment file.
 
-### Issue 3 - Category Seed
+#### Issue 4
 
-**Reviewer feedback:** The branch order, Category model, migration, unique constraint, four required names, and repeatable upsert approach were correct. However, the Prisma migration and seed commands ran from `server/` while the documented `DATABASE_URL` was in the repository-root `.env`, so the commands failed on a fresh documented setup.
+**Partner's feedback:** The Prisma endpoint, ordering, UI states, builds, and database-independent tests met the acceptance criteria. The reviewer could not rerun the database-backed test because PostgreSQL/Docker was unavailable in their review environment, but confirmed that the test was correctly structured.
 
-**My response and correction:** I added `dotenv-cli` and changed the Prisma generate, migration, and seed scripts to load `../.env` explicitly. I removed the temporary `server/.env` copy and verified Prisma generation and migration, two consecutive seed runs, the server build, and all tests using only the root environment file. I then [requested re-review](https://github.com/auto4496/toktickit/pull/7#issuecomment-5252997073).
-
-**Final approval:** The reviewer re-reviewed commit `040e3cc`, verified the root environment configuration, both builds, all existing tests, Category model, migration, seed values, and idempotent upsert, and approved the PR. PR #7 was then merged into `lab1-staging`.
-
-### Issue 4 - Category List
-
-**Implementation submitted:** [PR #8](https://github.com/auto4496/toktickit/pull/8) adds the Prisma-backed category endpoint, predictable ID ordering, Supertest coverage, API-driven React category list, loading/Online/Offline states, and Vitest UI coverage.
-
-**Verification:** The complete Vitest suite passes with four test files and six tests. Both production builds also pass. The React test dependencies are aligned with the client version, and Vitest deduplicates React so the UI tests use a single instance.
-
-**Reviewer feedback:** The reviewer confirmed that PR #8 is based on the merged Issue 3 branch and satisfies the Issue 4 acceptance criteria. They verified the Prisma-backed endpoint, predictable ID ordering, database-error handling, API-driven React list, loading and error states, both builds, and the five database-independent tests. The database-backed Supertest was correctly structured but could not be rerun in the review environment because PostgreSQL/Docker was unavailable.
-
-**Final approval:** [The reviewer approved commit `a7357bf`.](https://github.com/auto4496/toktickit/pull/8#pullrequestreview-4913008861)
+**My response:** No blocking change was requested. I had already run the complete suite with PostgreSQL available: four test files and six tests passed. The PR was approved and merged into `lab1-staging`.
 
 ## Pull Requests I Reviewed for My Partner
 
-### Partner Issue 1 - Project Foundation
+| Issue | Pull Request | My review result |
+|---|---|---|
+| Issue 1 - Project Foundation | [Datakung PR #5](https://github.com/Datakung/toktickit/pull/5) | [Approved](https://github.com/Datakung/toktickit/pull/5#pullrequestreview-4891993807) |
+| Issue 2 - API Health Check | [Datakung PR #6](https://github.com/Datakung/toktickit/pull/6) | [Approved](https://github.com/Datakung/toktickit/pull/6#pullrequestreview-4892317634) |
+| Issue 3 - Category Seed | [Datakung PR #7](https://github.com/Datakung/toktickit/pull/7) | [Approved](https://github.com/Datakung/toktickit/pull/7#pullrequestreview-4895042402) |
+| Issue 4 - Category List | [Datakung PR #8](https://github.com/Datakung/toktickit/pull/8) | [Approved](https://github.com/Datakung/toktickit/pull/8#pullrequestreview-4905951464) |
 
-- Pull Request: [Datakung/toktickit PR #5](https://github.com/Datakung/toktickit/pull/5)
-- My initial review: I requested verification that the backend could build and start from a completely fresh installation because my restricted review environment reported a Prisma-related build problem.
-- Partner response: The partner tested a fresh clone with Node v24.14.0 and npm 11.9.0. `npm ci`, `npm run build`, and `npm run dev` succeeded; HTTP 501 was confirmed as the intentional Issue 2 stub.
-- My follow-up: I found that disabled dependency lifecycle scripts in my review environment had caused a non-representative result. I documented the correction and [approved the PR](https://github.com/Datakung/toktickit/pull/5#pullrequestreview-4891993807).
+### My Feedback and My Partner's Responses
 
-### Partner Issue 2 - API Health Check
+#### Partner Issue 1
 
-- Pull Request: [Datakung/toktickit PR #6](https://github.com/Datakung/toktickit/pull/6)
-- My review: I verified the exact health JSON, HTTP 200, Supertest coverage, real frontend API call, loading/online/offline states, configuration consistency, and clean mergeability. I approved the PR and suggested changing `Relates to #2` to `Closes #2` as a non-blocking workflow improvement.
-- Partner response: The partner explained that GitHub does not apply closing keywords when the PR merges into a non-default staging branch, so Issue 2 would be closed manually after merge.
-- Outcome: [Approved and merged.](https://github.com/Datakung/toktickit/pull/6#pullrequestreview-4892317634)
+**My feedback:** I initially asked for a clean-install backend verification because my restricted environment reported a Prisma build problem.
 
-### Partner Issue 3 - Category Seed
+**Partner's response:** My partner supplied Node/npm versions and confirmed that `npm ci`, `npm run build`, and `npm run dev` passed in a fresh clone. I found that my environment had disabled dependency lifecycle scripts, corrected my review, and approved the PR.
 
-- Pull Request: [Datakung/toktickit PR #7](https://github.com/Datakung/toktickit/pull/7)
-- My review: I verified the required Category fields, migration SQL, unique name index, exactly four seed names, idempotent upsert, secret handling, README consistency, and separation from Issue 4.
-- Outcome: I found no blocking issue and [approved the PR](https://github.com/Datakung/toktickit/pull/7#pullrequestreview-4895042402); it was later merged into the partner's `lab1-staging` branch.
+#### Partner Issue 2
 
-### Partner Issue 4 - Category List
+**My feedback:** The feature met the acceptance criteria. I suggested changing `Relates to #2` to `Closes #2` as a non-blocking workflow improvement.
 
-- Pull Request: [Datakung/toktickit PR #8](https://github.com/Datakung/toktickit/pull/8)
-- My review: I verified the Prisma-backed category endpoint, ascending ID order, Supertest coverage, API-driven React list, and tested loading, success, and useful failure states. I found no blocking issues and approved the PR.
-- Non-blocking suggestion: I asked the partner to update two outdated README statements that still described the category API as deferred.
-- Partner response: The partner updated both statements so the README documents the completed health-and-category flow and implemented Prisma endpoint.
-- Outcome: [Approved and merged.](https://github.com/Datakung/toktickit/pull/8#pullrequestreview-4905951464)
+**Partner's response:** My partner explained that GitHub does not automatically close an Issue when a PR is merged into a non-default staging branch, so the Issue would be closed manually after merge. I accepted the explanation and approved the PR.
+
+#### Partner Issue 3
+
+**My feedback:** I checked the Category model, migration, unique index, four seed names, idempotent upsert, secrets, README, and Issue 3 scope. I found no blocking problem.
+
+**Partner's response:** No correction was requested, so no follow-up change was needed. I approved the PR.
+
+#### Partner Issue 4
+
+**My feedback:** The endpoint, ordering, API test, React category list, and loading/success/error states were correct. I made one non-blocking suggestion to update two outdated README statements.
+
+**Partner's response:** My partner updated both README statements to describe the completed health and category flow. I verified the update and approved the PR.
+
+## Final Integration
+
+[PR #9](https://github.com/auto4496/toktickit/pull/9) promotes the completed `lab1-staging` branch to `main`. It remains unmerged until the documentation audit and final peer review are complete.
