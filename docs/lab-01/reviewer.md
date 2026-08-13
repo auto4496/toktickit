@@ -95,4 +95,4 @@ The same peer-review process was completed in both directions. My partner review
 
 ## Final Integration
 
-[PR #9](https://github.com/auto4496/toktickit/pull/9) promotes the completed `lab1-staging` branch to `main`. It remains unmerged until the documentation audit and final peer review are complete.
+[PR #9](https://github.com/auto4496/toktickit/pull/9) promoted the completed `lab1-staging` branch to `main` after the documentation audit and final peer review were complete. It was merged at commit `cd2e787`. The final `main` verification passed all six tests, both production builds, Prisma schema and migration checks, two consecutive seed runs, and the four-row/four-distinct-name database check.

@@ -21,14 +21,14 @@ Run from the repository root:
 npm test
 ```
 
-Final feature-branch result:
+Final `main` result at merge commit `cd2e787`:
 
 ```text
 Test Files  4 passed (4)
 Tests       6 passed (6)
 ```
 
-The complete suite was run from the repository root on `feature/4-category-list`. It will be run once more on `main` after the final Lab 1 merge.
+The complete suite was rerun from the repository root on `main` after PR #9 was merged. All four test files and all six tests passed.
 
 ## Database and Build Verification
 
@@ -41,4 +41,4 @@ The complete suite was run from the repository root on `feature/4-category-list`
 | `npm run build:server` from repository root | Express TypeScript build succeeds |
 | `npm run build:client` from repository root | React/Vite production build succeeds |
 
-Both production build commands passed on the completed Issue 4 implementation.
+Both production build commands passed again on `main` at merge commit `cd2e787`.
