@@ -62,7 +62,10 @@ Each review records the commit reviewed and checks:
 - Reviewer's initial verification: server and client builds passed; five non-database tests passed; the Category API test could not run because `DATABASE_URL`/PostgreSQL was unavailable in the review environment.
 - Verification after correction: On 2026-08-30, `npm run build:server` and `npm run build:client` passed. `npm test` passed five non-database tests; the Category API test remained environment-blocked because PostgreSQL was unavailable at `localhost:5432`.
 - GitHub workflow response: PR #12 was linked to Issue #11 through the Development panel. Issue #11 moved to Fixing while corrections were handled, all eight review threads received a response before being resolved, the Issue returned to PR Review, and a follow-up review was requested from `@Datakung` on 2026-08-30.
-- Approval: Pending re-review after every comment is answered and resolved.
+- Follow-up review at `7dda4e7`: Changes requested. The eight original findings and workflow corrections were accepted; the reviewer requested two final clarifications—the initial Submit enabled/disabled rule and the user-visible `ATTACHMENT_FILE_UNAVAILABLE` state.
+- Final correction: Commit `e0213ea` defines Submit as disabled during reference loading and enabled afterward so invalid submission displays client validation without an API request. It also defines the unavailable Attachment badge/message and retains Retry Download and Remove; AC-05, AC-17, UI-03, and UI-10 are aligned.
+- Final correction workflow: Issue #11 moved from PR Review to Fixing, `e0213ea` was pushed, both follow-up threads received replies and were resolved, and the Issue returned to PR Review on 2026-08-30.
+- Approval: Pending final re-review from `@Datakung`.
 - Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
 
 ## Pull Requests I Reviewed for My Partner
