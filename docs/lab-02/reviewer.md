@@ -20,7 +20,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Lab 2 work item | Planned branch | Contract and evidence focus | Issue | Pull Request | Review outcome |
 |---|---|---|---|---|---|
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Changes requested at `fbd0f83`; corrected in `643ad65`; re-review requested |
-| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | #13 | TBD | In progress |
+| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Review requested |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | TBD | Planned |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | TBD | Planned |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
@@ -66,6 +66,18 @@ Each review records the commit reviewed and checks:
 - Final correction: Commit `e0213ea` defines Submit as disabled during reference loading and enabled afterward so invalid submission displays client validation without an API request. It also defines the unavailable Attachment badge/message and retains Retry Download and Remove; AC-05, AC-17, UI-03, and UI-10 are aligned.
 - Final correction workflow: Issue #11 moved from PR Review to Fixing, `e0213ea` was pushed, both follow-up threads received replies and were resolved, and the Issue returned to PR Review on 2026-08-30.
 - Approval: Pending final re-review from `@Datakung`.
+- Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
+
+### Data Foundation and Development Requester Context
+
+- Issue: [#13](https://github.com/auto4496/toktickit/issues/13)
+- Pull Request: [#18](https://github.com/auto4496/toktickit/pull/18)
+- Branch: `feature/lab2-2-data-requester-context`
+- Reviewed commit: `18d74f1`
+- Requirements/ACs/Tests: FR-01-FR-07, FR-32; BR-01-BR-07, BR-39-BR-43; AC-01-AC-03, AC-24, AC-25; API-01, API-02, and UI-01
+- Verification: Prisma Client generation and migration deploy passed; the idempotent seed passed twice; server and client production builds passed; all 7 test files and 20 tests passed.
+- GitHub workflow: PR #18 targets `lab2-staging`, is linked to Issue #13 through the Development panel, and review was requested from `@Datakung` on 2026-08-31. Issue #13 is in PR Review.
+- Approval: Pending review from `@Datakung`.
 - Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
 
 ## Pull Requests I Reviewed for My Partner
