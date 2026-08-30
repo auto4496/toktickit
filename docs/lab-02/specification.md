@@ -122,14 +122,14 @@ The delivered journey is:
 - **BR-15:** Blank-only Summary, Description, or removal reason values are invalid.
 - **BR-16:** Frontend validation improves feedback but never replaces backend validation.
 - **BR-17:** The Submit button is disabled while creation is pending. The server remains responsible for preventing unintended duplicates through idempotency.
-- **BR-18:** Each create attempt includes a client-generated UUID in the `Idempotency-Key` header. Repeating the same key and identical requester/payload returns the original created Ticket; reuse with a different payload returns `409`.
+- **BR-18:** One client-generated UUID `Idempotency-Key` represents one logical Ticket submission. The client creates it after frontend validation passes and immediately before the first POST, stores the pending key with the canonical payload in session storage, and retains it for network/timeout and `5xx` retries of that unchanged payload. The client rotates the key after a successful `2xx`, Cancel/Clear/Create Another, or any edit to a canonical field after a request was sent. The canonical request hash is SHA-256 over UTF-8 JSON with fixed key order: canonical lowercase `requesterId`, integer `categoryId`, integer `relatedSystemId`, Summary normalized to Unicode NFC and trimmed, uppercase `requestedPriority`, and Description normalized to Unicode NFC with CRLF converted to LF and leading/trailing whitespace trimmed; internal whitespace is otherwise preserved. The server atomically reserves `(requesterId, idempotencyKey)` in the same database transaction that creates the Ticket and completes the reservation. It uses `INSERT ... ON CONFLICT DO NOTHING RETURNING id`, not an uncaught unique-constraint exception: PostgreSQL waits for a concurrent conflicting insert to commit or roll back. The transaction that receives an inserted ID creates the single Ticket and completes its reservation; a transaction that receives no ID reads the committed reservation and returns the original Ticket as a `200` replay when the hash matches or `409` when it differs. If the first transaction rolls back, its reservation disappears and the waiting insert succeeds, so no concurrent loser becomes a `500`.
 - **BR-19:** A failed Ticket create request does not clear entered fields or selected valid files.
 
 ### Search, Filtering, Sorting, and Pagination
 
 - **BR-20:** Search is case-insensitive, trimmed, limited to 100 characters, and matches Ticket Number, Summary, and Description.
 - **BR-21:** Supported filters are `categoryId`, `requestedPriority`, and `currentStatus`.
-- **BR-22:** Supported sort fields are `createdAt`, `updatedAt`, `ticketNumber`, and `requestedPriority`; supported directions are `asc` and `desc`.
+- **BR-22:** Supported sort fields are `createdAt`, `updatedAt`, `ticketNumber`, and `requestedPriority`; supported directions are `asc` and `desc`. Requested Priority uses business rank `LOW = 1`, `MEDIUM = 2`, and `HIGH = 3`, so ascending is `LOW -> MEDIUM -> HIGH` and descending is the reverse. The API implements this rank explicitly and does not rely on alphabetical, UI-label, or database-enum order.
 - **BR-23:** Default sorting is `updatedAt desc` with `ticketNumber desc` as a deterministic secondary sort.
 - **BR-24:** Pagination is one-based. Default `page` is 1, default `pageSize` is 10, and permitted page sizes are 10, 20, and 50.
 - **BR-25:** Invalid query parameters return `400` with field-specific details; they are not silently ignored.
@@ -137,17 +137,17 @@ The delivered journey is:
 
 ### Attachments
 
-- **BR-27:** Permitted file extensions and MIME types are JPG/JPEG (`image/jpeg`), PNG (`image/png`), WEBP (`image/webp`), and PDF (`application/pdf`). Extension and MIME type must agree.
+- **BR-27:** Permitted file mappings are JPG/JPEG (`image/jpeg`, bytes start `FF D8 FF`), PNG (`image/png`, bytes start `89 50 4E 47 0D 0A 1A 0A`), WEBP (`image/webp`, `RIFF` at bytes 0-3 and `WEBP` at bytes 8-11), and PDF (`application/pdf`, bytes start `%PDF-`). Extension comparison is case-insensitive and canonicalized to lowercase. The server rejects a file unless extension, declared multipart MIME type, and detected magic-byte signature all match one permitted mapping; client-provided MIME type alone is never trusted.
 - **BR-28:** Maximum Attachment size is 5 MiB (5 * 1024 * 1024 bytes) per file.
 - **BR-29:** A Ticket may have at most five active Attachments. Removed Attachments do not count toward this limit.
-- **BR-30:** Original filenames are normalized for display and never used as storage filenames. Stored filenames use a generated UUID plus an approved extension under a server-controlled directory.
+- **BR-30:** The server derives the display name by stripping all `/` and `\\` path segments to a basename, normalizing it to Unicode NFC, trimming surrounding whitespace, and removing NUL, C0 control characters (`U+0000-U+001F`), and DEL (`U+007F`). It rejects an empty name, `.` or `..`, a name without a basename before the extension, or a normalized name longer than 255 UTF-8 bytes. Original case is retained for the safe display basename, but the approved extension is compared case-insensitively. The display name is never used as a storage path; stored filenames use a generated UUID plus the canonical lowercase extension under a server-controlled directory.
 - **BR-31:** Attachment metadata includes ID, Ticket ID, original name, stored name, MIME type, byte size, storage key, uploader Requester ID, upload timestamp, removal timestamp, removal reason, and remover Requester ID.
 - **BR-32:** Storage keys and server filesystem paths are never returned to clients.
-- **BR-33:** Upload first validates ownership, active count, size, extension, and MIME type. Metadata is committed only after the file is stored successfully; a database failure triggers best-effort deletion of the newly stored file.
+- **BR-33:** Upload streams first to a unique server-controlled temporary file while enforcing the byte limit, then validates ownership, filename, extension, declared MIME type, and magic-byte signature. The metadata transaction locks the owned Ticket row with `SELECT ... FOR UPDATE`, counts active Attachments while holding that per-Ticket lock, rejects a sixth active file, moves the validated temporary file to its final UUID storage name, inserts metadata, and commits before releasing the lock. Concurrent uploads to the same Ticket are therefore serialized. A request rejected after temporary storage deletes its temporary file; any move, insert, or commit failure rolls back metadata and performs best-effort cleanup of temporary and newly moved final files, with cleanup failure logged for operational repair.
 - **BR-34:** Ticket creation and Attachment uploads use separate API operations. If the Ticket is created but one or more uploads fail, the Ticket remains saved, successful uploads remain active, and the UI reports each failed file with a Retry action.
 - **BR-35:** Soft removal requires explicit confirmation and a trimmed reason of 5-200 characters.
 - **BR-36:** Soft removal sets `removedAt`, `removalReason`, and `removedByRequesterId`; it does not delete the Attachment row or physical file in Lab 2.
-- **BR-37:** Removed Attachment metadata remains visible with a Removed badge, removal date, and reason, but preview and download controls are unavailable.
+- **BR-37:** Lab 2 provides no inline Attachment preview endpoint or Preview control for any file type. Active Attachments provide safe metadata and Download only. Removed Attachment metadata remains visible with a Removed badge, removal date, and reason, but Download is unavailable and the byte endpoint returns the safe not-found response.
 - **BR-38:** Upload, metadata, download, and removal operations require ownership of the parent Ticket.
 
 ### Failure and Safety
@@ -178,7 +178,8 @@ The detailed visual and interaction contract is in [ui-spec.md](./ui-spec.md).
 | `RequesterUser` | `id` UUID PK, `name`, `email` unique, `isActive`, `createdAt`, `updatedAt`. Replaces the unused Lab 1 `User` model with an explicit temporary requester concept. |
 | `Category` | Existing integer PK and unique `name`; add `isActive` and `updatedAt`. |
 | `RelatedSystem` | Integer PK, unique `name`, `isActive`, timestamps. |
-| `Ticket` | UUID PK, unique `ticketNumber`, `requesterId`, `categoryId`, `relatedSystemId`, `summary`, `requestedPriority`, nullable read-only `itPriority`, `description`, `currentStatus`, `idempotencyKey`, `requestHash`, timestamps. |
+| `Ticket` | UUID PK, unique `ticketNumber`, `requesterId`, `categoryId`, `relatedSystemId`, `summary`, `requestedPriority`, nullable read-only `itPriority`, `description`, `currentStatus`, timestamps. |
+| `TicketCreateRequest` | UUID PK, `requesterId`, `idempotencyKey`, canonical SHA-256 `requestHash`, unique nullable `ticketId`, `createdAt`, and `completedAt`; reservation and Ticket creation commit atomically. |
 | `Attachment` | UUID PK, `ticketId`, original/stored names, MIME type, size, private storage key, `uploadedByRequesterId`, timestamps, nullable removal fields. |
 
 ### Enums
@@ -196,7 +197,7 @@ The detailed visual and interaction contract is in [ui-spec.md](./ui-spec.md).
 ### Constraints and Indexes
 
 - Unique: Requester email, Category name, Related System name, Ticket Number.
-- Idempotency: composite unique index on `(requesterId, idempotencyKey)`.
+- Idempotency: composite unique index on `TicketCreateRequest(requesterId, idempotencyKey)` and unique index on nullable `ticketId`.
 - My Tickets: indexes on `(requesterId, updatedAt)`, `(requesterId, currentStatus, updatedAt)`, `(requesterId, requestedPriority, updatedAt)`, and `(requesterId, categoryId, updatedAt)`.
 - Attachment lookup: index on `(ticketId, removedAt)`.
 - Required foreign keys use restrictive deletion. Lab 2 does not hard-delete Requesters, Tickets, or Attachments.
@@ -231,20 +232,20 @@ All requester-scoped endpoints require `X-Requester-Id`. The API uses JSON excep
 - **AC-03:** Given Requester A is selected, when the user changes to Requester B, then A's cached tickets disappear before B's data is displayed.
 - **AC-04:** Given valid Ticket data, when the Requester submits once, then one Ticket is saved with the matching `requesterId`, `NEW` status, server timestamp, and official Ticket Number.
 - **AC-05:** Given missing, blank, invalid, or out-of-range Ticket fields, when submitted, then field-level errors are shown and no Ticket is saved.
-- **AC-06:** Given a Ticket request is pending or the same idempotency key is repeated, when submission is repeated, then no duplicate Ticket is created.
+- **AC-06:** Given two sequential or concurrent create requests use the same Requester and idempotency key, when their canonical hashes match, then exactly one Ticket is created and the other request returns the original Ticket as a replay; when hashes differ, the second request returns `409`. The client retains or rotates the key according to BR-18.
 - **AC-07:** Given Category, Related System, or create APIs fail, when Create Ticket is used, then a safe error is shown and valid entered values remain available.
 - **AC-08:** Given Requester A is selected, when My Tickets loads, then only A's tickets and correct pagination metadata are returned.
-- **AC-09:** Given owned tickets with varied values, when search, filters, sorting, or pagination are applied, then the documented deterministic subset and order are returned.
+- **AC-09:** Given owned tickets with varied values, when search, filters, sorting, or pagination are applied, then the documented deterministic subset and order are returned, including Requested Priority ascending as `LOW`, `MEDIUM`, `HIGH` and descending in the reverse order.
 - **AC-10:** Given no owned tickets or no matches, when My Tickets loads, then the correct distinct empty or no-results state is shown.
 - **AC-11:** Given an owned Ticket, when Ticket Detail is opened, then its current values are displayed read-only with Attachment metadata.
 - **AC-12:** Given Requester B is selected, when a Ticket belonging to Requester A is requested directly, then the API returns the safe not-found response and no Ticket data.
-- **AC-13:** Given an owned Ticket and a valid permitted file, when uploaded, then one active Attachment is stored and its safe metadata is displayed.
-- **AC-14:** Given a disallowed extension/MIME pair, when selected or uploaded, then it is rejected and no Attachment metadata is created.
+- **AC-13:** Given an owned Ticket and a file whose safe basename, size, extension, declared MIME type, and magic-byte signature satisfy the permitted mapping, when uploaded, then one active Attachment is stored under a UUID name and only safe metadata is displayed.
+- **AC-14:** Given an unsafe filename, disallowed or mismatched extension/MIME/signature combination, or malformed content signature, when selected or uploaded, then it is rejected and no Attachment metadata or stored-file residue is created.
 - **AC-15:** Given a file larger than 5 MiB, when uploaded, then the API rejects it with the documented size error.
-- **AC-16:** Given five active Attachments, when a sixth is uploaded, then it is rejected; after one is soft-removed, one replacement upload is permitted.
-- **AC-17:** Given an active owned Attachment, when Download is selected, then the saved bytes are returned with a safe content disposition.
+- **AC-16:** Given five active Attachments, when a sixth is uploaded, then it is rejected; after one is soft-removed, one replacement upload is permitted. Given four active Attachments and two concurrent valid uploads, exactly one succeeds, one returns the limit conflict, the final active count is five, and no temporary or final orphan file remains.
+- **AC-17:** Given an active owned Attachment, when Download is selected, then the saved bytes are returned with a safe content disposition. No active or removed Attachment exposes an inline Preview control or preview endpoint in Lab 2.
 - **AC-18:** Given an active owned Attachment and a valid removal reason, when removal is confirmed, then removal metadata is saved and retained in Ticket Detail.
-- **AC-19:** Given a removed Attachment, when preview or download is attempted, then the file is not returned.
+- **AC-19:** Given a removed Attachment, when its metadata is displayed or its download URL is requested directly, then removal metadata remains visible, no Preview or Download control is offered, and file bytes are not returned.
 - **AC-20:** Given Requester B is selected, when metadata, download, or removal is requested for A's Attachment, then the API returns the safe not-found response.
 - **AC-21:** Given a Ticket is created and one subsequent Attachment upload fails, then the Ticket and successful uploads remain saved, failed files are identified, and Retry is available.
 - **AC-22:** Given desktop, tablet, and mobile viewports, when all required screens are inspected, then controls remain usable with no clipping, overlap, hidden actions, or horizontal page scrolling.
@@ -271,6 +272,9 @@ Every Acceptance Criterion maps to at least one planned automated or visual test
 
 - Work is decomposed into Lab 2 GitHub Issues using Backlog, Specified, Started, PR Review, Fixing, and Done.
 - `lab2-staging` was created from completed Lab 1 `main`; each Issue uses its own feature branch and peer-reviewed PR into staging.
+- Each PR is linked to its Issue through GitHub's Development panel; a branch association or body mention alone is insufficient evidence.
+- After a change request, the Issue moves to Fixing. The author pushes corrections, replies to every review comment, and only then resolves each addressed thread before returning the Issue to PR Review.
+- After approval, the approving peer reviewer, not the PR author, performs the merge into `lab2-staging`.
 - Review findings, responses, approvals, and links are recorded in `reviewer.md`.
 - Integration is verified on `lab2-staging`, followed by one release PR to `main`.
 - `ai-use.md` records the selected LLM, 6-10 meaningful prompts, results, corrections, and a brief personal reflection.

@@ -22,6 +22,7 @@ The final submission will contain 6-10 meaningful prompts. This living table rec
 | 4 | Work decomposition | How should the work start, and must Lab 2 use four Issues like Lab 1? | Proposed a dependency-aware decomposition and clarified that the labsheet requires a reasonable set rather than exactly four. | Corrected the numbering so existing Lab 1 Issues are preserved and new GitHub numbers are assigned automatically. |
 | 5 | Reviewer workload | Will too many Issues create unnecessary approval work for the peer reviewer? | Reduced the proposed decomposition from eight to six cohesive Lab 2 work items. | Confirmed that each Issue remains reviewable and all required scope areas are still covered collectively. |
 | 6 | Contract authoring | Start Lab 2 with the Engineering Contract before implementation. | Created the Lab 2 branch flow and drafted the specification, API, UI, test, review, and AI-use documents. | Baseline builds were run; the database-dependent test limitation was recorded rather than reported as a pass. Contract consistency review remains required before approval. |
+| 7 | Peer-review correction | Fix the Engineering Contract after the peer reviewer requested changes. | Tightened idempotency and upload concurrency, sorting, filename/signature rules, preview scope, safe-error tests, and GitHub review evidence. | Each correction was mapped back to the review thread and the contract was checked for matching API, UI, AC, and Test-ID language before re-review. |
 
 ## AI Use Rules Applied
 

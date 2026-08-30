@@ -100,12 +100,13 @@ This prevents the Development Requester context from revealing another Requester
   "uploadedAt": "2026-08-30T08:15:32.000Z",
   "removedAt": null,
   "removalReason": null,
-  "canPreview": true,
   "canDownload": true
 }
 ```
 
 `storedName`, `storageKey`, and server path are private and never appear in API responses.
+
+Lab 2 intentionally provides no inline preview endpoint and no `canPreview` field. Active files may be downloaded; removed files may not be downloaded or previewed.
 
 ### Ticket Summary
 
@@ -213,6 +214,17 @@ Request:
 
 The body cannot set Ticket Number, Ticket Date, Requester ID, Current Status, or IT Priority.
 
+#### Idempotency lifecycle and canonical hash
+
+- One client-generated UUID key represents one logical submission.
+- The client creates the key after client validation passes and immediately before the first POST. It stores the pending key and canonical payload in session storage.
+- Network/timeout and `5xx` retries of an unchanged canonical payload reuse the key.
+- The client rotates the key after any successful `2xx`, Cancel/Clear/Create Another, or an edit to a canonical field after a request was sent.
+- The server builds a fixed-order UTF-8 JSON object containing canonical lowercase `requesterId`, integer `categoryId`, integer `relatedSystemId`, Summary normalized to Unicode NFC and trimmed, uppercase `requestedPriority`, and Description normalized to Unicode NFC with CRLF converted to LF and leading/trailing whitespace trimmed. Internal whitespace is otherwise preserved.
+- `requestHash` is the lowercase hexadecimal SHA-256 of that exact UTF-8 JSON byte sequence.
+- A `TicketCreateRequest` row reserves `(requesterId, idempotencyKey)` in the same transaction that creates the Ticket and marks the reservation complete. The composite database unique constraint is authoritative. Reservation uses `INSERT ... ON CONFLICT DO NOTHING RETURNING id`, avoiding an aborted transaction or uncaught unique-constraint exception.
+- Two concurrent same-key inserts are serialized by PostgreSQL's unique check. The conflicting insert waits for the first transaction. If the first commits, the waiting statement returns no ID, then reads the completed reservation and returns the original Ticket as a `200` replay for the same hash or `409 IDEMPOTENCY_KEY_REUSED` for a different hash. If the first rolls back, the waiting insert returns its new ID and creates the single Ticket. A concurrent loser never becomes a `500` merely because of the unique constraint.
+
 First successful response: `201 Created`
 
 ```json
@@ -298,6 +310,8 @@ Success: `200 OK`
 
 Items use the Ticket Summary shape. Sorting always adds `ticketNumber desc` as the secondary order unless Ticket Number is already the primary sort.
 
+Requested Priority sorting uses explicit business rank `LOW = 1`, `MEDIUM = 2`, and `HIGH = 3`. Ascending order is `LOW`, `MEDIUM`, `HIGH`; descending order is `HIGH`, `MEDIUM`, `LOW`. The query must use this rank rather than alphabetical or database-enum order.
+
 Failures:
 
 - `400 REQUESTER_CONTEXT_REQUIRED`
@@ -377,7 +391,6 @@ Success: `201 Created`
     "uploadedAt": "2026-08-30T08:15:32.000Z",
     "removedAt": null,
     "removalReason": null,
-    "canPreview": true,
     "canDownload": true
   }
 }
@@ -386,6 +399,7 @@ Success: `201 Created`
 Failures:
 
 - `400 FILE_REQUIRED`
+- `400 ATTACHMENT_FILENAME_INVALID`
 - `400 INVALID_TICKET_ID`
 - `404 RESOURCE_NOT_FOUND` for missing or non-owned Ticket
 - `409 ATTACHMENT_LIMIT_REACHED`
@@ -393,13 +407,23 @@ Failures:
 - `415 ATTACHMENT_TYPE_UNSUPPORTED`
 - `500 ATTACHMENT_UPLOAD_FAILED`
 
-The maximum file size is 5 MiB. The permitted extension/MIME pairs are `.jpg` or `.jpeg` with `image/jpeg`, `.png` with `image/png`, `.webp` with `image/webp`, and `.pdf` with `application/pdf`.
+The maximum file size is 5 MiB. Filename handling and content validation are server-side requirements:
+
+1. Strip all `/` and `\\` path segments to a basename, normalize Unicode to NFC, trim surrounding whitespace, and remove NUL, C0 controls (`U+0000-U+001F`), and DEL (`U+007F`).
+2. Reject an empty basename, `.` or `..`, a name without a basename before its extension, or a normalized display name longer than 255 UTF-8 bytes.
+3. Compare extensions case-insensitively and store the approved extension in lowercase. Retain the safe basename's original case for display only.
+4. Require extension, declared multipart MIME type, and detected magic bytes to agree with one permitted mapping:
+   - `.jpg`/`.jpeg`, `image/jpeg`, prefix `FF D8 FF`;
+   - `.png`, `image/png`, prefix `89 50 4E 47 0D 0A 1A 0A`;
+   - `.webp`, `image/webp`, `RIFF` at bytes 0-3 and `WEBP` at bytes 8-11;
+   - `.pdf`, `application/pdf`, prefix `%PDF-`.
+5. Never use the display basename as a storage path. The final name is a generated UUID plus canonical extension.
 
 ### GET `/api/attachments/:attachmentId`
 
 Purpose: retrieve safe metadata for one Attachment belonging to an owned Ticket.
 
-Success: `200 OK` with the Attachment Metadata shape. Removed metadata is returned with `canPreview: false` and `canDownload: false`.
+Success: `200 OK` with the Attachment Metadata shape. Removed metadata is returned with `canDownload: false`. Lab 2 exposes no inline preview capability for active or removed Attachments.
 
 Failures:
 
@@ -454,7 +478,6 @@ Success: `200 OK` with updated Attachment Metadata:
     "uploadedAt": "2026-08-30T08:15:32.000Z",
     "removedAt": "2026-08-30T08:20:10.000Z",
     "removalReason": "Uploaded the wrong screenshot.",
-    "canPreview": false,
     "canDownload": false
   }
 }
@@ -478,14 +501,16 @@ Failures:
 | `404` | Missing/non-owned Ticket or Attachment, removed download, or unavailable active file. |
 | `409` | Idempotency conflict, active Attachment limit, or already-removed conflict. |
 | `413` | Attachment exceeds 5 MiB. |
-| `415` | Unsupported extension/MIME pair. |
+| `415` | Unsupported or mismatched extension, declared MIME type, or magic-byte signature. |
 | `500` | Safe unexpected server failure. |
 
 ## 7. Transaction and Compensation Rules
 
-- Ticket creation is one database transaction containing idempotency evaluation and Ticket insertion.
-- Attachment upload validates ownership and current active count before storage.
-- After a file is stored, metadata is inserted. If metadata insertion fails, the server attempts to remove the newly stored file and logs any compensation failure.
+- Ticket creation uses one transaction containing `TicketCreateRequest` reservation, canonical-hash comparison, Ticket insertion, and reservation completion. Reservation uses `INSERT ... ON CONFLICT DO NOTHING RETURNING id`; the composite unique constraint serializes concurrent same-key requests, and a no-ID result is handled as replay or `409`, never leaked as `500`.
+- Attachment upload streams to a unique temporary file while enforcing the byte limit, then validates the safe basename and extension/MIME/signature mapping.
+- The metadata transaction selects the owned Ticket row `FOR UPDATE`, counts active Attachments while holding that per-Ticket lock, and rejects the request if the count is already five.
+- While holding the lock, the server moves the validated temporary file to its final UUID path, inserts metadata, and commits. Concurrent uploads for one Ticket are therefore serialized; with four active files and two simultaneous uploads, exactly one reaches five and the other returns `409 ATTACHMENT_LIMIT_REACHED`.
+- A request rejected before final move deletes its temporary file. A move, insert, or commit failure rolls back metadata and performs best-effort deletion of temporary and newly moved final files. Cleanup failures are logged with a correlation ID for operational repair and are never exposed as paths to the client.
 - Ticket creation and upload are intentionally separate. A created Ticket is not deleted when a later Attachment upload fails.
 - Soft removal updates metadata in one database transaction and intentionally retains the stored file in Lab 2.
 

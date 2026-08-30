@@ -258,11 +258,12 @@ Active rows show:
 
 - File-type icon plus original filename.
 - MIME-friendly type label, formatted size, and upload date.
-- Preview when supported by approved product behavior.
 - Download action.
 - Remove action.
 
-Removed rows remain visible and show original filename, size, uploaded date, Removed badge, removal date, and reason. Preview, Download, and Remove actions are absent or disabled with an explanation.
+Lab 2 intentionally provides no inline preview for images, WEBP, or PDF and exposes no Preview action. This avoids an additional authenticated-byte rendering mechanism while Requester identity is still temporary test context. Active files are accessed only through Download with `Content-Disposition: attachment`.
+
+Removed rows remain visible and show original filename, size, uploaded date, Removed badge, removal date, and reason. Download and Remove actions are absent or disabled with an explanation; no Preview action exists for either active or removed rows.
 
 ### Removal Confirmation
 
