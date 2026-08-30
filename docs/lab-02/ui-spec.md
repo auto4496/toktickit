@@ -176,8 +176,8 @@ Tablet may use two columns where practical. Mobile stacks every field and action
 | State | Required behavior |
 |---|---|
 | Reference loading | Reference selectors disabled; visible loading state; entered text is not lost during retry. |
-| Initial | Read-only values visually distinct; Submit follows the approved initial enabled/disabled rule. |
-| Validation failure | Focus moves to the error summary or first invalid field; each invalid field has an inline message. |
+| Initial | While reference data is loading, Submit Ticket is disabled. After reference data loads, Submit Ticket is enabled even when required fields are still empty or invalid so an attempted submission can reveal validation guidance. |
+| Validation failure | Selecting Submit Ticket runs client validation before any API request. Focus moves to the error summary or first invalid field, each invalid field has an inline message, and the create API is not called. |
 | Submitting | Submit shows `Submitting...`, all duplicate submission paths are disabled, and form values remain visible. |
 | Ticket success | Official Ticket Number and saved values from the response are shown with View Ticket and Create Another actions. |
 | API failure | Safe alert near actions; editable values and selected valid files remain. |
@@ -264,6 +264,8 @@ Active rows show:
 Lab 2 intentionally provides no inline preview for images, WEBP, or PDF and exposes no Preview action. This avoids an additional authenticated-byte rendering mechanism while Requester identity is still temporary test context. Active files are accessed only through Download with `Content-Disposition: attachment`.
 
 Removed rows remain visible and show original filename, size, uploaded date, Removed badge, removal date, and reason. Download and Remove actions are absent or disabled with an explanation; no Preview action exists for either active or removed rows.
+
+If active metadata exists but Download returns `404 ATTACHMENT_FILE_UNAVAILABLE`, the row remains visible with its safe filename and metadata, an `Unavailable` badge, and the message `This file cannot be downloaded right now.` No bytes, stored filename, or filesystem detail is shown. **Retry Download** and **Remove** remain available; a successful retry clears the unavailable state. No Preview action is introduced.
 
 ### Removal Confirmation
 
