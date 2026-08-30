@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Engineering Contract corrections recorded; follow-up review pending
+Status: Engineering Contract corrections submitted; follow-up review requested
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -19,7 +19,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 
 | Lab 2 work item | Planned branch | Contract and evidence focus | Issue | Pull Request | Review outcome |
 |---|---|---|---|---|---|
-| Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Changes requested at `fbd0f83`; corrected in `643ad65`; re-review pending |
+| Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Changes requested at `fbd0f83`; corrected in `643ad65`; re-review requested |
 | Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | TBD | TBD | Planned |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | TBD | TBD | Planned |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | TBD | TBD | Planned |
@@ -61,6 +61,7 @@ Each review records the commit reviewed and checks:
 - Correction commit: `643ad65`
 - Reviewer's initial verification: server and client builds passed; five non-database tests passed; the Category API test could not run because `DATABASE_URL`/PostgreSQL was unavailable in the review environment.
 - Verification after correction: On 2026-08-30, `npm run build:server` and `npm run build:client` passed. `npm test` passed five non-database tests; the Category API test remained environment-blocked because PostgreSQL was unavailable at `localhost:5432`.
+- GitHub workflow response: PR #12 was linked to Issue #11 through the Development panel. Issue #11 moved to Fixing while corrections were handled, all eight review threads received a response before being resolved, the Issue returned to PR Review, and a follow-up review was requested from `@Datakung` on 2026-08-30.
 - Approval: Pending re-review after every comment is answered and resolved.
 - Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
 
