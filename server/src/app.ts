@@ -39,11 +39,13 @@ app.get('/api/categories', async (_req: Request, res: Response) => {
     });
 
     res.status(200).json(categories);
-  } catch {
+  } catch (error) {
     sendUnexpectedError(
       res,
       'REFERENCE_DATA_UNAVAILABLE',
       'Request categories could not be loaded. Try again.',
+      'categories.list',
+      error,
     );
   }
 });
@@ -66,11 +68,13 @@ app.get('/api/related-systems', async (_req: Request, res: Response) => {
         left.id - right.id,
     );
     res.status(200).json(relatedSystems);
-  } catch {
+  } catch (error) {
     sendUnexpectedError(
       res,
       'REFERENCE_DATA_UNAVAILABLE',
       'Related systems could not be loaded. Try again.',
+      'related-systems.list',
+      error,
     );
   }
 });
@@ -90,11 +94,13 @@ app.get('/api/requesters', async (_req: Request, res: Response) => {
     });
 
     res.status(200).json(requesters);
-  } catch {
+  } catch (error) {
     sendUnexpectedError(
       res,
       'REQUESTERS_UNAVAILABLE',
       'Requesters could not be loaded. Try again.',
+      'requesters.list',
+      error,
     );
   }
 });

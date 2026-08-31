@@ -71,11 +71,13 @@ export const requireRequesterContext = async (
       email: requester.email,
     };
     next();
-  } catch {
+  } catch (error) {
     sendUnexpectedError(
       res,
       'REQUESTER_CONTEXT_UNAVAILABLE',
       'Requester context could not be verified. Try again.',
+      'requester-context.verify',
+      error,
     );
   }
 };

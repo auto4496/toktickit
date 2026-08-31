@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
 
 vi.mock('../../src/prisma.js', () => ({
@@ -25,6 +25,10 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 describe('Lab 2 reference-data APIs', () => {
   it('returns only active Categories in ascending ID order', async () => {
     prismaMock.category.findMany.mockResolvedValue([
@@ -48,8 +52,8 @@ describe('Lab 2 reference-data APIs', () => {
 
   it('returns active Related Systems in case-insensitive name order', async () => {
     prismaMock.relatedSystem.findMany.mockResolvedValue([
-      { id: 2, name: 'Email and Collaboration' },
       { id: 1, name: 'ERP' },
+      { id: 2, name: 'Email and Collaboration' },
     ]);
 
     const response = await request(app).get('/api/related-systems');
@@ -93,15 +97,17 @@ describe('Lab 2 reference-data APIs', () => {
   });
 
   it.each([
-    ['/api/categories', 'category', 'REFERENCE_DATA_UNAVAILABLE'],
-    ['/api/related-systems', 'relatedSystem', 'REFERENCE_DATA_UNAVAILABLE'],
-    ['/api/requesters', 'requesterUser', 'REQUESTERS_UNAVAILABLE'],
+    ['/api/categories', 'category', 'REFERENCE_DATA_UNAVAILABLE', 'categories.list'],
+    ['/api/related-systems', 'relatedSystem', 'REFERENCE_DATA_UNAVAILABLE', 'related-systems.list'],
+    ['/api/requesters', 'requesterUser', 'REQUESTERS_UNAVAILABLE', 'requesters.list'],
   ] as const)(
     'returns a safe error when %s lookup fails',
-    async (path, model, code) => {
-      prismaMock[model].findMany.mockRejectedValue(
-        new Error('password=secret; SELECT * FROM private_table'),
+    async (path, model, code, operation) => {
+      const internalError = new Error(
+        'password=secret; SELECT * FROM private_table',
       );
+      const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      prismaMock[model].findMany.mockRejectedValue(internalError);
 
       const response = await request(app).get(path);
 
@@ -114,6 +120,12 @@ describe('Lab 2 reference-data APIs', () => {
         },
       });
       expect(response.text).not.toMatch(/password|secret|select|private_table/i);
+      expect(logSpy).toHaveBeenCalledWith('Unexpected API failure', {
+        correlationId: response.body.error.correlationId,
+        code,
+        operation,
+        error: internalError,
+      });
     },
   );
 });

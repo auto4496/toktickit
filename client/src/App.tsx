@@ -4,7 +4,7 @@ type HealthResponse = { status: string; service: string };
 type Category = { id: number; name: string };
 type Requester = { id: string; name: string; email: string };
 
-const REQUESTER_STORAGE_KEY = 'toktickit.requester';
+export const REQUESTER_STORAGE_KEY = 'toktickit.requester';
 
 const isCategory = (value: unknown): value is Category => {
   if (typeof value !== 'object' || value === null) return false;

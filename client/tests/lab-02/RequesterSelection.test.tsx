@@ -3,7 +3,7 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import App from '../../src/App';
+import App, { REQUESTER_STORAGE_KEY } from '../../src/App';
 
 const requesters = [
   {
@@ -67,19 +67,37 @@ describe('Development Requester context', () => {
 
     expect(screen.getByText('Jennifer Anderson')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'My Tickets' })).toBeInTheDocument();
-    expect(window.localStorage.getItem('toktickit.requester')).toContain(
+    expect(window.localStorage.getItem(REQUESTER_STORAGE_KEY)).toContain(
       requesters[0].id,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Change Requester' }));
+    const changeRequester = screen.getByRole('button', { name: 'Change Requester' });
+    expect(changeRequester.closest('.requester-chip')).toBeInTheDocument();
+
+    fireEvent.click(changeRequester);
 
     expect(
       screen.getByRole('heading', { name: 'Select Development Requester' }),
     ).toBeInTheDocument();
-    expect(window.localStorage.getItem('toktickit.requester')).toBeNull();
+    expect(window.localStorage.getItem(REQUESTER_STORAGE_KEY)).toBeNull();
     expect(
       await screen.findByRole('option', { name: /Jennifer Anderson/ }),
     ).toBeInTheDocument();
+  });
+
+  it('restores a persisted Requester in a fresh App mount', () => {
+    window.localStorage.setItem(REQUESTER_STORAGE_KEY, JSON.stringify(requesters[1]));
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<App />);
+
+    expect(screen.getByText('Michael Chen')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'My Tickets' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Select Development Requester' }),
+    ).not.toBeInTheDocument();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('shows the empty state and supports Retry', async () => {
@@ -94,7 +112,9 @@ describe('Development Requester context', () => {
     expect(
       await screen.findByText('No active Development Requesters are available'),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    const retry = screen.getByRole('button', { name: 'Retry' });
+    expect(retry.closest('.state-panel')).toBeInTheDocument();
+    fireEvent.click(retry);
 
     expect(
       await screen.findByRole('option', { name: /Michael Chen/ }),
