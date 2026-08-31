@@ -1,7 +1,16 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import prisma from './prisma.js';
-import { sendUnexpectedError } from './api-error.js';
+import { sendExpectedError, sendUnexpectedError } from './api-error.js';
+import {
+  IDEMPOTENCY_KEY_PATTERN,
+  createTicketForRequester,
+  validateTicketInput,
+} from './ticket-create.js';
+import {
+  RequesterContextRequest,
+  requireRequesterContext,
+} from './requester-context.js';
 
 const app = express();
 
@@ -104,5 +113,80 @@ app.get('/api/requesters', async (_req: Request, res: Response) => {
     );
   }
 });
+
+app.post(
+  '/api/tickets',
+  requireRequesterContext,
+  async (req: RequesterContextRequest, res: Response) => {
+    const idempotencyKey = req.header('Idempotency-Key');
+    if (!idempotencyKey || !IDEMPOTENCY_KEY_PATTERN.test(idempotencyKey)) {
+      sendExpectedError(
+        res,
+        400,
+        'IDEMPOTENCY_KEY_INVALID',
+        'Retry this submission with a valid idempotency key.',
+      );
+      return;
+    }
+
+    const validation = validateTicketInput(req.body);
+    if (!validation.success) {
+      res.status(400).json({
+        error: {
+          code: 'VALIDATION_FAILED',
+          message: 'Please correct the highlighted fields.',
+          fieldErrors: validation.fieldErrors,
+        },
+      });
+      return;
+    }
+
+    try {
+      const result = await createTicketForRequester(
+        prisma,
+        req.requester!,
+        validation.value,
+        idempotencyKey,
+      );
+
+      if (result.kind === 'invalid-reference') {
+        res.status(400).json({
+          error: {
+            code: 'REFERENCE_VALUE_INACTIVE',
+            message: 'Select active reference values and try again.',
+            fieldErrors: result.fieldErrors,
+          },
+        });
+        return;
+      }
+
+      if (result.kind === 'conflict') {
+        sendExpectedError(
+          res,
+          409,
+          'IDEMPOTENCY_KEY_REUSED',
+          'This submission key was already used for different Ticket data.',
+        );
+        return;
+      }
+
+      if (result.kind === 'replayed') {
+        res.setHeader('Idempotency-Replayed', 'true');
+        res.status(200).json({ data: result.data });
+        return;
+      }
+
+      res.status(201).json({ data: result.data });
+    } catch (error) {
+      sendUnexpectedError(
+        res,
+        'TICKET_CREATE_FAILED',
+        'The Ticket could not be created. Try again.',
+        'tickets.create',
+        error,
+      );
+    }
+  },
+);
 
 export default app;
