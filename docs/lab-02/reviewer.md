@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Engineering Contract corrections submitted; follow-up review requested
+Status: Data and Requester Context corrections submitted; follow-up review requested
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -19,8 +19,8 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 
 | Lab 2 work item | Planned branch | Contract and evidence focus | Issue | Pull Request | Review outcome |
 |---|---|---|---|---|---|
-| Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Changes requested at `fbd0f83`; corrected in `643ad65`; re-review requested |
-| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Review requested |
+| Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
+| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Changes requested at `f4f86e1`; corrected in `1157ed2`; re-review requested |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | TBD | Planned |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | TBD | Planned |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
@@ -65,8 +65,8 @@ Each review records the commit reviewed and checks:
 - Follow-up review at `7dda4e7`: Changes requested. The eight original findings and workflow corrections were accepted; the reviewer requested two final clarifications—the initial Submit enabled/disabled rule and the user-visible `ATTACHMENT_FILE_UNAVAILABLE` state.
 - Final correction: Commit `e0213ea` defines Submit as disabled during reference loading and enabled afterward so invalid submission displays client validation without an API request. It also defines the unavailable Attachment badge/message and retains Retry Download and Remove; AC-05, AC-17, UI-03, and UI-10 are aligned.
 - Final correction workflow: Issue #11 moved from PR Review to Fixing, `e0213ea` was pushed, both follow-up threads received replies and were resolved, and the Issue returned to PR Review on 2026-08-30.
-- Approval: Pending final re-review from `@Datakung`.
-- Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
+- Approval: Approved by `@Datakung` at `522392e` on 2026-08-31 (2026-08-30 UTC).
+- Merge: Merged by the peer reviewer into `lab2-staging` as `2bcdb54` on 2026-08-31 (2026-08-30 UTC).
 
 ### Data Foundation and Development Requester Context
 
@@ -75,9 +75,14 @@ Each review records the commit reviewed and checks:
 - Branch: `feature/lab2-2-data-requester-context`
 - Implementation commit: `18d74f1`; review handoff evidence commit: `00573c0`
 - Requirements/ACs/Tests: FR-01-FR-07, FR-32; BR-01-BR-07, BR-39-BR-43; AC-01-AC-03, AC-24, AC-25; API-01, API-02, and UI-01
-- Verification: Prisma Client generation and migration deploy passed; the idempotent seed passed twice; server and client production builds passed; all 7 test files and 20 tests passed.
-- GitHub workflow: PR #18 targets `lab2-staging`, is linked to Issue #13 through the Development panel, and review was requested from `@Datakung` on 2026-08-31. Issue #13 is in PR Review.
-- Approval: Pending review from `@Datakung`.
+- Reviewed commit: `f4f86e1`
+- Review outcome: Changes requested by `@Datakung`.
+- Review feedback received: add BR-40 operational logging tied to the returned correlation ID; align the mobile breakpoint with `<768px`; enforce 44 by 44 pixel targets for Change Requester and Retry; add real PostgreSQL seed/filter/order coverage and an unsorted Related System fixture; cover unknown and failed Requester lookups; prove persisted `localStorage` restoration; and align the living workflow record with GitHub and the completed PR #12 outcome.
+- My response and correction: unexpected errors now log their correlation ID, code, operation, and original error while responses remain safe; mobile behavior begins at 767px and the named controls have 44px minimum dimensions; a reusable seed function supports isolated PostgreSQL integration tests; requester-context, sorting, persistence, and foundation-style coverage were expanded; and the review record now includes the actual PR #12 approval and merge.
+- Correction commit: `1157ed2`
+- Verification after correction: the idempotent seed passed twice with 4 Categories, 6 Related Systems, and 5 Requesters; server and client production builds passed; all 9 test files and 28 tests passed, including real PostgreSQL active/inactive filtering and ordering.
+- GitHub workflow response: PR #18 targets `lab2-staging` and is linked to Issue #13 through the Development panel. Issue #13 moved to Fixing while corrections were handled; all seven review threads received a response before being resolved; the PR summary was corrected from `sessionStorage` to `localStorage`; the Issue returned to PR Review; and a follow-up review was requested from `@Datakung` on 2026-08-31.
+- Approval: Pending follow-up review from `@Datakung`.
 - Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
 
 ## Pull Requests I Reviewed for My Partner
