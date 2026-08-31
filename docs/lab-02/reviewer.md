@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Data and Requester Context corrections submitted; follow-up review requested
+Status: Data and Requester Context second correction submitted; follow-up review requested
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -20,7 +20,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Lab 2 work item | Planned branch | Contract and evidence focus | Issue | Pull Request | Review outcome |
 |---|---|---|---|---|---|
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
-| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Changes requested at `f4f86e1`; corrected in `1157ed2`; re-review requested |
+| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Changes requested at `f4f86e1` and `057b71c`; corrected in `1157ed2` and `c19d2f8`; re-review requested |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | TBD | Planned |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | TBD | Planned |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
@@ -82,7 +82,11 @@ Each review records the commit reviewed and checks:
 - Correction commit: `1157ed2`
 - Verification after correction: the idempotent seed passed twice with 4 Categories, 6 Related Systems, and 5 Requesters; server and client production builds passed; all 9 test files and 28 tests passed, including real PostgreSQL active/inactive filtering and ordering.
 - GitHub workflow response: PR #18 targets `lab2-staging` and is linked to Issue #13 through the Development panel. Issue #13 moved to Fixing while corrections were handled; all seven review threads received a response before being resolved; the PR summary was corrected from `sessionStorage` to `localStorage`; the Issue returned to PR Review; and a follow-up review was requested from `@Datakung` on 2026-08-31.
-- Approval: Pending follow-up review from `@Datakung`.
+- Follow-up review at `057b71c`: Changes requested. The seven original findings were accepted; the reviewer identified that the new PostgreSQL integration test still inherited the normal `DATABASE_URL`, so `npm test` could seed or modify development data. The reviewer required a dedicated `TEST_DATABASE_URL`, a clear test-only guard, Vitest configuration, and an isolated command in the documentation.
+- Second correction: Commit `c19d2f8` adds a test-database URL guard that requires a distinct `test` database/schema marker, rejects development/production/live markers and the same database/schema as `DATABASE_URL`, and injects the accepted URL as Prisma's `DATABASE_URL` only inside Vitest. It adds `.env.test.example`, an isolated `npm run test:integration` command, guard coverage, and independent Lab 1 category seeding against the guarded test database.
+- Verification after second correction: missing `TEST_DATABASE_URL` failed during Vitest configuration before test collection or database access; `npm run test:integration` passed 1 file and 3 PostgreSQL tests against `toktickit_test`; `npm test` passed 10 files and 34 tests against the same isolated database; server and client production builds passed.
+- Second correction workflow: Issue #13 moved from PR Review to Fixing while the correction was implemented. Commit `c19d2f8` and this evidence were pushed before the Issue returned to PR Review and another review was requested from `@Datakung` on 2026-08-31.
+- Approval: Pending second follow-up review from `@Datakung`.
 - Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
 
 ## Pull Requests I Reviewed for My Partner
