@@ -9,6 +9,7 @@
     "build:server": "npm --prefix server run build",
     "build:client": "npm --prefix client run build",
     "test": "vitest run",
+    "test:integration": "vitest run server/tests/lab-02/reference-data.integration.test.ts",
     "test:watch": "vitest",
     "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
     "prisma:studio": "npx prisma studio --schema=server/prisma/schema.prisma"

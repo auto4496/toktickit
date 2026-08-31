@@ -1,7 +1,12 @@
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
+import { seedDatabase } from '../../prisma/seed-data.js';
 import app from '../../src/app.js';
 import prisma from '../../src/prisma.js';
+
+beforeAll(async () => {
+  await seedDatabase(prisma);
+});
 
 afterAll(async () => {
   await prisma.$disconnect();

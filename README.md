@@ -149,7 +149,17 @@ Select **Check System** in the frontend to request both endpoints. The page show
 
 ## Tests and Builds
 
-Run all currently implemented automated tests:
+Automated tests require a separate PostgreSQL database or schema. Copy the test
+template, edit it if necessary, and migrate that test-only target as documented
+in [`docs/lab-02/tests.md`](docs/lab-02/tests.md):
+
+```powershell
+Copy-Item .env.test.example .env.test.local
+```
+
+Run all currently implemented automated tests. Vitest fails fast unless
+`TEST_DATABASE_URL` clearly identifies a test-only target distinct from
+`DATABASE_URL`:
 
 ```bash
 npm test

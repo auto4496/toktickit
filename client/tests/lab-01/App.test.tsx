@@ -2,7 +2,7 @@
 
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from '../../src/App';
 
 const healthResponse = {
@@ -22,6 +22,10 @@ const jsonResponse = (body: unknown, status = 200) =>
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+
+beforeEach(() => {
+  window.history.replaceState({}, '', '/lab-01');
+});
 
 afterEach(() => {
   cleanup();

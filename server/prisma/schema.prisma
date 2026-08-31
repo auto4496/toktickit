@@ -10,16 +10,102 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TicketStatus {
+  NEW
+}
+
+model RequesterUser {
+  id                  String                @id @default(uuid())
+  name                String
+  email               String                @unique
+  isActive            Boolean               @default(true)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt
+  tickets             Ticket[]
+  ticketCreateRequests TicketCreateRequest[]
+  uploadedAttachments Attachment[]          @relation("AttachmentUploadedBy")
+  removedAttachments  Attachment[]          @relation("AttachmentRemovedBy")
 }
 
 model Category {
   id        Int      @id @default(autoincrement())
   name      String   @unique
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  tickets   Ticket[]
+}
+
+model RelatedSystem {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id                String              @id @default(uuid())
+  ticketNumber      String              @unique
+  requesterId       String
+  categoryId        Int
+  relatedSystemId   Int
+  summary           String
+  requestedPriority Priority
+  itPriority        Priority?
+  description       String
+  currentStatus     TicketStatus        @default(NEW)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt
+  requester         RequesterUser       @relation(fields: [requesterId], references: [id], onDelete: Restrict)
+  category          Category            @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  relatedSystem     RelatedSystem       @relation(fields: [relatedSystemId], references: [id], onDelete: Restrict)
+  createRequest     TicketCreateRequest?
+  attachments       Attachment[]
+
+  @@index([requesterId, updatedAt])
+  @@index([requesterId, currentStatus, updatedAt])
+  @@index([requesterId, requestedPriority, updatedAt])
+  @@index([requesterId, categoryId, updatedAt])
+}
+
+model TicketCreateRequest {
+  id             String        @id @default(uuid())
+  requesterId    String
+  idempotencyKey String
+  requestHash    String
+  ticketId       String?       @unique
+  createdAt      DateTime      @default(now())
+  completedAt    DateTime?
+  requester      RequesterUser @relation(fields: [requesterId], references: [id], onDelete: Restrict)
+  ticket         Ticket?       @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+
+  @@unique([requesterId, idempotencyKey])
+}
+
+model Attachment {
+  id                     String         @id @default(uuid())
+  ticketId               String
+  originalName           String
+  storedName             String
+  mimeType               String
+  sizeBytes              Int
+  storageKey             String
+  uploadedByRequesterId  String
+  uploadedAt             DateTime       @default(now())
+  removedAt              DateTime?
+  removalReason          String?
+  removedByRequesterId   String?
+  ticket                 Ticket         @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  uploadedBy             RequesterUser  @relation("AttachmentUploadedBy", fields: [uploadedByRequesterId], references: [id], onDelete: Restrict)
+  removedBy              RequesterUser? @relation("AttachmentRemovedBy", fields: [removedByRequesterId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, removedAt])
 }
