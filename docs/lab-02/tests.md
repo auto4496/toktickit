@@ -109,16 +109,37 @@ At each viewport, Playwright checks `document.documentElement.scrollWidth <= doc
 
 ## 5. Test Commands
 
-Planned final commands from repository root:
+Vitest requires a dedicated PostgreSQL target through `TEST_DATABASE_URL`. Copy
+`.env.test.example` to the ignored `.env.test.local`, then set the connection to
+a database or schema created only for automated tests. Its database name or
+schema must contain a distinct `test` marker, must not contain a
+development/production/live marker, and must not match the `DATABASE_URL`
+database and schema. Vitest fails before collecting tests when any guard fails.
+
+Prepare that isolated target by temporarily supplying the same URL to Prisma:
 
 ```powershell
+Copy-Item .env.test.example .env.test.local
+# Edit .env.test.local, then use that TEST_DATABASE_URL value below.
+$env:DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/toktickit_test?schema=public"
+npx prisma migrate deploy --schema=server/prisma/schema.prisma
+Remove-Item Env:DATABASE_URL
+```
+
+Run the PostgreSQL seed/filter/order integration evidence or the complete suite
+from the repository root. Both commands load `TEST_DATABASE_URL` from
+`.env.test.local` and inject it as Prisma's `DATABASE_URL` only inside Vitest:
+
+```powershell
+npm run test:integration
 npm test
 npm run test:e2e
 npm run build:server
 npm run build:client
 ```
 
-Planned database preparation uses the documented isolated test database command added by the data-foundation Issue. Production/development data must never be cleared by automated tests.
+Production/development data must never be migrated, seeded, or cleared by
+automated tests.
 
 ## 6. Baseline and Final Results
 
@@ -140,9 +161,11 @@ Not yet executed. This section must record the final `main` commit, commands, te
 |---|---|
 | Prisma Client generation and migration deploy | Pass; `20260831003000_lab2_data_requester_context` applied to the local test database |
 | Seed executed twice | Pass; each run reported 4 Categories, 6 Related Systems, and 5 Requesters |
+| Test-database safety guard | Pass; `npm test` without `TEST_DATABASE_URL` stopped during Vitest configuration before test collection or database access |
+| `npm run test:integration` with isolated `toktickit_test` | Pass; 1 test file and 3 PostgreSQL seed/filter/order tests |
 | `npm run build:server` | Pass |
 | `npm run build:client` | Pass; Vite production bundle completed |
-| `npx vitest run` | Pass; 9 test files and 28 tests, including Lab 1 regression coverage and isolated PostgreSQL seed/filter/order coverage |
+| `npm test` with isolated `toktickit_test` | Pass; 10 test files and 34 tests, including test-database guard, Lab 1 regression, and PostgreSQL seed/filter/order coverage |
 
 ## 7. Known Limitations or Deferred Tests
 
