@@ -1,6 +1,6 @@
-# TokTickIT - Lab 01
+# TokTickIT - Lab 02 in progress
 
-TokTickIT is the Lab 1 full-stack vertical slice for an IT service desk. The React client checks the Express API and displays request categories loaded from PostgreSQL through Prisma.
+TokTickIT is an IT service-desk application. The current Lab 2 increment adds a Development Requester context and a complete Create Ticket workflow on top of the Lab 1 health/category foundation.
 
 ## Technology Stack
 
@@ -124,6 +124,8 @@ Default URLs:
 - Frontend: `http://localhost:3000`
 - Health endpoint: `http://localhost:5000/api/health`
 - Category endpoint: `http://localhost:5000/api/categories`
+- Create Ticket screen: `http://localhost:3000/tickets/new`
+- Create Ticket endpoint: `POST http://localhost:5000/api/tickets`
 
 The health endpoint returns:
 
@@ -145,7 +147,7 @@ The category endpoint returns the seeded categories in ID order:
 ]
 ```
 
-Select **Check System** in the frontend to request both endpoints. The page shows a loading state, the Online status and category list on success, or a useful Offline message when either request fails.
+Select an active Development Requester, then open **Create Ticket**. The form loads active Category and Related System values, validates Ticket fields and optional file selection, prevents duplicate submissions with an idempotency key, and shows the server-issued Ticket Number after creation. This requester selection is a Lab 2 testing context, not authentication.
 
 ## Tests and Builds
 
@@ -172,4 +174,4 @@ npm run build:server
 npm run build:client
 ```
 
-The test suite covers the server foundation, health endpoint, category endpoint, heading, loading-to-success behavior, and API failure state.
+The current suite covers the Lab 1 foundation plus test-database safety, seeded reference data, requester context, Ticket validation/number generation, sequential and concurrent idempotent creation, safe failures, and Create Ticket UI/responsive states.
