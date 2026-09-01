@@ -191,6 +191,19 @@ Not yet executed. This section must record the final `main` commit, commands, te
 | `npm test` with isolated `toktickit_test` | Pass; 18 test files and 120 tests after peer-review corrections |
 | `git diff --check` | Pass |
 
+### Issue #16 Ticket Detail and Attachment Lifecycle Results on 2026-09-01
+
+| Check | Result |
+|---|---|
+| Attachment validation unit coverage | Pass; 17 tests cover approved extension/MIME/signature combinations, safe basename normalization, control/path stripping, unsafe mappings, exact 5 MiB boundary, and removal-reason boundaries |
+| Owned Ticket Detail API | Pass; 2 tests cover read-only detail shape without storage fields and identical safe 404 behavior for missing/non-owned Tickets |
+| Attachment lifecycle API | Pass; 2 tests cover verified PNG upload, safe metadata, active download headers/bytes, soft removal, removed download blocking, and cross-requester metadata isolation |
+| Requester Ticket Detail UI | Pass; 3 tests cover loaded read-only values/Attachment actions/no Preview control, safe not-found, and safe retry failure text |
+| `npm test` with isolated `toktickit_test` | Pass; 22 test files and 144 tests |
+| `npm run build:server` | Pass |
+| `npm run build:client` | Pass; Vite production bundle completed |
+| `git diff --check` | Pass |
+
 ## 7. Known Limitations or Deferred Tests
 
 - Real authentication and role authorization are deferred to Lab 3. `X-Requester-Id` tests verify Lab 2 ownership behavior, not security against a malicious client choosing another seeded identity.

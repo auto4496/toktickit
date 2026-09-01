@@ -123,6 +123,14 @@ Each review records the commit reviewed and checks:
 - Verification after correction: focused coverage passed 3 files and 31 tests; `npm test` passed 18 files and 120 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
 - Workflow status: Issue #15 moved from PR Review to Fixing while corrections were implemented. After both correction commits were pushed, all four threads received responses and were resolved, PR #20 was formally linked to Issue #15 through the Development panel, Issue #15 returned to PR Review, and re-review was requested from `@Datakung`.
 
+### Ticket Detail and Attachment Lifecycle
+
+- Issue: [#16](https://github.com/auto4496/toktickit/issues/16)
+- Branch: `feature/lab2-5-ticket-detail-attachments`
+- Requirements/ACs/Tests: FR-19-FR-28, FR-32; BR-05-BR-06, BR-27-BR-38, BR-39-BR-43; AC-11-AC-21, AC-24; UNIT-04, API-10/API-11 plus focused Attachment lifecycle coverage, and UI-09/UI-10 foundation.
+- Implementation: requester-owned Ticket Detail, safe indistinguishable not-found behavior, disk-backed private Attachment storage with approved type/name/signature and size validation, per-Ticket active-count locking, safe metadata/download/removal endpoints, and a responsive Ticket Detail/Attachment interface with no Preview action.
+- Verification before review: the isolated full suite passed 22 files and 144 tests; server/client production builds and `git diff --check` passed. Evidence is recorded in `tests.md`.
+
 ## Pull Requests I Reviewed for My Partner
 
 Record at least the partner repository, Issue/PR link, commit reviewed, evidence checked, feedback given, partner response, follow-up verification, and final approval outcome. Do not claim a command was rerun when only code inspection was possible.
