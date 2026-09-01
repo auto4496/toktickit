@@ -23,7 +23,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Approved at `5819232`; merged by reviewer as `9ab607d` |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Corrections verified at `995128c`; re-review requested |
-| Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
+| Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | [#21](https://github.com/auto4496/toktickit/pull/21) | Corrections pushed at `5d56647`; re-review pending |
 | Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Planned |
 | Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
 
@@ -127,9 +127,13 @@ Each review records the commit reviewed and checks:
 
 - Issue: [#16](https://github.com/auto4496/toktickit/issues/16)
 - Branch: `feature/lab2-5-ticket-detail-attachments`
-- Requirements/ACs/Tests: FR-19-FR-28, FR-32; BR-05-BR-06, BR-27-BR-38, BR-39-BR-43; AC-11-AC-21, AC-24; UNIT-04, API-10/API-11 plus focused Attachment lifecycle coverage, and UI-09/UI-10 foundation.
+- Pull Request: [#21](https://github.com/auto4496/toktickit/pull/21)
+- Requirements/ACs/Tests: FR-19-FR-28, FR-32; BR-05-BR-06, BR-27-BR-38, BR-39-BR-43; AC-11-AC-21, AC-24; UNIT-04, API-10-API-18, and UI-06/UI-09-UI-11.
 - Implementation: requester-owned Ticket Detail, safe indistinguishable not-found behavior, disk-backed private Attachment storage with approved type/name/signature and size validation, per-Ticket active-count locking, safe metadata/download/removal endpoints, and a responsive Ticket Detail/Attachment interface with no Preview action.
-- Verification before review: the isolated full suite passed 22 files and 147 tests after edge-case corrections; server/client production builds and `git diff --check` passed. Focused coverage includes 4 Attachment API tests (five-active/concurrent and unavailable-file behavior) and 4 Ticket Detail UI tests (including Escape dialog dismissal). Evidence is recorded in `tests.md`.
+- Verification before review: the isolated full suite passed 22 files and 147 tests after edge-case corrections; server/client production builds and `git diff --check` passed.
+- Review feedback at `e942b2e`: add post-create per-file uploads and Retry; clean rejected temporary/final files; enforce ownership before validation details; align upload codes; prevent stale concurrent UI updates; add uploading/invalid/failed/unavailable/removed/ownership UI states; trap dialog focus; complete API-12-API-18 compensation/boundary/failure coverage; and formally link PR #21 to Issue #16.
+- Correction response: commit `5d56647` implements post-create per-file upload retention/Retry/Remove, owned upload preflight, contracted error codes, awaited cleanup and compensation coverage, functional Attachment UI updates with explicit busy/failure states, safe unavailable/ownership feedback, and complete dialog focus management. PR #21 is linked in Issue #16's Development panel.
+- Verification after correction: focused UI coverage passed 2 files and 19 tests; focused Attachment API coverage passed 1 file and 9 tests; `npm test` passed 22 files and 160 tests against isolated `toktickit_test`; server/client production builds and `git diff --check` passed. Evidence is recorded in `tests.md`.
 
 ## Pull Requests I Reviewed for My Partner
 
