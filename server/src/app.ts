@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import prisma from './prisma.js';
 import { sendExpectedError, sendUnexpectedError } from './api-error.js';
@@ -186,6 +186,39 @@ app.post(
         error,
       );
     }
+  },
+);
+
+type JsonParseError = SyntaxError & { type?: string };
+
+const isJsonParseError = (error: unknown): error is JsonParseError =>
+  error instanceof SyntaxError &&
+  (error as JsonParseError).type === 'entity.parse.failed';
+
+app.use(
+  (error: unknown, _req: Request, res: Response, next: NextFunction) => {
+    if (res.headersSent) {
+      next(error);
+      return;
+    }
+
+    if (isJsonParseError(error)) {
+      sendExpectedError(
+        res,
+        400,
+        'INVALID_JSON',
+        'Request body must contain valid JSON.',
+      );
+      return;
+    }
+
+    sendUnexpectedError(
+      res,
+      'REQUEST_FAILED',
+      'The request could not be processed. Try again.',
+      'request.middleware',
+      error,
+    );
   },
 );
 

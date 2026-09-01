@@ -126,6 +126,28 @@ describe('Create Ticket', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
+  it('exposes accessible required semantics for every required Ticket field', async () => {
+    const fetchMock = vi.fn((input: RequestInfo | URL) =>
+      Promise.resolve(referenceResponse(input)),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderCreateTicket();
+    await screen.findByRole('option', { name: 'Hardware' });
+
+    expect(screen.getByRole('combobox', { name: /Category.*required/i })).toBeRequired();
+    expect(
+      screen.getByRole('combobox', { name: /Related System.*required/i }),
+    ).toBeRequired();
+    expect(
+      screen.getByRole('combobox', { name: /Requested Priority.*required/i }),
+    ).toBeRequired();
+    expect(screen.getByRole('textbox', { name: /Summary.*required/i })).toBeRequired();
+    expect(
+      screen.getByRole('textbox', { name: /Description.*required/i }),
+    ).toBeRequired();
+  });
+
   it('shows a safe reference failure and Retry preserves entered text', async () => {
     const fetchMock = vi
       .fn()
@@ -205,9 +227,10 @@ describe('Create Ticket', () => {
       resolveCreate(jsonResponse(ticketResponse, 201));
     });
 
-    expect(
-      await screen.findByRole('heading', { name: 'Ticket created' }),
-    ).toBeInTheDocument();
+    const successHeading = await screen.findByRole('heading', {
+      name: 'Ticket created',
+    });
+    expect(successHeading).toHaveFocus();
     expect(screen.getByText('TKT-20260831-A1B2C3D4')).toBeInTheDocument();
     expect(screen.getByText('VPN disconnects after sign-in')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'View Ticket' })).toHaveAttribute(

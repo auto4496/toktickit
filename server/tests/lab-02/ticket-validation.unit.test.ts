@@ -42,7 +42,9 @@ describe('Lab 2 Ticket validation and normalization', () => {
   it.each([
     ['categoryId', { categoryId: 0 }],
     ['categoryId', { categoryId: 1.5 }],
+    ['categoryId', { categoryId: 2_147_483_648 }],
     ['relatedSystemId', { relatedSystemId: '2' }],
+    ['relatedSystemId', { relatedSystemId: Number.MAX_SAFE_INTEGER }],
     ['requestedPriority', { requestedPriority: 'URGENT' }],
     ['summary', { summary: '    ' }],
     ['summary', { summary: '1234' }],

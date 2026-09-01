@@ -208,6 +208,10 @@ body {
   font-weight: 650;
 }
 
+.required-indicator {
+  color: #9b2828;
+}
+
 .ticket-card select,
 .ticket-card input[type='text'],
 .ticket-card input[type='file'],

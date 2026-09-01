@@ -18,6 +18,12 @@ describe('Lab 2 responsive and touch-target styles', () => {
     );
   });
 
+  it('styles the visible required indicator with the approved error color', () => {
+    expect(styles).toMatch(
+      /\.required-indicator\s*\{[\s\S]*?color:\s*#9b2828;[\s\S]*?\}/,
+    );
+  });
+
   it('stacks Create Ticket grids and actions on mobile without long-value overflow', () => {
     expect(styles).toMatch(
       /\.readonly-grid,[\s\S]*?\.classification-grid\s*\{\s*grid-template-columns:\s*1fr;/,

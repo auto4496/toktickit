@@ -6,6 +6,7 @@ export const IDEMPOTENCY_KEY_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const TICKET_NUMBER_ATTEMPTS = 3;
+const POSTGRES_INTEGER_MAX = 2_147_483_647;
 const priorities = ['LOW', 'MEDIUM', 'HIGH'] as const;
 
 export type TicketPriority = (typeof priorities)[number];
@@ -31,6 +32,12 @@ const normalizeSummary = (value: string) => value.normalize('NFC').trim();
 const normalizeDescription = (value: string) =>
   value.normalize('NFC').replace(/\r\n/g, '\n').trim();
 
+const isPostgresIntegerId = (value: unknown): value is number =>
+  typeof value === 'number' &&
+  Number.isInteger(value) &&
+  value > 0 &&
+  value <= POSTGRES_INTEGER_MAX;
+
 export const validateTicketInput = (body: unknown): TicketValidationResult => {
   const input =
     typeof body === 'object' && body !== null
@@ -39,12 +46,12 @@ export const validateTicketInput = (body: unknown): TicketValidationResult => {
   const fieldErrors: TicketFieldErrors = {};
 
   const categoryId = input.categoryId;
-  if (!Number.isInteger(categoryId) || Number(categoryId) <= 0) {
+  if (!isPostgresIntegerId(categoryId)) {
     fieldErrors.categoryId = 'Select an active Category.';
   }
 
   const relatedSystemId = input.relatedSystemId;
-  if (!Number.isInteger(relatedSystemId) || Number(relatedSystemId) <= 0) {
+  if (!isPostgresIntegerId(relatedSystemId)) {
     fieldErrors.relatedSystemId = 'Select an active Related System.';
   }
 

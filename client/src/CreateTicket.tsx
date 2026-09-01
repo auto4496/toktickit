@@ -181,6 +181,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
   const [createdTicket, setCreatedTicket] = useState<TicketData | null>(null);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -204,6 +205,10 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
       active = false;
     };
   }, [referenceAttempt]);
+
+  useEffect(() => {
+    if (createdTicket) successHeadingRef.current?.focus();
+  }, [createdTicket]);
 
   const clearPendingSubmission = () =>
     window.sessionStorage.removeItem(CREATE_TICKET_PENDING_KEY);
@@ -300,7 +305,9 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
       <main className="workspace create-ticket-page">
         <section className="ticket-success" aria-labelledby="ticket-success-title">
           <p className="eyebrow">Request saved</p>
-          <h1 id="ticket-success-title">Ticket created</h1>
+          <h1 id="ticket-success-title" ref={successHeadingRef} tabIndex={-1}>
+            Ticket created
+          </h1>
           <p className="ticket-number">{createdTicket.ticketNumber}</p>
           <dl className="saved-ticket-grid">
             <div><dt>Requester</dt><dd>{createdTicket.requester.name}</dd></div>
@@ -371,9 +378,13 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
 
           <div className="classification-grid">
             <div>
-              <label htmlFor="ticket-category">Category <span aria-hidden="true">*</span></label>
+              <label htmlFor="ticket-category">
+                Category <span className="required-indicator" aria-hidden="true">*</span>
+                <span className="visually-hidden"> required</span>
+              </label>
               <select
                 id="ticket-category"
+                required
                 value={values.categoryId}
                 disabled={referenceState !== 'ready' || submitting}
                 aria-invalid={Boolean(fieldErrors.categoryId)}
@@ -386,9 +397,13 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
               {fieldErrors.categoryId && <p id="ticket-category-error" className="field-error">{fieldErrors.categoryId}</p>}
             </div>
             <div>
-              <label htmlFor="ticket-system">Related System <span aria-hidden="true">*</span></label>
+              <label htmlFor="ticket-system">
+                Related System <span className="required-indicator" aria-hidden="true">*</span>
+                <span className="visually-hidden"> required</span>
+              </label>
               <select
                 id="ticket-system"
+                required
                 value={values.relatedSystemId}
                 disabled={referenceState !== 'ready' || submitting}
                 aria-invalid={Boolean(fieldErrors.relatedSystemId)}
@@ -401,9 +416,13 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
               {fieldErrors.relatedSystemId && <p id="ticket-system-error" className="field-error">{fieldErrors.relatedSystemId}</p>}
             </div>
             <div>
-              <label htmlFor="ticket-priority">Requested Priority <span aria-hidden="true">*</span></label>
+              <label htmlFor="ticket-priority">
+                Requested Priority <span className="required-indicator" aria-hidden="true">*</span>
+                <span className="visually-hidden"> required</span>
+              </label>
               <select
                 id="ticket-priority"
+                required
                 value={values.requestedPriority}
                 disabled={submitting}
                 aria-invalid={Boolean(fieldErrors.requestedPriority)}
@@ -417,10 +436,14 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
             </div>
           </div>
 
-          <label htmlFor="ticket-summary">Summary <span aria-hidden="true">*</span></label>
+          <label htmlFor="ticket-summary">
+            Summary <span className="required-indicator" aria-hidden="true">*</span>
+            <span className="visually-hidden"> required</span>
+          </label>
           <input
             id="ticket-summary"
             type="text"
+            required
             maxLength={120}
             value={values.summary}
             disabled={submitting}
@@ -431,9 +454,13 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
           <p id="ticket-summary-help" className="field-help">5 to 120 characters</p>
           {fieldErrors.summary && <p id="ticket-summary-error" className="field-error">{fieldErrors.summary}</p>}
 
-          <label htmlFor="ticket-description">Description <span aria-hidden="true">*</span></label>
+          <label htmlFor="ticket-description">
+            Description <span className="required-indicator" aria-hidden="true">*</span>
+            <span className="visually-hidden"> required</span>
+          </label>
           <textarea
             id="ticket-description"
+            required
             rows={6}
             maxLength={2_000}
             value={values.description}

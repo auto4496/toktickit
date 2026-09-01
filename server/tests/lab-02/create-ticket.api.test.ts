@@ -138,6 +138,48 @@ describe('POST /api/tickets', () => {
     );
   });
 
+  it('rejects reference IDs outside the PostgreSQL integer range', async () => {
+    const before = await prisma.ticket.count({ where: { requesterId } });
+    const response = await postTicket(randomUUID(), {
+      ...validBody(),
+      categoryId: Number.MAX_SAFE_INTEGER,
+      relatedSystemId: 2_147_483_648,
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toMatchObject({
+      code: 'VALIDATION_FAILED',
+      fieldErrors: {
+        categoryId: expect.any(String),
+        relatedSystemId: expect.any(String),
+      },
+    });
+    await expect(prisma.ticket.count({ where: { requesterId } })).resolves.toBe(
+      before,
+    );
+  });
+
+  it('returns safe JSON for a malformed JSON request body', async () => {
+    const before = await prisma.ticket.count({ where: { requesterId } });
+    const response = await request(app)
+      .post('/api/tickets')
+      .set(requesterHeader)
+      .set('Idempotency-Key', randomUUID())
+      .set('Content-Type', 'application/json')
+      .send('{"categoryId":');
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toMatch(/application\/json/);
+    expect(response.body.error).toEqual({
+      code: 'INVALID_JSON',
+      message: 'Request body must contain valid JSON.',
+    });
+    expect(response.text).not.toMatch(/syntaxerror|stack|\\users\\|toktickit|app\.ts/i);
+    await expect(prisma.ticket.count({ where: { requesterId } })).resolves.toBe(
+      before,
+    );
+  });
+
   it('rejects inactive reference values and saves nothing', async () => {
     const before = await prisma.ticket.count({ where: { requesterId } });
     const response = await postTicket(randomUUID(), {
