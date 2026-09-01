@@ -19,8 +19,9 @@ describe('Lab 2 responsive and touch-target styles', () => {
   });
 
   it('styles the visible required indicator with the approved error color', () => {
+    expect(styles).toMatch(/:root\s*\{[\s\S]*?--color-error:\s*#B42318;/);
     expect(styles).toMatch(
-      /\.required-indicator\s*\{[\s\S]*?color:\s*#9b2828;[\s\S]*?\}/,
+      /\.required-indicator\s*\{[\s\S]*?color:\s*var\(--color-error\);[\s\S]*?\}/,
     );
   });
 

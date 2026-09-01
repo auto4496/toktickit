@@ -101,6 +101,9 @@ Each review records the commit reviewed and checks:
 - Review feedback received at `48d35fb`: add safe JSON handling for malformed request bodies; reject Category and Related System IDs outside PostgreSQL's 32-bit integer range; expose required-field semantics and styling to assistive technology; and announce or focus the successful creation state.
 - My response and correction: added application-level JSON error middleware, bounded reference-ID validation, required control semantics and visible markers, managed focus on the success heading, and focused unit/API/UI/style regression coverage.
 - Verification after correction: `npm test` passed 15 files and 77 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
+- Follow-up review feedback at `f0c3763`: the required indicator used a hard-coded color instead of the approved `--color-error: #B42318` design token.
+- Follow-up correction: defined the approved error token and used it for required indicators, invalid borders, and field-error text; the style regression verifies both the token value and its use.
+- Follow-up verification: `ResponsiveStyles.test.tsx` passed 1 file and 4 tests against the isolated test configuration; the client production build and `git diff --check` passed.
 - Review status: PR #19 targets `lab2-staging`, remains unmerged, and is ready for `@Datakung` re-review after the correction push. The reviewer must merge after approval.
 
 ## Pull Requests I Reviewed for My Partner

@@ -173,7 +173,7 @@ Not yet executed. This section must record the final `main` commit, commands, te
 |---|---|
 | Test-first Ticket unit/API coverage | Pass; Ticket Number, validation, canonical hashing, valid create, inactive references, sequential/concurrent idempotency, conflict, and safe failure are covered |
 | Create Ticket UI coverage | Pass; 7 tests cover reference states, linked/required validation, Attachment selection, busy protection, focused success confirmation, safe retry preservation, and idempotency-key rotation/reuse |
-| Responsive Create Ticket style coverage | Pass; mobile grids/actions stack, 44px actions remain enforced, and long saved/selected values wrap safely |
+| Responsive Create Ticket style coverage | Pass; mobile grids/actions stack, 44px actions remain enforced, long saved/selected values wrap safely, and required/error states use the approved `--color-error: #B42318` token |
 | `npm run build:server` | Pass |
 | `npm run build:client` | Pass; Vite production bundle completed |
 | `npm test` with isolated `toktickit_test` | Pass; 15 test files and 77 tests after peer-review corrections |
