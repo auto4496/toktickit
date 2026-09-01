@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: My Tickets peer-review corrections implemented and verified
+Status: My Tickets peer-review corrections verified and returned for re-review
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -22,7 +22,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
 | Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Approved at `5819232`; merged by reviewer as `9ab607d` |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
-| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Corrections verified at `995128c`; re-review pending |
+| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Corrections verified at `995128c`; re-review requested |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
 | Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Planned |
 | Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
@@ -121,7 +121,7 @@ Each review records the commit reviewed and checks:
 - My response and correction: result summaries now derive from returned rows and are omitted for empty pages; empty, no-results, and out-of-range states are polite status regions; desktop and mobile use the same NEW badge backed by `--color-pale-green`; API coverage verifies both directions and Ticket Number tie-breaking for every sort field; and the GitHub Development panel links PR #20 to Issue #15.
 - Correction commit: `995128c`.
 - Verification after correction: focused coverage passed 3 files and 31 tests; `npm test` passed 18 files and 120 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
-- Workflow status: Issue #15 moved from PR Review to Fixing while corrections were implemented. PR #20 targets `lab2-staging`, is formally linked to Issue #15 through the Development panel, and will return to PR Review after every thread receives a response.
+- Workflow status: Issue #15 moved from PR Review to Fixing while corrections were implemented. After both correction commits were pushed, all four threads received responses and were resolved, PR #20 was formally linked to Issue #15 through the Development panel, Issue #15 returned to PR Review, and re-review was requested from `@Datakung`.
 
 ## Pull Requests I Reviewed for My Partner
 
