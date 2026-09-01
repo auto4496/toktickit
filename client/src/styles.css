@@ -528,6 +528,17 @@ body {
   text-align: center;
 }
 
+.detail-page { max-width: 1100px; margin: 0 auto; padding: clamp(1.25rem, 4vw, 3rem); }
+.back-link { padding-left: 0; }
+.detail-header, .page-heading-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.detail-header h1 { margin: 0; overflow-wrap: anywhere; }
+.detail-dates, .attachment-help, .attachment-row span { color: #52665e; }
+.detail-panel { margin-top: 1.5rem; padding: clamp(1rem, 3vw, 2rem); border: 1px solid #d8e4da; border-radius: 1rem; background: #fff; }
+.detail-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin: 1rem 0 0; }
+.detail-grid div { min-width: 0; }.detail-grid dt { color: #52665e; font-weight: 700; }.detail-grid dd { margin: .35rem 0 0; overflow-wrap: anywhere; }.detail-wide { grid-column: 1 / -1; }
+.attachment-add { position: relative; overflow: hidden; }.attachment-add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.attachment-list { display: grid; gap: .75rem; margin: 1rem 0 0; padding: 0; list-style: none; }.attachment-row { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid #e2ebe4; border-radius: .75rem; }.attachment-row strong, .attachment-row span { display: block; overflow-wrap: anywhere; }.attachment-actions { display: flex; align-items: flex-start; gap: .5rem; }.removed-badge { margin-top: .5rem; color: #6a4a13; background: #fff7e0; }.attachment-unavailable { margin-top: .5rem; color: #9b2c20; font-weight: 650; }.dialog-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 1rem; background: rgb(25 45 34 / .55); }.removal-dialog { width: min(100%, 34rem); padding: 1.5rem; border-radius: 1rem; background: white; box-shadow: 0 1rem 3rem rgb(0 0 0 / .25); }.removal-dialog textarea { width: 100%; min-height: 7rem; margin-top: .4rem; }
+
 @media (max-width: 767px) {
   .topbar { flex-wrap: wrap; gap: 0.75rem 1rem; }
   .menu-button { display: block; margin-left: auto; }
@@ -566,4 +577,5 @@ body {
   .ticket-list-card dd { min-width: 0; margin: 0; overflow-wrap: anywhere; text-align: right; }
   .ticket-pagination { display: grid; grid-template-columns: 1fr 1fr; }
   .ticket-pagination span { grid-column: 1 / -1; grid-row: 1; }
+  .detail-header, .attachment-row { flex-direction: column; }.detail-grid { grid-template-columns: 1fr; }.detail-wide { grid-column: auto; }.attachment-actions { width: 100%; }.attachment-actions .btn { flex: 1; }
 }

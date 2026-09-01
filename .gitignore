@@ -26,6 +26,7 @@ pnpm-debug.log*
 # Testing & Coverage
 coverage/
 .vitest/
+tmp/attachments/
 
 # OS / Editor Files
 .DS_Store
