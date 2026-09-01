@@ -45,6 +45,18 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
     return () => { active = false; };
   }, [requester.id, ticketId, retry]);
 
+  useEffect(() => {
+    if (!removing) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setRemoving(null); setReason(''); removeButton.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [removing]);
+
   const upload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = '';

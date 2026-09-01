@@ -41,4 +41,13 @@ describe('Requester Ticket Detail', () => {
     expect(screen.getByText('Ticket details could not be loaded. Try again.')).toBeInTheDocument();
     expect(screen.queryByText(/SQL at/i)).not.toBeInTheDocument();
   });
+
+  it('opens a named removal dialog and closes it with Escape', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ data: detail }))));
+    render(<App />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Remove' }));
+    expect(screen.getByRole('dialog', { name: 'Remove vpn-error.png?' })).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
 });

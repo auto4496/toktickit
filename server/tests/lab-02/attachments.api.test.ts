@@ -9,6 +9,7 @@ const requesterAId = '55555555-5555-4555-8555-555555555551';
 const requesterBId = '55555555-5555-4555-8555-555555555552';
 const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
 let ticketId: string;
+let concurrentTicketId: string;
 let attachmentId: string;
 
 beforeAll(async () => {
@@ -24,6 +25,8 @@ beforeAll(async () => {
   const relatedSystem = await prisma.relatedSystem.findFirstOrThrow({ where: { isActive: true } });
   const ticket = await prisma.ticket.create({ data: { ticketNumber: 'TKT-20260901-16000002', requesterId: requesterAId, categoryId: category.id, relatedSystemId: relatedSystem.id, summary: 'Attachment lifecycle Ticket', description: 'Ticket used to verify Attachment lifecycle.', requestedPriority: 'LOW' } });
   ticketId = ticket.id;
+  const concurrentTicket = await prisma.ticket.create({ data: { ticketNumber: 'TKT-20260901-16000003', requesterId: requesterAId, categoryId: category.id, relatedSystemId: relatedSystem.id, summary: 'Concurrent Attachment Ticket', description: 'Ticket used to verify concurrent Attachment admission.', requestedPriority: 'LOW' } });
+  concurrentTicketId = concurrentTicket.id;
 });
 
 afterAll(async () => {
@@ -57,5 +60,32 @@ describe('Attachment lifecycle', () => {
     const response = await request(app).get(`/api/attachments/${attachmentId}`).set('X-Requester-Id', requesterBId);
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ error: { code: 'RESOURCE_NOT_FOUND', message: 'The requested resource was not found.' } });
+  });
+
+  it('enforces the five-active limit, permits a replacement, and serializes concurrent admission', async () => {
+    await prisma.attachment.createMany({ data: Array.from({ length: 5 }, (_, index) => ({ ticketId, originalName: `limit-${index}.png`, storedName: `limit-${index}.png`, storageKey: `limit-${index}.png`, mimeType: 'image/png', sizeBytes: png.length, uploadedByRequesterId: requesterAId })) });
+    const sixth = await request(app).post(`/api/tickets/${ticketId}/attachments`).set('X-Requester-Id', requesterAId).attach('file', png, { filename: 'sixth.png', contentType: 'image/png' });
+    expect(sixth.status).toBe(409);
+    expect(sixth.body.error.code).toBe('ATTACHMENT_LIMIT_REACHED');
+    const first = await prisma.attachment.findFirstOrThrow({ where: { ticketId, removedAt: null } });
+    await prisma.attachment.update({ where: { id: first.id }, data: { removedAt: new Date(), removalReason: 'Free an active attachment slot.', removedByRequesterId: requesterAId } });
+    const replacement = await request(app).post(`/api/tickets/${ticketId}/attachments`).set('X-Requester-Id', requesterAId).attach('file', png, { filename: 'replacement.png', contentType: 'image/png' });
+    expect(replacement.status).toBe(201);
+
+    await prisma.attachment.createMany({ data: Array.from({ length: 4 }, (_, index) => ({ ticketId: concurrentTicketId, originalName: `parallel-${index}.png`, storedName: `parallel-${index}.png`, storageKey: `parallel-${index}.png`, mimeType: 'image/png', sizeBytes: png.length, uploadedByRequesterId: requesterAId })) });
+    const [left, right] = await Promise.all([
+      request(app).post(`/api/tickets/${concurrentTicketId}/attachments`).set('X-Requester-Id', requesterAId).attach('file', png, { filename: 'parallel-left.png', contentType: 'image/png' }),
+      request(app).post(`/api/tickets/${concurrentTicketId}/attachments`).set('X-Requester-Id', requesterAId).attach('file', png, { filename: 'parallel-right.png', contentType: 'image/png' }),
+    ]);
+    expect([left.status, right.status].sort()).toEqual([201, 409]);
+    expect(await prisma.attachment.count({ where: { ticketId: concurrentTicketId, removedAt: null } })).toBe(5);
+  });
+
+  it('returns a safe unavailable-file error without leaking private storage information', async () => {
+    const unavailable = await prisma.attachment.create({ data: { ticketId, originalName: 'missing.pdf', storedName: 'private.pdf', storageKey: 'does-not-exist.pdf', mimeType: 'application/pdf', sizeBytes: 5, uploadedByRequesterId: requesterAId } });
+    const response = await request(app).get(`/api/attachments/${unavailable.id}/download`).set('X-Requester-Id', requesterAId);
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: { code: 'ATTACHMENT_FILE_UNAVAILABLE', message: 'This file cannot be downloaded right now.' } });
+    expect(response.text).not.toContain('does-not-exist');
   });
 });
