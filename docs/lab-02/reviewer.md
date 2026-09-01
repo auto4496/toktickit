@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Create Ticket submitted for peer review
+Status: My Tickets peer-review corrections verified and returned for re-review
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -21,8 +21,8 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 |---|---|---|---|---|---|
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
 | Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Approved at `5819232`; merged by reviewer as `9ab607d` |
-| Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Review requested from `@Datakung` |
-| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | TBD | Planned |
+| Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
+| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Corrections verified at `995128c`; re-review requested |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
 | Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Planned |
 | Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
@@ -104,7 +104,24 @@ Each review records the commit reviewed and checks:
 - Follow-up review feedback at `f0c3763`: the required indicator used a hard-coded color instead of the approved `--color-error: #B42318` design token.
 - Follow-up correction: defined the approved error token and used it for required indicators, invalid borders, and field-error text; the style regression verifies both the token value and its use.
 - Follow-up verification: `ResponsiveStyles.test.tsx` passed 1 file and 4 tests against the isolated test configuration; the client production build and `git diff --check` passed.
-- Review status: PR #19 targets `lab2-staging`, remains unmerged, and is ready for `@Datakung` re-review after the correction push. The reviewer must merge after approval.
+- Approval: Approved by `@Datakung` at `bbb3a1d` on 2026-09-01 after all five review threads were answered and resolved.
+- Merge: Merged by the peer reviewer into `lab2-staging` as `8f78ab7` on 2026-09-01; Issue #14 then moved to Done and was closed.
+
+### My Tickets Ownership, Querying, and Responsive States
+
+- Issue: [#15](https://github.com/auto4496/toktickit/issues/15)
+- Pull Request: [#20](https://github.com/auto4496/toktickit/pull/20)
+- Branch: `feature/lab2-4-my-tickets`
+- Implementation commit: `9efd496`
+- Requirements/ACs/Tests: FR-14-FR-18, FR-29-FR-32; BR-04-BR-07, BR-20-BR-25, BR-39-BR-43; AC-08-AC-10, AC-22-AC-24; UNIT-03, API-07-API-09, UI-07, UI-08, and the relevant STYLE-01 coverage.
+- Implementation: strict query parsing and safe field errors; Requester-owned Ticket summaries; deterministic secondary ordering; scalable explicit LOW-MEDIUM-HIGH priority ranking; one-based pagination metadata; and an accessible My Tickets UI with search, filters, sorting, page size, loading, empty, no-results, safe failure/Retry, desktop table, and mobile cards.
+- Verification before review: `npm test` passed 18 files and 118 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
+- Browser verification: the live local flow passed at 1440x900, 834x1112, and 390x844 with no horizontal page overflow, no hidden tablet action, desktop/tablet tables, mobile cards, 44px View actions, and working search/no-results/Clear Filters recovery.
+- Review feedback received at `cacddb9`: prevent inverted result ranges on valid out-of-range pages; announce first-use empty and filtered no-results transitions; use the approved pale-green NEW badge consistently; exercise both directions for every supported sort and its deterministic secondary order; and formally link PR #20 to Issue #15.
+- My response and correction: result summaries now derive from returned rows and are omitted for empty pages; empty, no-results, and out-of-range states are polite status regions; desktop and mobile use the same NEW badge backed by `--color-pale-green`; API coverage verifies both directions and Ticket Number tie-breaking for every sort field; and the GitHub Development panel links PR #20 to Issue #15.
+- Correction commit: `995128c`.
+- Verification after correction: focused coverage passed 3 files and 31 tests; `npm test` passed 18 files and 120 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
+- Workflow status: Issue #15 moved from PR Review to Fixing while corrections were implemented. After both correction commits were pushed, all four threads received responses and were resolved, PR #20 was formally linked to Issue #15 through the Development panel, Issue #15 returned to PR Review, and re-review was requested from `@Datakung`.
 
 ## Pull Requests I Reviewed for My Partner
 

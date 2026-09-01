@@ -1,6 +1,6 @@
 # Lab 2 Test Plan and Results
 
-Status: Implemented through Issue #14 Create Ticket; later increments remain planned
+Status: Implemented through Issue #15 My Tickets; later increments remain planned
 
 Contract source: [specification.md](./specification.md), [api-spec.md](./api-spec.md), and [ui-spec.md](./ui-spec.md)
 
@@ -28,7 +28,7 @@ Test data must be deterministic and isolated. API tests create their own Request
 |---|---|---|---|---|---|---|
 | UNIT-01 | Unit | BR-08, BR-09, AC-04 | Ticket Number generator format and collision retry | Valid `TKT-YYYYMMDD-XXXXXXXX`; retry succeeds or safe failure after limit | `server/tests/lab-02/ticket-number.unit.test.ts` | Pass (3 tests) |
 | UNIT-02 | Unit | BR-11-BR-16, AC-05, AC-25 | Ticket normalization and validation boundaries | Trimmed valid values accepted; blank, short, long, enum, and inactive references rejected | `server/tests/lab-02/ticket-validation.unit.test.ts` | Pass (12 tests) |
-| UNIT-03 | Unit | BR-20-BR-25, AC-09 | Ticket-list query parser | Defaults and permitted values normalize; invalid values return field errors | `server/tests/lab-02/ticket-query.unit.test.ts` | Planned |
+| UNIT-03 | Unit | BR-20-BR-25, AC-09 | Ticket-list query parser | Defaults and permitted values normalize; invalid values return field errors | `server/tests/lab-02/ticket-query.unit.test.ts` | Pass (16 tests) |
 | UNIT-04 | Unit | BR-27-BR-30, BR-35, AC-14-AC-16, AC-18 | Attachment type, size, count, safe-basename, signature, and reason rules | Exact boundaries and approved extension/MIME/magic-byte mappings pass; traversal, control, empty, overlong, mismatch, and malformed cases fail safely | `server/tests/lab-02/attachment-validation.unit.test.ts` | Planned |
 | UNIT-05 | Unit | BR-18, AC-06 | Canonical Ticket request and idempotency hash | Fixed key order, UUID/enum casing, Unicode NFC, CRLF-to-LF, trimming, and preserved internal whitespace produce deterministic SHA-256; a meaningful field change changes the hash | `server/tests/lab-02/ticket-idempotency.unit.test.ts` | Pass (3 tests) |
 | API-01 | API/integration | FR-02, FR-07, FR-32, BR-02, AC-01, AC-24, AC-25 | Active Requesters, Categories, Related Systems, seeded PostgreSQL filtering/ordering, and injected lookup failures | Only active rows returned in documented order/shapes; each unexpected lookup failure returns a safe code/message without database details and logs matching operational context | `server/tests/lab-02/reference-data.api.test.ts`, `server/tests/lab-02/reference-data.integration.test.ts` | Pass (9 tests) |
@@ -37,9 +37,9 @@ Test data must be deterministic and isolated. API tests create their own Request
 | API-04 | API | FR-09, BR-11-BR-16, AC-05, AC-25 | Create Ticket validation table, including PostgreSQL integer boundaries | `400` field errors; zero Ticket rows created | `server/tests/lab-02/create-ticket.api.test.ts` | Pass (14-test API suite) |
 | API-05 | API | FR-11, BR-17-BR-18, AC-06 | Sequential and concurrent Ticket idempotency | Same key/canonical hash replays original; changed hash returns `409`; two concurrent same-key requests create exactly one Ticket and the loser returns replay rather than `500` | `server/tests/lab-02/create-ticket.api.test.ts` | Pass (14-test API suite) |
 | API-06 | API | FR-13, BR-39-BR-40, AC-07, AC-24 | Safe Ticket-create and malformed-JSON failures | Generic safe JSON without stack, path, SQL, or private details; unexpected failures include a correlation ID | `server/tests/lab-02/create-ticket.api.test.ts` | Pass (14-test API suite) |
-| API-07 | API | FR-14, FR-32, BR-04-BR-07, AC-08, AC-24 | My Tickets ownership, pagination metadata, and injected failure | Only selected Requester's Tickets returned with accurate metadata; unexpected list failure returns a safe error without query/database details | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
-| API-08 | API | FR-15-FR-16, BR-20-BR-24, AC-09 | Search, each filter, sort, secondary order, and page boundaries | Deterministic documented subset/order, including priority asc `LOW, MEDIUM, HIGH` and desc reverse | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
-| API-09 | API | BR-25, AC-09 | Invalid ticket-list queries | `400 INVALID_QUERY_PARAMETER` with field errors | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
+| API-07 | API | FR-14, FR-32, BR-04-BR-07, AC-08, AC-24 | My Tickets ownership, pagination metadata, and injected failure | Only selected Requester's Tickets returned with accurate metadata; unexpected list failure returns a safe error without query/database details | `server/tests/lab-02/my-tickets.api.test.ts` | Pass (19-test API suite) |
+| API-08 | API | FR-15-FR-16, BR-20-BR-24, AC-09 | Search, each filter, sort, secondary order, and page boundaries | Deterministic documented subset/order, including priority asc `LOW, MEDIUM, HIGH` and desc reverse | `server/tests/lab-02/my-tickets.api.test.ts` | Pass (19-test API suite) |
+| API-09 | API | BR-25, AC-09 | Invalid ticket-list queries | `400 INVALID_QUERY_PARAMETER` with field errors | `server/tests/lab-02/my-tickets.api.test.ts` | Pass (19-test API suite) |
 | API-10 | API | FR-19, FR-21, FR-32, AC-11, AC-24 | Owned Ticket Detail and injected failure | `200` read-only data shape with owned Attachment metadata; unexpected detail failure returns a safe error without database details | `server/tests/lab-02/ticket-detail.api.test.ts` | Planned |
 | API-11 | API | FR-20, BR-05-BR-06, AC-12 | Missing and cross-requester Ticket Detail | Same safe `404`; response contains no Ticket data | `server/tests/lab-02/ticket-detail.api.test.ts` | Planned |
 | API-12 | API | FR-22-FR-24, FR-32, BR-27-BR-33, AC-13, AC-24 | Valid Attachment upload/metadata and injected storage failure | `201` safe metadata after storage; private path absent; unexpected storage/DB failure uses safe error and leaves no residue | `server/tests/lab-02/attachments.api.test.ts` | Planned |
@@ -55,12 +55,12 @@ Test data must be deterministic and isolated. API tests create their own Request
 | UI-04 | UI | FR-10-FR-12, BR-18, AC-04, AC-06 | Create busy/success and idempotency-key lifecycle | Submit disabled while pending; retries retain the key for unchanged canonical data; post-send edit or terminal action rotates it; official number/backend values shown once and success receives focus | `client/tests/lab-02/CreateTicket.test.tsx` | Pass (7-test UI suite) |
 | UI-05 | UI | FR-13, BR-19, AC-07, AC-24 | Create API failure preservation | Safe error; editable values and valid selected files retained | `client/tests/lab-02/CreateTicket.test.tsx` | Pass (7-test UI suite) |
 | UI-06 | UI | BR-34, AC-21 | Partial Attachment upload after Ticket create | Ticket success retained; each failed file identified with Retry | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
-| UI-07 | UI | FR-14-FR-18, FR-32, AC-08-AC-10, AC-24 | My Tickets loaded, loading, empty, no-results, expected failure, and unexpected safe failure | Correct distinct states/results/actions; unexpected error exposes no backend detail and Retry retains current query controls | `client/tests/lab-02/MyTickets.test.tsx` | Planned |
-| UI-08 | UI | FR-15-FR-16, AC-09 | Search/filter/sort/page interactions | Documented query generated; filter/page interactions reset correctly | `client/tests/lab-02/MyTickets.test.tsx` | Planned |
+| UI-07 | UI | FR-14-FR-18, FR-32, AC-08-AC-10, AC-24 | My Tickets loaded, loading, empty, no-results, out-of-range, expected failure, and unexpected safe failure | Correct distinct announced states/results/actions; no inverted empty-page range; unexpected error exposes no backend detail and Retry retains current query controls | `client/tests/lab-02/MyTickets.test.tsx` | Pass (6-test UI suite) |
+| UI-08 | UI | FR-15-FR-16, AC-09 | Search/filter/sort/page interactions | Documented query generated; filter/page interactions reset correctly | `client/tests/lab-02/MyTickets.test.tsx` | Pass (6-test UI suite) |
 | UI-09 | UI | FR-19-FR-21, FR-32, AC-11-AC-12, AC-24 | Ticket Detail loading, owned data, not-found, and unexpected failure | Read-only information and separate Attachment section; safe not-found; unexpected error exposes no backend detail and Retry works | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Planned |
 | UI-10 | UI | FR-22-FR-27, FR-32, AC-13-AC-19, AC-24 | Attachment active, uploading, unsafe/invalid, failed, unavailable-file, removed, no-preview, and unexpected-failure states | Unavailable keeps safe metadata with badge/message, exposes no bytes/private detail, retains Retry Download and Remove; other states show correct controls, no Preview, reason dialog, safe errors, and retained removal metadata | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
 | UI-11 | UI | FR-28, AC-20 | Attachment ownership failure feedback | Safe not-found/failure state with no leaked metadata | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
-| STYLE-01 | UI style | FR-29, FR-31, AC-23 | Required labels, asterisks, field states, button hierarchy, badges, ARIA, mobile breakpoint, and minimum touch targets | Required semantic attributes/classes and visible state text present; Issue #13 foundation uses the approved `<768px` breakpoint and 44 by 44 pixel minimum targets | `client/tests/lab-02/ResponsiveStyles.test.tsx`; later screens in `client/tests/lab-02/ZenGreenStyles.test.tsx` | Pass for foundation and Create Ticket (3 tests); later screens planned |
+| STYLE-01 | UI style | FR-29, FR-31, AC-23 | Required labels, asterisks, field states, button hierarchy, badges, ARIA, mobile breakpoint, and minimum touch targets | Required semantic attributes/classes and visible state text present; Issue #13 foundation uses the approved `<768px` breakpoint and 44 by 44 pixel minimum targets; NEW uses the approved pale-green token | `client/tests/lab-02/ResponsiveStyles.test.tsx`; later screens in `client/tests/lab-02/ZenGreenStyles.test.tsx` | Pass for foundation, Create Ticket, and My Tickets (6 tests); later screens planned |
 | E2E-01 | E2E | AC-01-AC-11 | Complete create-to-detail flow | Select Requester, create, receive official number, find in list, open read-only detail | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
 | E2E-02 | E2E | AC-03, AC-08, AC-12, AC-20 | Multi-requester ownership flow | Switching hides prior data; direct Ticket and Attachment access rejected | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
 | E2E-03 | E2E | AC-13-AC-21 | Attachment lifecycle | Add, reject invalid, enforce limit, download, remove with reason, retain metadata, block removed download | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
@@ -177,6 +177,19 @@ Not yet executed. This section must record the final `main` commit, commands, te
 | `npm run build:server` | Pass |
 | `npm run build:client` | Pass; Vite production bundle completed |
 | `npm test` with isolated `toktickit_test` | Pass; 15 test files and 77 tests after peer-review corrections |
+
+### Issue #15 My Tickets Results on 2026-09-01
+
+| Check | Result |
+|---|---|
+| Ticket query parser and business priority rank | Pass; 16 tests cover defaults, normalization, every invalid boundary, repeated/unknown parameters, explicit LOW-MEDIUM-HIGH order, and deterministic Ticket Number tie-breaking |
+| Owned list API | Pass; 19 tests cover Requester isolation, summary shape, search fields, filters, all sort fields/directions, scalable priority pagination, page boundaries, Category references, safe query errors, context, and correlated unexpected failure |
+| My Tickets UI | Pass; 6 tests cover loading/loaded, desktop table/mobile cards, announced first-use empty and filtered no-results states, safe out-of-range display, consistent NEW badges, Clear Filters, query generation, pagination reset, safe Retry preservation, and stale-data clearing across Requesters |
+| Responsive browser inspection | Pass at 1440x900, 834x1112, and 390x844; no horizontal page overflow or hidden action, table/card breakpoint and 44px View action verified, search/no-results/Clear Filters exercised |
+| `npm run build:server` | Pass |
+| `npm run build:client` | Pass; Vite production bundle completed |
+| `npm test` with isolated `toktickit_test` | Pass; 18 test files and 120 tests after peer-review corrections |
+| `git diff --check` | Pass |
 
 ## 7. Known Limitations or Deferred Tests
 

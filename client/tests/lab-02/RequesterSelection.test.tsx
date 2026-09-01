@@ -85,9 +85,28 @@ describe('Development Requester context', () => {
     ).toBeInTheDocument();
   });
 
-  it('restores a persisted Requester in a fresh App mount', () => {
+  it('restores a persisted Requester in a fresh App mount', async () => {
     window.localStorage.setItem(REQUESTER_STORAGE_KEY, JSON.stringify(requesters[1]));
-    const fetchMock = vi.fn();
+    const fetchMock = vi.fn((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith('/api/categories')) return Promise.resolve(jsonResponse([]));
+      if (url.includes('/api/tickets?')) {
+        return Promise.resolve(
+          jsonResponse({
+            data: [],
+            meta: {
+              page: 1,
+              pageSize: 10,
+              totalItems: 0,
+              totalPages: 0,
+              sortBy: 'updatedAt',
+              sortDirection: 'desc',
+            },
+          }),
+        );
+      }
+      throw new Error(`Unexpected URL: ${url}`);
+    });
     vi.stubGlobal('fetch', fetchMock);
 
     render(<App />);
@@ -97,7 +116,10 @@ describe('Development Requester context', () => {
     expect(
       screen.queryByRole('heading', { name: 'Select Development Requester' }),
     ).not.toBeInTheDocument();
-    expect(fetchMock).not.toHaveBeenCalled();
+    await screen.findByRole('heading', { name: 'You have not created any tickets yet' });
+    expect(
+      fetchMock.mock.calls.some(([input]) => String(input).endsWith('/api/requesters')),
+    ).toBe(false);
   });
 
   it('shows the empty state and supports Retry', async () => {

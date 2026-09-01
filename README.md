@@ -126,6 +126,8 @@ Default URLs:
 - Category endpoint: `http://localhost:5000/api/categories`
 - Create Ticket screen: `http://localhost:3000/tickets/new`
 - Create Ticket endpoint: `POST http://localhost:5000/api/tickets`
+- My Tickets screen: `http://localhost:3000/tickets`
+- My Tickets endpoint: `GET http://localhost:5000/api/tickets`
 
 The health endpoint returns:
 
@@ -147,7 +149,7 @@ The category endpoint returns the seeded categories in ID order:
 ]
 ```
 
-Select an active Development Requester, then open **Create Ticket**. The form loads active Category and Related System values, validates Ticket fields and optional file selection, prevents duplicate submissions with an idempotency key, and shows the server-issued Ticket Number after creation. This requester selection is a Lab 2 testing context, not authentication.
+Select an active Development Requester, then use **Create Ticket** or **My Tickets**. Ticket creation loads active reference values, validates fields and optional file selection, prevents duplicate submissions with an idempotency key, and shows the server-issued Ticket Number. My Tickets returns only the selected Requester's data and provides search, Category/Priority/Status filters, deterministic sorting, pagination, distinct empty/no-results/failure states, a desktop table, and mobile cards. This requester selection is a Lab 2 testing context, not authentication.
 
 ## Tests and Builds
 

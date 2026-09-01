@@ -8,6 +8,10 @@ import {
   validateTicketInput,
 } from './ticket-create.js';
 import {
+  listTicketsForRequester,
+  parseTicketListQuery,
+} from './ticket-query.js';
+import {
   RequesterContextRequest,
   requireRequesterContext,
 } from './requester-context.js';
@@ -113,6 +117,62 @@ app.get('/api/requesters', async (_req: Request, res: Response) => {
     );
   }
 });
+
+app.get(
+  '/api/tickets',
+  requireRequesterContext,
+  async (req: RequesterContextRequest, res: Response) => {
+    const validation = parseTicketListQuery(
+      req.query as Record<string, unknown>,
+    );
+    if (!validation.success) {
+      res.status(400).json({
+        error: {
+          code: 'INVALID_QUERY_PARAMETER',
+          message: 'Please correct the invalid query parameters.',
+          fieldErrors: validation.fieldErrors,
+        },
+      });
+      return;
+    }
+
+    try {
+      if (validation.value.categoryId !== undefined) {
+        const category = await prisma.category.findUnique({
+          where: { id: validation.value.categoryId },
+          select: { id: true },
+        });
+        if (!category) {
+          res.status(400).json({
+            error: {
+              code: 'INVALID_QUERY_PARAMETER',
+              message: 'Please correct the invalid query parameters.',
+              fieldErrors: {
+                categoryId: 'categoryId must reference an existing Category.',
+              },
+            },
+          });
+          return;
+        }
+      }
+
+      const result = await listTicketsForRequester(
+        prisma,
+        req.requester!.id,
+        validation.value,
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      sendUnexpectedError(
+        res,
+        'TICKET_LIST_FAILED',
+        'Tickets could not be loaded. Try again.',
+        'tickets.list',
+        error,
+      );
+    }
+  },
+);
 
 app.post(
   '/api/tickets',
