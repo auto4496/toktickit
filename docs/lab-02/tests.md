@@ -199,7 +199,7 @@ Not yet executed. This section must record the final `main` commit, commands, te
 | Owned Ticket Detail API | Pass; 2 tests cover read-only detail shape without storage fields and identical safe 404 behavior for missing/non-owned Tickets |
 | Attachment lifecycle API | Pass; 4 tests cover verified PNG upload, safe metadata, active download headers/bytes, soft removal, removed download blocking, cross-requester metadata isolation, five-active/replacement/concurrent admission, and safe unavailable-file behavior |
 | Requester Ticket Detail UI | Pass; 4 tests cover loaded read-only values/Attachment actions/no Preview control, safe not-found, safe retry failure text, and Escape dismissal of the named removal dialog |
-| `npm test` with isolated `toktickit_test` | Pass; 22 test files and 144 tests |
+| `npm test` with isolated `toktickit_test` | Pass; 22 test files and 147 tests after edge-case corrections |
 | `npm run build:server` | Pass |
 | `npm run build:client` | Pass; Vite production bundle completed |
 | `git diff --check` | Pass |

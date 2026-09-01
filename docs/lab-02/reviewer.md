@@ -129,7 +129,7 @@ Each review records the commit reviewed and checks:
 - Branch: `feature/lab2-5-ticket-detail-attachments`
 - Requirements/ACs/Tests: FR-19-FR-28, FR-32; BR-05-BR-06, BR-27-BR-38, BR-39-BR-43; AC-11-AC-21, AC-24; UNIT-04, API-10/API-11 plus focused Attachment lifecycle coverage, and UI-09/UI-10 foundation.
 - Implementation: requester-owned Ticket Detail, safe indistinguishable not-found behavior, disk-backed private Attachment storage with approved type/name/signature and size validation, per-Ticket active-count locking, safe metadata/download/removal endpoints, and a responsive Ticket Detail/Attachment interface with no Preview action.
-- Verification before review: the isolated full suite passed 22 files and 144 tests; server/client production builds and `git diff --check` passed. A focused correction run then passed 4 Attachment API tests (including five-active/concurrent and unavailable-file behavior) and 4 Ticket Detail UI tests (including Escape dialog dismissal). Evidence is recorded in `tests.md`.
+- Verification before review: the isolated full suite passed 22 files and 147 tests after edge-case corrections; server/client production builds and `git diff --check` passed. Focused coverage includes 4 Attachment API tests (five-active/concurrent and unavailable-file behavior) and 4 Ticket Detail UI tests (including Escape dialog dismissal). Evidence is recorded in `tests.md`.
 
 ## Pull Requests I Reviewed for My Partner
 
