@@ -117,6 +117,11 @@ describe('My Tickets', () => {
     expect(within(table).getByText(ticket.summary)).toHaveAttribute('title', ticket.summary);
     expect(within(table).getByText('Not assigned')).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: `View Ticket ${ticket.ticketNumber}` })).toHaveLength(2);
+    const statusBadges = screen.getAllByText('New', { selector: '.status-new' });
+    expect(statusBadges).toHaveLength(2);
+    for (const statusBadge of statusBadges) {
+      expect(statusBadge).toHaveClass('ticket-badge', 'status-new');
+    }
 
     const ticketCall = fetchMock.mock.calls.find(([input]) =>
       String(input).includes('/api/tickets?'),
@@ -145,20 +150,26 @@ describe('My Tickets', () => {
 
     renderMyTickets();
 
-    expect(
-      await screen.findByRole('heading', {
-        name: 'You have not created any tickets yet',
-      }),
-    ).toBeInTheDocument();
+    const firstUseHeading = await screen.findByRole('heading', {
+      name: 'You have not created any tickets yet',
+    });
+    expect(firstUseHeading.closest('[role="status"]')).toHaveAttribute(
+      'aria-live',
+      'polite',
+    );
 
     fireEvent.change(screen.getByLabelText('Search tickets'), {
       target: { value: '  vpn  ' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
 
-    expect(
-      await screen.findByRole('heading', { name: 'No tickets match these filters' }),
-    ).toBeInTheDocument();
+    const noResultsHeading = await screen.findByRole('heading', {
+      name: 'No tickets match these filters',
+    });
+    expect(noResultsHeading.closest('[role="status"]')).toHaveAttribute(
+      'aria-live',
+      'polite',
+    );
     expect(requestedUrls.at(-1)).toContain('search=vpn');
 
     fireEvent.click(
@@ -173,6 +184,36 @@ describe('My Tickets', () => {
         name: 'You have not created any tickets yet',
       }),
     ).toBeInTheDocument();
+  });
+
+  it('shows an announced out-of-range state without an inverted result range', async () => {
+    const fetchMock = vi.fn((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith('/api/categories')) return Promise.resolve(jsonResponse(categories));
+      if (url.includes('/api/tickets?')) {
+        return Promise.resolve(
+          jsonResponse(ticketResponse([], {
+            page: 99,
+            totalItems: 12,
+            totalPages: 2,
+          })),
+        );
+      }
+      throw new Error(`Unexpected URL: ${url}`);
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderMyTickets();
+
+    const outOfRangeHeading = await screen.findByRole('heading', {
+      name: 'No tickets on this page',
+    });
+    expect(outOfRangeHeading.closest('[role="status"]')).toHaveAttribute(
+      'aria-live',
+      'polite',
+    );
+    expect(screen.queryByText(/Showing \d+–\d+ of 12 tickets/)).not.toBeInTheDocument();
+    expect(screen.getByText('Page 99 of 2')).toBeInTheDocument();
   });
 
   it('generates documented filter and sort queries and resets page after page-size changes', async () => {
@@ -206,7 +247,7 @@ describe('My Tickets', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     renderMyTickets();
-    await screen.findByText('Showing 1–10 of 11 tickets');
+    await screen.findByText('Showing 1–1 of 11 tickets');
 
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     await waitFor(() => expect(requestedUrls.at(-1)).toContain('page=2'));

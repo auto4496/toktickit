@@ -249,9 +249,11 @@ export default function MyTickets({ requester }: { requester: Requester }) {
   const hasFilters = Boolean(
     query.search || query.categoryId || query.requestedPriority || query.currentStatus,
   );
-  const resultStart = meta && meta.totalItems > 0 ? (meta.page - 1) * meta.pageSize + 1 : 0;
-  const resultEnd = meta
-    ? Math.min(meta.page * meta.pageSize, meta.totalItems)
+  const resultStart = meta && tickets.length > 0
+    ? (meta.page - 1) * meta.pageSize + 1
+    : 0;
+  const resultEnd = tickets.length > 0
+    ? resultStart + tickets.length - 1
     : 0;
 
   return (
@@ -417,7 +419,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
       )}
 
       {listState === 'loaded' && meta?.totalItems === 0 && !hasFilters && (
-        <section className="ticket-list-state empty-state">
+        <section className="ticket-list-state empty-state" role="status" aria-live="polite">
           <h2>You have not created any tickets yet</h2>
           <p>Create your first Ticket to start tracking a request.</p>
           <a className="btn btn-success" href="/tickets/new">Create Ticket</a>
@@ -425,7 +427,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
       )}
 
       {listState === 'loaded' && meta?.totalItems === 0 && hasFilters && (
-        <section className="ticket-list-state empty-state">
+        <section className="ticket-list-state empty-state" role="status" aria-live="polite">
           <h2>No tickets match these filters</h2>
           <p>Change the search or filters and try again.</p>
           <button className="btn btn-outline-success" type="button" onClick={clearFilters}>
@@ -438,13 +440,15 @@ export default function MyTickets({ requester }: { requester: Requester }) {
         <section className="ticket-results" aria-labelledby="ticket-results-heading">
           <div className="ticket-results-summary">
             <h2 id="ticket-results-heading">Ticket results</h2>
-            <p aria-live="polite">
-              Showing {resultStart}–{resultEnd} of {meta.totalItems} tickets
-            </p>
+            {tickets.length > 0 && (
+              <p aria-live="polite">
+                Showing {resultStart}–{resultEnd} of {meta.totalItems} tickets
+              </p>
+            )}
           </div>
 
           {tickets.length === 0 ? (
-            <div className="ticket-list-state empty-state">
+            <div className="ticket-list-state empty-state" role="status" aria-live="polite">
               <h3>No tickets on this page</h3>
               <p>Return to a previous page to view results.</p>
             </div>
@@ -491,7 +495,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
                       <div><dt>Category</dt><dd>{ticket.category.name}</dd></div>
                       <div><dt>Requested Priority</dt><dd>{priorityLabel(ticket.requestedPriority)}</dd></div>
                       <div><dt>IT Priority</dt><dd>{ticket.itPriority ? priorityLabel(ticket.itPriority) : 'Not assigned'}</dd></div>
-                      <div><dt>Current Status</dt><dd>New</dd></div>
+                      <div><dt>Current Status</dt><dd><span className="ticket-badge status-new">New</span></dd></div>
                       <div><dt>Last Updated</dt><dd><time dateTime={ticket.updatedAt}>{formatDate(ticket.updatedAt)}</time></dd></div>
                     </dl>
                     <TicketViewLink ticket={ticket} />

@@ -178,11 +178,23 @@ describe('GET /api/tickets', () => {
   });
 
   it('sorts every supported field deterministically, including explicit priority rank', async () => {
-    const created = await listTickets(
+    const createdAsc = await listTickets(
       '?sortBy=createdAt&sortDirection=asc&pageSize=20',
     );
-    const ticketNumber = await listTickets(
+    const createdDesc = await listTickets(
+      '?sortBy=createdAt&sortDirection=desc&pageSize=20',
+    );
+    const updatedAsc = await listTickets(
+      '?sortBy=updatedAt&sortDirection=asc&pageSize=20',
+    );
+    const updatedDesc = await listTickets(
+      '?sortBy=updatedAt&sortDirection=desc&pageSize=20',
+    );
+    const ticketNumberAsc = await listTickets(
       '?sortBy=ticketNumber&sortDirection=asc&pageSize=20',
+    );
+    const ticketNumberDesc = await listTickets(
+      '?sortBy=ticketNumber&sortDirection=desc&pageSize=20',
     );
     const priorityAsc = await listTickets(
       '?sortBy=requestedPriority&sortDirection=asc&pageSize=20',
@@ -194,8 +206,46 @@ describe('GET /api/tickets', () => {
       '?sortBy=requestedPriority&sortDirection=asc&page=2',
     );
 
-    expect(created.body.data[0].ticketNumber).toBe('TKT-20260901-15000001');
-    expect(ticketNumber.body.data[0].ticketNumber).toBe('TKT-20260901-15000001');
+    const ticketNumbers = (response: { body: { data: Array<{ ticketNumber: string }> } }) =>
+      response.body.data.map((ticket: { ticketNumber: string }) => ticket.ticketNumber);
+    const ascendingNumbers = Array.from(
+      { length: 12 },
+      (_, index) => `TKT-20260901-15${String(index + 1).padStart(6, '0')}`,
+    );
+    const descendingNumbers = [...ascendingNumbers].reverse();
+
+    expect(ticketNumbers(createdAsc)).toEqual(ascendingNumbers);
+    expect(ticketNumbers(createdDesc)).toEqual(descendingNumbers);
+    expect(ticketNumbers(updatedAsc)).toEqual([
+      'TKT-20260901-15000002',
+      'TKT-20260901-15000001',
+      'TKT-20260901-15000004',
+      'TKT-20260901-15000003',
+      'TKT-20260901-15000006',
+      'TKT-20260901-15000005',
+      'TKT-20260901-15000008',
+      'TKT-20260901-15000007',
+      'TKT-20260901-15000010',
+      'TKT-20260901-15000009',
+      'TKT-20260901-15000012',
+      'TKT-20260901-15000011',
+    ]);
+    expect(ticketNumbers(updatedDesc)).toEqual([
+      'TKT-20260901-15000012',
+      'TKT-20260901-15000011',
+      'TKT-20260901-15000010',
+      'TKT-20260901-15000009',
+      'TKT-20260901-15000008',
+      'TKT-20260901-15000007',
+      'TKT-20260901-15000006',
+      'TKT-20260901-15000005',
+      'TKT-20260901-15000004',
+      'TKT-20260901-15000003',
+      'TKT-20260901-15000002',
+      'TKT-20260901-15000001',
+    ]);
+    expect(ticketNumbers(ticketNumberAsc)).toEqual(ascendingNumbers);
+    expect(ticketNumbers(ticketNumberDesc)).toEqual(descendingNumbers);
     expect(
       priorityAsc.body.data.map(
         (ticket: { requestedPriority: string }) => ticket.requestedPriority,
@@ -214,7 +264,29 @@ describe('GET /api/tickets', () => {
       'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM',
       'LOW', 'LOW', 'LOW', 'LOW',
     ]);
-    expect(priorityAsc.body.data.slice(0, 4).map((ticket: { ticketNumber: string }) => ticket.ticketNumber)).toEqual([
+    expect(ticketNumbers(priorityAsc)).toEqual([
+      'TKT-20260901-15000010',
+      'TKT-20260901-15000007',
+      'TKT-20260901-15000004',
+      'TKT-20260901-15000001',
+      'TKT-20260901-15000011',
+      'TKT-20260901-15000008',
+      'TKT-20260901-15000005',
+      'TKT-20260901-15000002',
+      'TKT-20260901-15000012',
+      'TKT-20260901-15000009',
+      'TKT-20260901-15000006',
+      'TKT-20260901-15000003',
+    ]);
+    expect(ticketNumbers(priorityDesc)).toEqual([
+      'TKT-20260901-15000012',
+      'TKT-20260901-15000009',
+      'TKT-20260901-15000006',
+      'TKT-20260901-15000003',
+      'TKT-20260901-15000011',
+      'TKT-20260901-15000008',
+      'TKT-20260901-15000005',
+      'TKT-20260901-15000002',
       'TKT-20260901-15000010',
       'TKT-20260901-15000007',
       'TKT-20260901-15000004',

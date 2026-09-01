@@ -35,6 +35,13 @@ describe('Lab 2 responsive and touch-target styles', () => {
     );
   });
 
+  it('uses the approved pale-green token for the New status badge', () => {
+    expect(styles).toMatch(/:root\s*\{[\s\S]*?--color-pale-green:\s*#EAF6EF;/);
+    expect(styles).toMatch(
+      /\.status-new\s*\{[\s\S]*?background:\s*var\(--color-pale-green\);[\s\S]*?\}/,
+    );
+  });
+
   it('uses a desktop table and mobile cards with safe wrapping and touch targets', () => {
     expect(styles).toMatch(/\.ticket-card-list\s*\{\s*display:\s*none;/);
     expect(styles).toMatch(
