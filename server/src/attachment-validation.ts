@@ -16,7 +16,7 @@ const attachmentRules: AttachmentRule[] = [
 
 export type AttachmentValidationResult =
   | { success: true; value: { originalName: string; extension: string; mimeType: string; sizeBytes: number } }
-  | { success: false; code: 'ATTACHMENT_NAME_INVALID' | 'ATTACHMENT_TYPE_INVALID' | 'ATTACHMENT_TOO_LARGE'; message: string };
+  | { success: false; code: 'ATTACHMENT_FILENAME_INVALID' | 'ATTACHMENT_TYPE_UNSUPPORTED' | 'ATTACHMENT_TOO_LARGE'; message: string };
 
 export const sanitizeAttachmentName = (input: unknown):
   | { success: true; value: { originalName: string; extension: string } }
@@ -32,11 +32,11 @@ export const sanitizeAttachmentName = (input: unknown):
 
 export const validateAttachmentFile = ({ originalName, mimeType, bytes }: { originalName: unknown; mimeType: unknown; bytes: Buffer }): AttachmentValidationResult => {
   const name = sanitizeAttachmentName(originalName);
-  if (!name.success) return { success: false, code: 'ATTACHMENT_NAME_INVALID', message: name.message };
+  if (!name.success) return { success: false, code: 'ATTACHMENT_FILENAME_INVALID', message: name.message };
   if (bytes.length > MAX_ATTACHMENT_BYTES) return { success: false, code: 'ATTACHMENT_TOO_LARGE', message: 'Each Attachment must be 5 MiB or smaller.' };
   const rule = attachmentRules.find((candidate) => candidate.extension === name.value.extension);
   if (!rule || mimeType !== rule.mimeType || !rule.matches(bytes)) {
-    return { success: false, code: 'ATTACHMENT_TYPE_INVALID', message: 'The file type could not be verified.' };
+    return { success: false, code: 'ATTACHMENT_TYPE_UNSUPPORTED', message: 'The file type could not be verified.' };
   }
   return { success: true, value: { ...name.value, mimeType: rule.mimeType, sizeBytes: bytes.length } };
 };

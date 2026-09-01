@@ -23,6 +23,7 @@ import {
   isAttachmentOperationError,
   MAX_ATTACHMENT_BYTES,
   removeOwnedAttachment,
+  safeUnlink,
 } from './attachment-service.js';
 import {
   RequesterContextRequest,
@@ -53,6 +54,17 @@ const invalidId = (res: Response, resource: 'Ticket' | 'Attachment') =>
   sendExpectedError(res, 400, `INVALID_${resource.toUpperCase()}_ID`, `Provide a valid ${resource} ID.`);
 const resourceNotFound = (res: Response) =>
   sendExpectedError(res, 404, 'RESOURCE_NOT_FOUND', 'The requested resource was not found.');
+const requireOwnedUploadTicket = async (req: RequesterContextRequest, res: Response, next: NextFunction) => {
+  const ticketId = routeId(req.params.ticketId);
+  if (!validUuid(ticketId)) return invalidId(res, 'Ticket');
+  try {
+    const ticket = await prisma.ticket.findFirst({ where: { id: ticketId, requesterId: req.requester!.id }, select: { id: true } });
+    if (!ticket) return resourceNotFound(res);
+    next();
+  } catch (error) {
+    sendUnexpectedError(res, 'ATTACHMENT_UPLOAD_FAILED', 'The Attachment could not be uploaded. Try again.', 'attachments.upload.ownership', error);
+  }
+};
 
 app.get('/', (_req: Request, res: Response) => {
   res.json({
@@ -225,27 +237,29 @@ app.get(
 app.post(
   '/api/tickets/:ticketId/attachments',
   requireRequesterContext,
+  requireOwnedUploadTicket,
   (req: RequesterContextRequest, res: Response, next: NextFunction) => {
     upload.single('file')(req, res, (error: unknown) => {
       if (!error) return next();
-      if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
-        sendExpectedError(res, 413, 'ATTACHMENT_TOO_LARGE', 'Each Attachment must be 5 MiB or smaller.');
-        return;
-      }
-      sendExpectedError(res, 400, 'ATTACHMENT_UPLOAD_INVALID', 'Provide one Attachment file.');
+      void safeUnlink(req.file?.path).then(() => {
+        if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+          sendExpectedError(res, 413, 'ATTACHMENT_TOO_LARGE', 'Each Attachment must be 5 MiB or smaller.');
+          return;
+        }
+        sendExpectedError(res, 400, 'FILE_REQUIRED', 'Provide one Attachment file.');
+      });
     });
   },
   async (req: RequesterContextRequest, res: Response) => {
     const ticketId = routeId(req.params.ticketId);
-    if (!validUuid(ticketId)) return invalidId(res, 'Ticket');
     if (!req.file) {
-      res.status(400).json({ error: { code: 'VALIDATION_FAILED', message: 'Provide one Attachment file.', fieldErrors: { file: 'Choose one Attachment file.' } } });
+      res.status(400).json({ error: { code: 'FILE_REQUIRED', message: 'Provide one Attachment file.', fieldErrors: { file: 'Choose one Attachment file.' } } });
       return;
     }
     try {
       const result = await createAttachmentForTicket(prisma, req.requester!.id, ticketId, req.file);
       if (result.kind === 'invalid') {
-        const status = result.validation.code === 'ATTACHMENT_TOO_LARGE' ? 413 : result.validation.code === 'ATTACHMENT_TYPE_INVALID' ? 415 : 400;
+        const status = result.validation.code === 'ATTACHMENT_TOO_LARGE' ? 413 : result.validation.code === 'ATTACHMENT_TYPE_UNSUPPORTED' ? 415 : 400;
         sendExpectedError(res, status, result.validation.code, result.validation.message);
         return;
       }

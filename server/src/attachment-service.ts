@@ -94,20 +94,22 @@ export const createAttachmentForTicket = async (
   ticketId: string,
   file: Express.Multer.File,
 ) => {
-  await ensureAttachmentDirectories();
   const temporaryPath = file.path;
-  const bytes = await fs.readFile(temporaryPath);
-  const validation = validateAttachmentFile({ originalName: file.originalname, mimeType: file.mimetype, bytes });
-  if (!validation.success) {
-    await safeUnlink(temporaryPath);
-    return { kind: 'invalid' as const, validation };
-  }
-
-  const storedName = `${randomUUID()}.${validation.value.extension}`;
-  const storageKey = storedName;
-  const finalPath = path.join(attachmentFinalDirectory, storedName);
+  let finalPath: string | undefined;
   let moved = false;
   try {
+    await ensureAttachmentDirectories();
+    const bytes = await fs.readFile(temporaryPath);
+    const validation = validateAttachmentFile({ originalName: file.originalname, mimeType: file.mimetype, bytes });
+    if (!validation.success) {
+      await safeUnlink(temporaryPath);
+      return { kind: 'invalid' as const, validation };
+    }
+
+    const storedName = `${randomUUID()}.${validation.value.extension}`;
+    const storageKey = storedName;
+    const destinationPath = path.join(attachmentFinalDirectory, storedName);
+    finalPath = destinationPath;
     const attachment = await client.$transaction(async (transaction) => {
       const ownedRows = await transaction.$queryRaw<Array<{ id: string }>>(Prisma.sql`
         SELECT "id" FROM "Ticket"
@@ -117,7 +119,7 @@ export const createAttachmentForTicket = async (
       if (ownedRows.length === 0) throw notFound();
       const activeCount = await transaction.attachment.count({ where: { ticketId, removedAt: null } });
       if (activeCount >= MAX_ACTIVE_ATTACHMENTS) throw limitReached();
-      await fs.rename(temporaryPath, finalPath);
+      await fs.rename(temporaryPath, destinationPath);
       moved = true;
       return transaction.attachment.create({
         data: {
