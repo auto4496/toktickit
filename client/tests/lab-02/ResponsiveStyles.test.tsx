@@ -17,4 +17,21 @@ describe('Lab 2 responsive and touch-target styles', () => {
       /\.state-panel button,[\s\S]*?\.requester-chip button[\s\S]*?min-width:\s*44px;[\s\S]*?min-height:\s*44px;/,
     );
   });
+
+  it('styles the visible required indicator with the approved error color', () => {
+    expect(styles).toMatch(/:root\s*\{[\s\S]*?--color-error:\s*#B42318;/);
+    expect(styles).toMatch(
+      /\.required-indicator\s*\{[\s\S]*?color:\s*var\(--color-error\);[\s\S]*?\}/,
+    );
+  });
+
+  it('stacks Create Ticket grids and actions on mobile without long-value overflow', () => {
+    expect(styles).toMatch(
+      /\.readonly-grid,[\s\S]*?\.classification-grid\s*\{\s*grid-template-columns:\s*1fr;/,
+    );
+    expect(styles).toContain('.form-actions { flex-direction: column-reverse; }');
+    expect(styles).toMatch(
+      /\.selected-files li,[\s\S]*?\.ticket-success p\s*\{\s*overflow-wrap:\s*anywhere;/,
+    );
+  });
 });

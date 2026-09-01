@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Data and Requester Context second correction submitted; follow-up review requested
+Status: Create Ticket submitted for peer review
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -20,8 +20,8 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Lab 2 work item | Planned branch | Contract and evidence focus | Issue | Pull Request | Review outcome |
 |---|---|---|---|---|---|
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
-| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Changes requested at `f4f86e1` and `057b71c`; corrected in `1157ed2` and `c19d2f8`; re-review requested |
-| Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | TBD | Planned |
+| Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Approved at `5819232`; merged by reviewer as `9ab607d` |
+| Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Review requested from `@Datakung` |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | TBD | Planned |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
 | Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Planned |
@@ -86,8 +86,25 @@ Each review records the commit reviewed and checks:
 - Second correction: Commit `c19d2f8` adds a test-database URL guard that requires a distinct `test` database/schema marker, rejects development/production/live markers and the same database/schema as `DATABASE_URL`, and injects the accepted URL as Prisma's `DATABASE_URL` only inside Vitest. It adds `.env.test.example`, an isolated `npm run test:integration` command, guard coverage, and independent Lab 1 category seeding against the guarded test database.
 - Verification after second correction: missing `TEST_DATABASE_URL` failed during Vitest configuration before test collection or database access; `npm run test:integration` passed 1 file and 3 PostgreSQL tests against `toktickit_test`; `npm test` passed 10 files and 34 tests against the same isolated database; server and client production builds passed.
 - Second correction workflow: Issue #13 moved from PR Review to Fixing while the correction was implemented. Commit `c19d2f8` and this evidence were pushed before the Issue returned to PR Review and another review was requested from `@Datakung` on 2026-08-31.
-- Approval: Pending second follow-up review from `@Datakung`.
-- Merge: Pending; the approving peer reviewer must merge into `lab2-staging`.
+- Approval: Approved by `@Datakung` at `5819232` on 2026-08-31 after the isolated test-database guard and evidence passed review.
+- Merge: Merged by the peer reviewer into `lab2-staging` as `9ab607d` on 2026-08-31.
+
+### Create Ticket API and Responsive UI
+
+- Issue: [#14](https://github.com/auto4496/toktickit/issues/14)
+- Pull Request: [#19](https://github.com/auto4496/toktickit/pull/19)
+- Branch: `feature/lab2-3-create-ticket`
+- Implementation commits: `3c77a39` and `4943739`
+- Requirements/ACs/Tests: FR-07-FR-13, FR-32; BR-08-BR-19, BR-39-BR-43; AC-04-AC-07, AC-24, AC-25; UNIT-01, UNIT-02, UNIT-05, API-03-API-06, and UI-02-UI-05
+- Implementation: backend Ticket Number generation, shared validation/canonical hashing, atomic PostgreSQL idempotency reservation/replay, safe create errors, responsive Create Ticket form, Attachment-selection preservation, and official success confirmation.
+- Verification before review: `npm test` passed 15 files and 71 tests against isolated `toktickit_test`; server and client production builds passed.
+- Review feedback received at `48d35fb`: add safe JSON handling for malformed request bodies; reject Category and Related System IDs outside PostgreSQL's 32-bit integer range; expose required-field semantics and styling to assistive technology; and announce or focus the successful creation state.
+- My response and correction: added application-level JSON error middleware, bounded reference-ID validation, required control semantics and visible markers, managed focus on the success heading, and focused unit/API/UI/style regression coverage.
+- Verification after correction: `npm test` passed 15 files and 77 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
+- Follow-up review feedback at `f0c3763`: the required indicator used a hard-coded color instead of the approved `--color-error: #B42318` design token.
+- Follow-up correction: defined the approved error token and used it for required indicators, invalid borders, and field-error text; the style regression verifies both the token value and its use.
+- Follow-up verification: `ResponsiveStyles.test.tsx` passed 1 file and 4 tests against the isolated test configuration; the client production build and `git diff --check` passed.
+- Review status: PR #19 targets `lab2-staging`, remains unmerged, and is ready for `@Datakung` re-review after the correction push. The reviewer must merge after approval.
 
 ## Pull Requests I Reviewed for My Partner
 
