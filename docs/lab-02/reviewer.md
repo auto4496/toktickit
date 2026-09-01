@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: My Tickets implemented and verified; Pull Request preparation in progress
+Status: My Tickets implemented, verified, and submitted for peer review
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -22,7 +22,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
 | Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Approved at `5819232`; merged by reviewer as `9ab607d` |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
-| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | TBD | Implemented and verified; PR preparation in progress |
+| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Submitted to `@Datakung` for peer review |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | TBD | Planned |
 | Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Planned |
 | Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
@@ -110,12 +110,14 @@ Each review records the commit reviewed and checks:
 ### My Tickets Ownership, Querying, and Responsive States
 
 - Issue: [#15](https://github.com/auto4496/toktickit/issues/15)
+- Pull Request: [#20](https://github.com/auto4496/toktickit/pull/20)
 - Branch: `feature/lab2-4-my-tickets`
+- Implementation commit: `9efd496`
 - Requirements/ACs/Tests: FR-14-FR-18, FR-29-FR-32; BR-04-BR-07, BR-20-BR-25, BR-39-BR-43; AC-08-AC-10, AC-22-AC-24; UNIT-03, API-07-API-09, UI-07, UI-08, and the relevant STYLE-01 coverage.
 - Implementation: strict query parsing and safe field errors; Requester-owned Ticket summaries; deterministic secondary ordering; scalable explicit LOW-MEDIUM-HIGH priority ranking; one-based pagination metadata; and an accessible My Tickets UI with search, filters, sorting, page size, loading, empty, no-results, safe failure/Retry, desktop table, and mobile cards.
 - Verification before review: `npm test` passed 18 files and 118 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
 - Browser verification: the live local flow passed at 1440x900, 834x1112, and 390x844 with no horizontal page overflow, no hidden tablet action, desktop/tablet tables, mobile cards, 44px View actions, and working search/no-results/Clear Filters recovery.
-- Workflow status: Issue #15 moved from Backlog through Specified to Started after its approved contract and dependency merge were verified. PR creation and peer review remain pending.
+- Workflow status: Issue #15 moved from Backlog through Specified and Started to PR Review. PR #20 targets `lab2-staging`, cross-references Issue #15, and is awaiting peer review from `@Datakung`.
 
 ## Pull Requests I Reviewed for My Partner
 
