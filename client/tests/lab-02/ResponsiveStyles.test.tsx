@@ -34,4 +34,17 @@ describe('Lab 2 responsive and touch-target styles', () => {
       /\.selected-files li,[\s\S]*?\.ticket-success p\s*\{\s*overflow-wrap:\s*anywhere;/,
     );
   });
+
+  it('uses a desktop table and mobile cards with safe wrapping and touch targets', () => {
+    expect(styles).toMatch(/\.ticket-card-list\s*\{\s*display:\s*none;/);
+    expect(styles).toMatch(
+      /@media \(max-width:\s*767px\)[\s\S]*?\.ticket-table-wrap\s*\{\s*display:\s*none;[\s\S]*?\.ticket-card-list\s*\{\s*display:\s*grid;/,
+    );
+    expect(styles).toMatch(
+      /\.ticket-card-number,[\s\S]*?\.ticket-list-card h3\s*\{\s*overflow-wrap:\s*anywhere;/,
+    );
+    expect(styles).toMatch(
+      /\.ticket-pagination button,[\s\S]*?\.ticket-view-action\s*\{[\s\S]*?min-height:\s*44px;/,
+    );
+  });
 });

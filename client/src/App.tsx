@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import CreateTicket from './CreateTicket';
+import MyTickets from './MyTickets';
 
 type HealthResponse = { status: string; service: string };
 type Category = { id: number; name: string };
@@ -223,11 +224,7 @@ function ApplicationShell({ requester, onChangeRequester }: { requester: Request
       {activePath === '/tickets/new' ? (
         <CreateTicket requester={requester} />
       ) : (
-        <main className="workspace">
-          <p className="eyebrow">Requester workspace</p>
-          <h1>My Tickets</h1>
-          <p className="text-secondary">Your ticket list will appear here in the next Lab 2 issue.</p>
-        </main>
+        <MyTickets requester={requester} />
       )}
     </div>
   );
