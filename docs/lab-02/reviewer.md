@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Issues #11-#17 are Done. [PR #22](https://github.com/auto4496/toktickit/pull/22) was approved and reviewer-merged into `lab2-staging`; final [release PR #23](https://github.com/auto4496/toktickit/pull/23) targets `main` and is awaiting peer review.
+Status: Lab 2 is complete. Issues #11-#17 are Done, [PR #22](https://github.com/auto4496/toktickit/pull/22) was approved and reviewer-merged into `lab2-staging`, and peer reviewer `@Datakung` merged final [release PR #23](https://github.com/auto4496/toktickit/pull/23) into `main`.
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -25,7 +25,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Approved at `3f05bfd`; merged by reviewer as `4f82246` |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | [#21](https://github.com/auto4496/toktickit/pull/21) | Approved at `003f817`; merged by reviewer as `05c6cc8` |
 | Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | [#22](https://github.com/auto4496/toktickit/pull/22) | Approved at `93eca5d`; merged by reviewer as `73c0ecb` |
-| Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | [#23](https://github.com/auto4496/toktickit/pull/23) | Peer review requested |
+| Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | [#23](https://github.com/auto4496/toktickit/pull/23) | Peer reviewer merged as `a0a4d32` |
 
 ## Review Checklist
 
@@ -175,5 +175,6 @@ Before the Lab 2 release PR is approved, record:
 - Client build: Passed.
 - Migration and two-run seed verification: Passed through the guarded PostgreSQL integration and E2E setup evidence.
 - Desktop/tablet/mobile visual review: Passed at 1440x900, 834x1112, and 390x844; 13 required and 11 supplementary screenshots inspected.
-- Release PR: [#23](https://github.com/auto4496/toktickit/pull/23); peer approval pending.
-- Final `main` merge commit: Pending release approval and merge.
+- Release PR: [#23](https://github.com/auto4496/toktickit/pull/23), merged by peer reviewer `@Datakung` on 2026-09-02.
+- Final `main` merge commit: `a0a4d32`.
+- Final-main verification: 23 Vitest files / 165 tests and 7 Playwright tests passed; server/client builds and `git diff --check` passed on 2026-09-02.

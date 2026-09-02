@@ -1,6 +1,6 @@
-# TokTickIT Lab 2 Report - Release Candidate
+# TokTickIT Lab 2 Engineering Report
 
-> Status: Issues #11-#17 are Done. [PR #22](https://github.com/auto4496/toktickit/pull/22) was approved and reviewer-merged as `73c0ecb`. Final [release PR #23](https://github.com/auto4496/toktickit/pull/23) targets `main`; its approval, merge commit, and final-main verification will be inserted only after they occur.
+> Status: Complete on 2026-09-02. Issues #11-#17 are Done, [PR #22](https://github.com/auto4496/toktickit/pull/22) was reviewer-merged as `73c0ecb`, and peer reviewer `@Datakung` merged final [release PR #23](https://github.com/auto4496/toktickit/pull/23) into `main` as `a0a4d32`. Final-main tests and builds passed.
 
 | Item | Evidence |
 |---|---|
@@ -9,7 +9,7 @@
 | Student | Phanuwit Butchari - 67070501070 - [@auto4496](https://github.com/auto4496) |
 | Peer reviewer | Pitchai Chadchuangchot - 67070501068 - [@Datakung](https://github.com/Datakung) |
 | Repository | [auto4496/toktickit](https://github.com/auto4496/toktickit) |
-| Submission | Release candidate; final `main` evidence will be added before LMS submission |
+| Submission | Final report prepared 2026-09-02 |
 
 ## Answer Part 1
 
@@ -25,9 +25,9 @@ The sprint uses `main` -> `lab2-staging` -> one feature branch per Issue -> peer
 | My Tickets | [#15](https://github.com/auto4496/toktickit/issues/15) / `feature/lab2-4-my-tickets` | [PR #20](https://github.com/auto4496/toktickit/pull/20), approved by `@Datakung`, reviewer-merged as `4f82246` |
 | Ticket Detail and Attachments | [#16](https://github.com/auto4496/toktickit/issues/16) / `feature/lab2-5-ticket-detail-attachments` | [PR #21](https://github.com/auto4496/toktickit/pull/21), approved by `@Datakung`, reviewer-merged as `05c6cc8` |
 | Quality and Release Evidence | [#17](https://github.com/auto4496/toktickit/issues/17) / `feature/lab2-6-quality-evidence` | [PR #22](https://github.com/auto4496/toktickit/pull/22), approved at `93eca5d`, reviewer-merged as `73c0ecb` |
-| Final release | `lab2-staging` -> `main` | [PR #23](https://github.com/auto4496/toktickit/pull/23) opened; peer approval and merge pending |
+| Final release | `lab2-staging` -> `main` | [PR #23](https://github.com/auto4496/toktickit/pull/23), peer reviewer-merged as `a0a4d32` |
 
-Working evidence: [GitHub Project](https://github.com/users/auto4496/projects/1), [reviewer.md](https://github.com/auto4496/toktickit/blob/lab2-staging/docs/lab-02/reviewer.md), [README.md](https://github.com/auto4496/toktickit/blob/lab2-staging/README.md), and [.gitignore](https://github.com/auto4496/toktickit/blob/lab2-staging/.gitignore). All Issues #11-#17 are closed and Done. I also reviewed [Datakung/toktickit PR #22](https://github.com/Datakung/toktickit/pull/22), requested fixes for unsafe E2E database reuse and tracked screenshot overwrites, verified the corrections at `8ae59ec`, and approved it before merge as `4dfb0f2`.
+Working evidence: [GitHub Project](https://github.com/users/auto4496/projects/1), [reviewer.md](https://github.com/auto4496/toktickit/blob/main/docs/lab-02/reviewer.md), [README.md](https://github.com/auto4496/toktickit/blob/main/README.md), and [.gitignore](https://github.com/auto4496/toktickit/blob/main/.gitignore). All Issues #11-#17 are closed and Done. I also reviewed [Datakung/toktickit PR #22](https://github.com/Datakung/toktickit/pull/22), requested fixes for unsafe E2E database reuse and tracked screenshot overwrites, verified the corrections at `8ae59ec`, and approved it before merge as `4dfb0f2`.
 
 ## Answer Part 2
 
@@ -37,7 +37,7 @@ The approved [Sprint Engineering Specification](https://github.com/auto4496/tokt
 
 Key decisions include backend ownership constraints on every requester-scoped query; safe identical 404 responses for missing and non-owned resources; backend-generated Ticket Numbers; canonical idempotency for Ticket creation; signature/MIME/extension Attachment validation; five-active Attachment admission under a database lock; private generated storage names; and test-database isolation.
 
-The specification explicitly excludes authentication, IT Staff workflow, status changes after creation, comments, Internal Notes, Actions Taken, and inline Attachment Preview. Commit/PR evidence proving the contract preceded implementation is linked through [PR #12](https://github.com/auto4496/toktickit/pull/12). A rendered specification screenshot will be added to the final PDF after the release branch is merged.
+The specification explicitly excludes authentication, IT Staff workflow, status changes after creation, comments, Internal Notes, Actions Taken, and inline Attachment Preview. Commit/PR evidence proving the contract preceded implementation is linked through [PR #12](https://github.com/auto4496/toktickit/pull/12).
 
 ## Answer Part 3
 
@@ -59,7 +59,7 @@ The version-controlled [Test Plan and Results](https://github.com/auto4496/tokti
 
 Test-first failures were retained as engineering evidence: Attachment traversal/control-character tests failed before safe-basename behavior; retry tests exposed an unintended duplicate POST before request separation; reviewer cases exposed missing cleanup/compensation, ownership-before-validation, attachment-state, and focus-trap coverage; and the Windows Playwright setup failed on `prisma.cmd` before it was changed to invoke Prisma through `node.exe`.
 
-Automated setup validates `TEST_DATABASE_URL`, refuses the development URL, deploys migrations only to the guarded test database, clears only E2E-owned Tickets and their related Attachment/create-request rows, and uses private ignored test storage. Routine E2E screenshots go to ignored `test-results/`; only `npm run test:e2e:capture` refreshes curated evidence. Final passing test output will be recaptured from the merged `main` branch before submission.
+Automated setup validates `TEST_DATABASE_URL`, refuses the development URL, deploys migrations only to the guarded test database, clears only E2E-owned Tickets and their related Attachment/create-request rows, and uses private ignored test storage. Routine E2E screenshots go to ignored `test-results/`; only `npm run test:e2e:capture` refreshes curated evidence. The same complete suite passed again on merged `main` at `a0a4d32`.
 
 ## Answer Part 4
 
@@ -152,8 +152,8 @@ The repository contains 13 contract-required screenshots plus 11 supplementary g
 |---|---|
 | Issue #17 PR / approval / reviewer merge | PR #22 approved at `93eca5d`; reviewer-merged as `73c0ecb` |
 | Release-candidate `lab2-staging` baseline | `73c0ecb` when release PR opened |
-| Release PR `lab2-staging` -> `main` | PR #23 open; peer approval pending |
-| Final `main` commit | Pending |
-| Final-main Vitest / Playwright result | Pending |
-| Final Kanban and commit-history screenshots | Pending |
+| Release PR `lab2-staging` -> `main` | PR #23 peer reviewer-merged on 2026-09-02 |
+| Final `main` commit | `a0a4d32` |
+| Final-main Vitest / Playwright result | Pass - 23 files / 165 tests; 7 E2E tests |
+| Final-main builds / diff check | Server Pass; Client Pass; `git diff --check` Pass |
 | All Issues #11-#17 Done and closed | Complete |
