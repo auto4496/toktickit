@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Issue #17 quality and release evidence is in PR Review on [PR #22](https://github.com/auto4496/toktickit/pull/22); review requested from `@Datakung`
+Status: Issues #11-#17 are Done. [PR #22](https://github.com/auto4496/toktickit/pull/22) was approved and reviewer-merged into `lab2-staging`; final [release PR #23](https://github.com/auto4496/toktickit/pull/23) targets `main` and is awaiting peer review.
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -24,8 +24,8 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Approved at `3f05bfd`; merged by reviewer as `4f82246` |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | [#21](https://github.com/auto4496/toktickit/pull/21) | Approved at `003f817`; merged by reviewer as `05c6cc8` |
-| Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | [#22](https://github.com/auto4496/toktickit/pull/22) | Review requested from `@Datakung` at `84be663` |
-| Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
+| Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | [#22](https://github.com/auto4496/toktickit/pull/22) | Approved at `93eca5d`; merged by reviewer as `73c0ecb` |
+| Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | [#23](https://github.com/auto4496/toktickit/pull/23) | Peer review requested |
 
 ## Review Checklist
 
@@ -151,21 +151,29 @@ Each review records the commit reviewed and checks:
 - Verification before review: `npm test` passed 23 files and 165 tests against isolated `toktickit_test`; `npm run test:e2e` passed 2 files and 7 tests; both production builds and `git diff --check` passed.
 - Visual verification: 13 required plus 11 supplementary screenshots were manually inspected at 1440x900, 834x1112, and 390x844. The additions explicitly show Requester loading/failure/ready, Create invalid/submitting/API-failure, requester switching, and Attachment invalid/uploading/failed/unavailable states. No clipping, overlap, hidden action, horizontal document overflow, unreadable filename, or color-only state was found.
 - Test-first record: the planned test files were authored before the responsive implementation. The first executable Vitest attempt stopped safely before collection because `TEST_DATABASE_URL` was absent; the guard was retained. Playwright setup and locator failures were then corrected without weakening assertions, followed by passing targeted and full runs.
-- Workflow status: Issue #17 moved from Backlog to Started before implementation. PR #22 was formally linked through the Development panel, the Issue moved to PR Review, and review was requested from `@Datakung` on 2026-09-02. Approval and reviewer merge remain pending and must be recorded only after they occur.
+- Review feedback: `@Datakung` required E2E cleanup to preserve unrelated isolated-test rows, routine E2E runs to stop modifying tracked screenshots, and README instructions to distinguish routine tests from intentional evidence capture.
+- Corrections: `9dd392d` scopes cleanup to E2E/RESP/VIS Tickets and their related rows and sends routine screenshots to ignored `test-results/`; `93eca5d` documents both `npm run test:e2e` and explicit `npm run test:e2e:capture` behavior.
+- Approval: Approved by `@Datakung` at `93eca5d` on 2026-09-02 after all requested corrections and the formal Development link were verified.
+- Merge: Merged by the peer reviewer into `lab2-staging` as `73c0ecb` on 2026-09-02; Issue #17 then moved to Done and was closed.
 
 ## Pull Requests I Reviewed for My Partner
 
-Record at least the partner repository, Issue/PR link, commit reviewed, evidence checked, feedback given, partner response, follow-up verification, and final approval outcome. Do not claim a command was rerun when only code inspection was possible.
+- Partner repository: [Datakung/toktickit](https://github.com/Datakung/toktickit)
+- Pull Request: [#22 - Issue 16: Complete Lab 2 quality and release evidence](https://github.com/Datakung/toktickit/pull/22)
+- Initial reviewed commit: `5791e58`; outcome: Changes requested.
+- Evidence checked and feedback: identified two release blockers - browser tests could use or reuse an unguarded development database, and routine E2E runs overwrote tracked screenshots with nondeterministic evidence. Requested a guarded isolated E2E database/storage lifecycle and a separate explicit deterministic capture command.
+- Partner response and follow-up: the partner added guarded migration/seed/cleanup, isolated upload storage, a development-data preservation check, ignored routine screenshots, and an explicit evidence command. Re-review at `8ae59ec` verified both findings were resolved.
+- Final outcome: Approved by `@auto4496`; reviewer-verified PR merged as `4dfb0f2` on 2026-09-02.
 
 ## Final Integration
 
 Before the Lab 2 release PR is approved, record:
 
-- Final `lab2-staging` commit: TBD
-- Complete test result: TBD
-- Server build: TBD
-- Client build: TBD
-- Migration and two-run seed verification: TBD
-- Desktop/tablet/mobile visual review: TBD
-- Release PR and approval: TBD
-- Final `main` merge commit: TBD
+- Release-candidate `lab2-staging` baseline: `73c0ecb` when PR #23 was opened.
+- Complete test result: 23 Vitest files / 165 tests and 2 Playwright files / 7 tests passed against isolated test infrastructure.
+- Server build: Passed.
+- Client build: Passed.
+- Migration and two-run seed verification: Passed through the guarded PostgreSQL integration and E2E setup evidence.
+- Desktop/tablet/mobile visual review: Passed at 1440x900, 834x1112, and 390x844; 13 required and 11 supplementary screenshots inspected.
+- Release PR: [#23](https://github.com/auto4496/toktickit/pull/23); peer approval pending.
+- Final `main` merge commit: Pending release approval and merge.
