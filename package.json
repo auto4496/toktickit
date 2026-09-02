@@ -9,12 +9,15 @@
     "build:server": "npm --prefix server run build",
     "build:client": "npm --prefix client run build",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:capture": "node e2e/lab-02/capture-evidence.mjs",
     "test:integration": "vitest run server/tests/lab-02/reference-data.integration.test.ts",
     "test:watch": "vitest",
     "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
     "prisma:studio": "npx prisma studio --schema=server/prisma/schema.prisma"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
     "@types/express": "^5.0.0",

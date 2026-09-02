@@ -1,6 +1,6 @@
 # Lab 2 Test Plan and Results
 
-Status: Implemented through Issue #16 Ticket Detail and Attachment Lifecycle; later quality/release evidence remains planned
+Status: Issue #17 quality, responsive, visual, and E2E evidence implemented and verified on the feature branch; final release integration remains pending
 
 Contract source: [specification.md](./specification.md), [api-spec.md](./api-spec.md), and [ui-spec.md](./ui-spec.md)
 
@@ -60,12 +60,12 @@ Test data must be deterministic and isolated. API tests create their own Request
 | UI-09 | UI | FR-19-FR-21, FR-32, AC-11-AC-12, AC-24 | Ticket Detail loading, owned data, not-found, and unexpected failure | Read-only information and separate Attachment section; safe not-found; unexpected error exposes no backend detail and Retry works | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Pass (11-test UI suite) |
 | UI-10 | UI | FR-22-FR-27, FR-32, AC-13-AC-19, AC-24 | Attachment active, uploading, unsafe/invalid, failed, unavailable-file, removed, no-preview, and unexpected-failure states | Unavailable keeps safe metadata with badge/message, exposes no bytes/private detail, retains Retry Download and Remove; other states show correct controls, no Preview, reason dialog, safe errors, and retained removal metadata | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Pass (11-test UI suite) |
 | UI-11 | UI | FR-28, AC-20 | Attachment ownership failure feedback | Safe not-found/failure state with no leaked metadata | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Pass (11-test UI suite) |
-| STYLE-01 | UI style | FR-29, FR-31, AC-23 | Required labels, asterisks, field states, button hierarchy, badges, ARIA, mobile breakpoint, and minimum touch targets | Required semantic attributes/classes and visible state text present; Issue #13 foundation uses the approved `<768px` breakpoint and 44 by 44 pixel minimum targets; NEW uses the approved pale-green token | `client/tests/lab-02/ResponsiveStyles.test.tsx`; later screens in `client/tests/lab-02/ZenGreenStyles.test.tsx` | Pass for foundation, Create Ticket, and My Tickets (6 tests); later screens planned |
-| E2E-01 | E2E | AC-01-AC-11 | Complete create-to-detail flow | Select Requester, create, receive official number, find in list, open read-only detail | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
-| E2E-02 | E2E | AC-03, AC-08, AC-12, AC-20 | Multi-requester ownership flow | Switching hides prior data; direct Ticket and Attachment access rejected | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
-| E2E-03 | E2E | AC-13-AC-21 | Attachment lifecycle | Add, reject invalid, enforce limit, download, remove with reason, retain metadata, block removed download | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
-| RESP-01 | Responsive | AC-22-AC-23 | Desktop, tablet, and mobile required screens | No clipping, overlap, hidden actions, or horizontal overflow; keyboard checks pass | `e2e/lab-02/responsive-visual.spec.ts` | Planned |
-| VIS-01 | Visual/manual | AC-22-AC-23 | Zen Green screenshot checklist | Approved screenshots and completed checklist match `ui-spec.md` | `docs/lab-02/ui-spec.md` and `artifacts/lab-02/screenshots/` | Planned |
+| STYLE-01 | UI style | FR-29, FR-31, AC-23 | Required labels, asterisks, field states, button hierarchy, badges, ARIA, tablet/mobile breakpoints, focus visibility, safe sizing, and minimum touch targets | Required semantic attributes/classes and visible state text present; all screens use the approved `<768px` breakpoint, two-column tablet layout where practical, 44 by 44 pixel minimum targets, visible Zen Green focus, and textual status/error states | `client/tests/lab-02/ResponsiveStyles.test.tsx`, `client/tests/lab-02/ZenGreenStyles.test.tsx` | Pass (11 tests) |
+| E2E-01 | E2E | AC-01-AC-11 | Complete create-to-detail flow | Select Requester, create with a valid file, receive official number, confirm upload, find in list, and open read-only detail | `e2e/lab-02/requester-ticket-flow.spec.ts` | Pass (1 test) |
+| E2E-02 | E2E | AC-03, AC-08, AC-12, AC-20 | Multi-requester ownership flow | Switching hides prior data; direct Ticket and Attachment access returns the indistinguishable safe `404` | `e2e/lab-02/requester-ticket-flow.spec.ts` | Pass (1 test) |
+| E2E-03 | E2E | AC-13-AC-21 | Attachment lifecycle | Add, reject invalid, enforce five-active limit, download, remove with reason, retain metadata, and block removed download | `e2e/lab-02/requester-ticket-flow.spec.ts` | Pass (1 test) |
+| RESP-01 | Responsive | AC-22-AC-23 | Requester Selection, My Tickets, Create Ticket, Ticket Detail, and removal dialog at desktop/tablet/mobile | No clipping, overlap, hidden actions, or horizontal overflow; desktop/tablet table, mobile cards, dialog Escape, and focus return pass | `e2e/lab-02/responsive-visual.spec.ts` | Pass (3 tests) |
+| VIS-01 | Visual/manual | AC-22-AC-23 | Zen Green screenshot checklist | Thirteen contracted screenshots captured and manually inspected against `ui-spec.md` | `docs/lab-02/ui-spec.md` and `artifacts/lab-02/screenshots/` | Pass (1 automated capture test plus manual review) |
 
 ## 3. Acceptance-Criterion Traceability
 
@@ -107,6 +107,8 @@ The authoritative checklist and screenshot names are in [ui-spec.md](./ui-spec.m
 
 At each viewport, Playwright checks `document.documentElement.scrollWidth <= document.documentElement.clientWidth`, required actions are visible/operable, and long Ticket/Attachment values do not force page overflow. Screenshot review remains required because automated DOM assertions do not prove visual quality.
 
+On 2026-09-02, all 13 required screenshots and 11 supplementary grading-state screenshots were generated by `VIS-01` and manually inspected. The supplementary set covers Requester loading/failure/ready, Create Ticket invalid/submitting/API-failure, requester switching, and four Attachment states. The review found no clipped labels, overlap, hidden primary action, unreadable filename, unintended horizontal page scrolling, or color-only status. Desktop/tablet tables, mobile cards, visible focus, active/uploading/invalid/failed/unavailable/removed Attachment states, and responsive action placement matched the approved contract.
+
 ## 5. Test Commands
 
 Vitest requires a dedicated PostgreSQL target through `TEST_DATABASE_URL`. Copy
@@ -141,6 +143,8 @@ npm run build:client
 Production/development data must never be migrated, seeded, or cleared by
 automated tests.
 
+`npm run test:e2e` validates `TEST_DATABASE_URL` before setup, deploys pending migrations only to that guarded target, seeds reference data idempotently, and clears only Ticket/Attachment browser-test data in the test database. It uses isolated ports `5100` and `3100` and private test storage under ignored `tmp/attachments/e2e`.
+
 ## 6. Baseline and Final Results
 
 ### Lab 1 Baseline on 2026-08-30
@@ -154,6 +158,20 @@ automated tests.
 ### Lab 2 Final Results
 
 Not yet executed. This section must record the final `main` commit, commands, test-file/test counts, pass status, and screenshot verification after implementation and release integration.
+
+### Issue #17 Quality and Release Evidence Results on 2026-09-02
+
+| Check | Result |
+|---|---|
+| Migration deploy in Playwright setup | Pass; 2 migrations found and no pending migration against isolated `toktickit_test` |
+| `npm test` with isolated `toktickit_test` | Pass; 23 test files and 165 tests |
+| `npm run test:e2e` | Pass; 2 Playwright files and 7 tests using one isolated worker |
+| `E2E-01`-`E2E-03` | Pass; create-to-detail, requester ownership, and Attachment lifecycle |
+| `RESP-01` | Pass at 1440x900, 834x1112, and 390x844 with no horizontal document overflow and required actions operable |
+| `VIS-01` | Pass; 13 required plus 11 supplementary grading-state screenshots generated and manually inspected |
+| `npm run build:server` | Pass |
+| `npm run build:client` | Pass; Vite production bundle completed |
+| `git diff --check` | Pass |
 
 ### Issue #13 Data and Requester Context Results on 2026-08-31
 
