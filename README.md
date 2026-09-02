@@ -181,7 +181,15 @@ npm test
 npm run test:e2e
 ```
 
-The Playwright setup validates the same test-only URL guard before it deploys migrations, seeds reference data idempotently, or clears browser-test Ticket/Attachment rows. It never uses the development database. The E2E suite runs the API and client on isolated ports `5100` and `3100`, checks desktop `1440x900`, tablet `834x1112`, and mobile `390x844`, and writes the required screenshot evidence under `artifacts/lab-02/screenshots/`.
+`npm run test:e2e` writes generated screenshots only under the ignored
+`test-results/` directory. Refresh the curated Lab 2 evidence explicitly when
+needed:
+
+```bash
+npm run test:e2e:capture
+```
+
+The Playwright setup validates the same test-only URL guard before it deploys migrations, seeds reference data idempotently, or clears only E2E-owned Ticket rows and their related Attachment and creation-request rows. It never uses the development database. The E2E suite runs the API and client on isolated ports `5100` and `3100`, checks desktop `1440x900`, tablet `834x1112`, and mobile `390x844`. Only `npm run test:e2e:capture` refreshes the curated screenshot evidence under `artifacts/lab-02/screenshots/`.
 
 Build both applications:
 
