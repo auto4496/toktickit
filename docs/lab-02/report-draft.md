@@ -1,6 +1,6 @@
 # TokTickIT Lab 2 Report - Review Draft
 
-> Status: Issue #17 is verified locally on 2026-09-02. The Issue #17 PR, reviewer approval/merge, release PR, final `main` commit, final Kanban screenshot, and final-main test output must be inserted only after those events occur.
+> Status: Issue #17 is verified locally and [PR #22](https://github.com/auto4496/toktickit/pull/22) is in PR Review on 2026-09-02. Reviewer approval/merge, release PR, final `main` commit, final Kanban screenshot, and final-main test output must be inserted only after those events occur.
 
 | Item | Evidence |
 |---|---|
@@ -24,7 +24,7 @@ The sprint uses `main` -> `lab2-staging` -> one feature branch per Issue -> peer
 | Create Ticket | [#14](https://github.com/auto4496/toktickit/issues/14) / `feature/lab2-3-create-ticket` | [PR #19](https://github.com/auto4496/toktickit/pull/19), reviewer-merged as `8f78ab7` |
 | My Tickets | [#15](https://github.com/auto4496/toktickit/issues/15) / `feature/lab2-4-my-tickets` | [PR #20](https://github.com/auto4496/toktickit/pull/20), approved by `@Datakung`, reviewer-merged as `4f82246` |
 | Ticket Detail and Attachments | [#16](https://github.com/auto4496/toktickit/issues/16) / `feature/lab2-5-ticket-detail-attachments` | [PR #21](https://github.com/auto4496/toktickit/pull/21), approved by `@Datakung`, reviewer-merged as `05c6cc8` |
-| Quality and Release Evidence | [#17](https://github.com/auto4496/toktickit/issues/17) / `feature/lab2-6-quality-evidence` | PR link and reviewer outcome pending |
+| Quality and Release Evidence | [#17](https://github.com/auto4496/toktickit/issues/17) / `feature/lab2-6-quality-evidence` | [PR #22](https://github.com/auto4496/toktickit/pull/22) formally linked; review requested from `@Datakung` |
 | Final release | `lab2-staging` -> `main` | Release PR, approval, and final merge pending |
 
 Working evidence: [GitHub Project](https://github.com/users/auto4496/projects/1), [reviewer.md](https://github.com/auto4496/toktickit/blob/main/docs/lab-02/reviewer.md), [README.md](https://github.com/auto4496/toktickit/blob/main/README.md), and [.gitignore](https://github.com/auto4496/toktickit/blob/main/.gitignore). The final PDF will add readable screenshots of the final-main commit graph, final Kanban with Issues #11-#17 in Done, rendered reviewer record, and IDE directory structure after release integration.
@@ -150,7 +150,7 @@ The repository contains 13 contract-required screenshots plus 11 supplementary g
 
 | Final evidence | Value to insert after it actually occurs |
 |---|---|
-| Issue #17 PR / approval / reviewer merge | Pending |
+| Issue #17 PR / approval / reviewer merge | PR #22 open; approval and reviewer merge pending |
 | Final `lab2-staging` commit | Pending |
 | Release PR `lab2-staging` -> `main` | Pending |
 | Final `main` commit | Pending |

@@ -1,6 +1,6 @@
 # Lab 2 AI Use Record
 
-Status: Completed through Issue #17 local verification; append peer-review and final release outcomes before submission
+Status: Completed through Issue #17 PR Review; append peer-review and final release outcomes before submission
 
 ## LLM Used
 

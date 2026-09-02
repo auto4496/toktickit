@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: Issue #17 quality and release evidence verified locally; Pull Request handoff pending
+Status: Issue #17 quality and release evidence is in PR Review on [PR #22](https://github.com/auto4496/toktickit/pull/22); review requested from `@Datakung`
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -24,7 +24,7 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
 | My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Approved at `3f05bfd`; merged by reviewer as `4f82246` |
 | Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | [#21](https://github.com/auto4496/toktickit/pull/21) | Approved at `003f817`; merged by reviewer as `05c6cc8` |
-| Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Local verification complete; PR handoff pending |
+| Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | [#22](https://github.com/auto4496/toktickit/pull/22) | Review requested from `@Datakung` at `84be663` |
 | Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
 
 ## Review Checklist
@@ -144,14 +144,14 @@ Each review records the commit reviewed and checks:
 
 - Issue: [#17](https://github.com/auto4496/toktickit/issues/17)
 - Branch: `feature/lab2-6-quality-evidence`
-- Pull Request: TBD until handoff
+- Pull Request: [#22](https://github.com/auto4496/toktickit/pull/22), targeting `lab2-staging`
 - Requirements/ACs/Tests: FR-29-FR-32; all cross-cutting BR items; AC-22-AC-25 with regression evidence for AC-01-AC-21; STYLE-01, RESP-01, VIS-01, and E2E-01-E2E-03.
 - Implementation: added the guarded Playwright environment, complete requester and Attachment browser journeys, three-viewport overflow/action/focus checks, the required screenshot capture, eleven supplementary grading-state captures, complete Zen Green style coverage, responsive tablet/mobile refinements, and release-ready setup documentation.
 - Dependency decision: `@playwright/test` `1.62.1` is the only new development dependency and is required by the approved browser/E2E/visual test plan; no runtime dependency was added.
 - Verification before review: `npm test` passed 23 files and 165 tests against isolated `toktickit_test`; `npm run test:e2e` passed 2 files and 7 tests; both production builds and `git diff --check` passed.
 - Visual verification: 13 required plus 11 supplementary screenshots were manually inspected at 1440x900, 834x1112, and 390x844. The additions explicitly show Requester loading/failure/ready, Create invalid/submitting/API-failure, requester switching, and Attachment invalid/uploading/failed/unavailable states. No clipping, overlap, hidden action, horizontal document overflow, unreadable filename, or color-only state was found.
 - Test-first record: the planned test files were authored before the responsive implementation. The first executable Vitest attempt stopped safely before collection because `TEST_DATABASE_URL` was absent; the guard was retained. Playwright setup and locator failures were then corrected without weakening assertions, followed by passing targeted and full runs.
-- Workflow status: Issue #17 moved from Backlog to Started before implementation. PR link, PR Review status, review outcome, and reviewer merge remain pending and must be recorded after they occur.
+- Workflow status: Issue #17 moved from Backlog to Started before implementation. PR #22 was formally linked through the Development panel, the Issue moved to PR Review, and review was requested from `@Datakung` on 2026-09-02. Approval and reviewer merge remain pending and must be recorded only after they occur.
 
 ## Pull Requests I Reviewed for My Partner
 
