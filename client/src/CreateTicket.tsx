@@ -35,6 +35,9 @@ type PendingSubmission = {
   canonicalPayload: string;
 };
 
+type SelectedFile = { id: string; file: File };
+type AttachmentUpload = { status: 'uploading' | 'uploaded' | 'failed'; message: string };
+
 const priorities: Priority[] = ['LOW', 'MEDIUM', 'HIGH'];
 const initialValues: FormValues = {
   categoryId: '',
@@ -138,6 +141,24 @@ const validateFiles = (files: File[]) => {
   return null;
 };
 
+const readAttachmentErrorCode = async (response: Response) => {
+  try {
+    const body = await response.json() as { error?: { code?: unknown } };
+    return typeof body.error?.code === 'string' ? body.error.code : null;
+  } catch {
+    return null;
+  }
+};
+
+const attachmentFailureMessage = (code: string | null) => {
+  if (code === 'ATTACHMENT_FILENAME_INVALID') return 'The filename is not valid.';
+  if (code === 'ATTACHMENT_TYPE_UNSUPPORTED') return 'The extension, declared type, and file contents do not match.';
+  if (code === 'ATTACHMENT_TOO_LARGE') return 'The file is larger than 5 MiB.';
+  if (code === 'ATTACHMENT_LIMIT_REACHED') return 'This Ticket already has five active Attachments.';
+  if (code === 'RESOURCE_NOT_FOUND') return 'The requested Ticket is unavailable.';
+  return 'The Attachment could not be uploaded. Try again.';
+};
+
 const validateValues = (
   values: FormValues,
   categories: ReferenceItem[],
@@ -175,13 +196,15 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
   >('loading');
   const [referenceAttempt, setReferenceAttempt] = useState(0);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [createdTicket, setCreatedTicket] = useState<TicketData | null>(null);
+  const [attachmentUploads, setAttachmentUploads] = useState<Record<string, AttachmentUpload>>({});
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const uploadedTicketRef = useRef<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -210,6 +233,33 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
     if (createdTicket) successHeadingRef.current?.focus();
   }, [createdTicket]);
 
+  const uploadAttachment = async (ticket: TicketData, selected: SelectedFile) => {
+    setAttachmentUploads((current) => ({ ...current, [selected.id]: { status: 'uploading', message: 'Uploading…' } }));
+    const form = new FormData();
+    form.append('file', selected.file);
+    try {
+      const response = await fetch(`${apiUrl()}/api/tickets/${ticket.id}/attachments`, { method: 'POST', headers: { 'X-Requester-Id': requester.id }, body: form });
+      if (!response.ok) {
+        const message = attachmentFailureMessage(await readAttachmentErrorCode(response));
+        setAttachmentUploads((current) => ({ ...current, [selected.id]: { status: 'failed', message } }));
+        return;
+      }
+      const body = await response.json() as { data?: { id?: unknown; originalName?: unknown } };
+      if (typeof body.data?.id !== 'string' || typeof body.data.originalName !== 'string') {
+        throw new Error('Invalid Attachment response.');
+      }
+      setAttachmentUploads((current) => ({ ...current, [selected.id]: { status: 'uploaded', message: 'Uploaded' } }));
+    } catch {
+      setAttachmentUploads((current) => ({ ...current, [selected.id]: { status: 'failed', message: 'The Attachment could not be uploaded. Try again.' } }));
+    }
+  };
+
+  useEffect(() => {
+    if (!createdTicket || selectedFiles.length === 0 || uploadedTicketRef.current === createdTicket.id) return;
+    uploadedTicketRef.current = createdTicket.id;
+    void (async () => { for (const selected of selectedFiles) await uploadAttachment(createdTicket, selected); })();
+  }, [createdTicket, selectedFiles]);
+
   const clearPendingSubmission = () =>
     window.sessionStorage.removeItem(CREATE_TICKET_PENDING_KEY);
 
@@ -227,11 +277,13 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
     setFieldErrors({});
     setSubmitError(null);
     setCreatedTicket(null);
+    setAttachmentUploads({});
+    uploadedTicketRef.current = null;
   };
 
   const chooseFiles = (files: File[]) => {
     const fileError = validateFiles(files);
-    setSelectedFiles(files);
+    setSelectedFiles(files.map((file) => ({ id: createUuid(), file })));
     setFieldErrors((current) => ({
       ...current,
       attachments: fileError ?? undefined,
@@ -249,7 +301,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
     if (submitting || referenceState !== 'ready') return;
 
     const errors = validateValues(values, categories, relatedSystems);
-    const fileError = validateFiles(selectedFiles);
+    const fileError = validateFiles(selectedFiles.map(({ file }) => file));
     if (fileError) errors.attachments = fileError;
     setFieldErrors(errors);
     setSubmitError(null);
@@ -319,12 +371,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
           </dl>
           <h2>{createdTicket.summary}</h2>
           <p>{createdTicket.description}</p>
-          {selectedFiles.length > 0 && (
-            <p className="attachment-note">
-              {selectedFiles.length} selected attachment(s) remain ready for the
-              Attachment workflow.
-            </p>
-          )}
+          {selectedFiles.length > 0 && <section className="attachment-note" aria-labelledby="post-create-attachments"><h2 id="post-create-attachments">Attachments</h2><ul className="post-create-uploads" aria-live="polite">{selectedFiles.map((selected) => { const upload = attachmentUploads[selected.id] ?? { status: 'uploading', message: 'Uploading…' }; return <li key={selected.id}><strong>{selected.file.name}</strong><span>{upload.message}</span>{upload.status === 'failed' && <div className="attachment-actions"><button type="button" className="btn btn-outline-success" onClick={() => void uploadAttachment(createdTicket, selected)}>Retry Upload</button><button type="button" className="btn btn-outline-danger" onClick={() => { setSelectedFiles((current) => current.filter((item) => item.id !== selected.id)); setAttachmentUploads((current) => { const next = { ...current }; delete next[selected.id]; return next; }); }}>Remove selection</button></div>}</li>; })}</ul></section>}
           <div className="form-actions">
             <a className="btn btn-success" href={`/tickets/${createdTicket.id}`}>
               View Ticket
@@ -495,7 +542,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
           {selectedFiles.length > 0 && (
             <>
               <ul className="selected-files">
-                {selectedFiles.map((file) => <li key={`${file.name}-${file.size}`}>{file.name}</li>)}
+                {selectedFiles.map(({ id, file }) => <li key={id}>{file.name}</li>)}
               </ul>
               <button
                 className="btn btn-outline-danger clear-files"

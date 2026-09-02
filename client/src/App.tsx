@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import CreateTicket from './CreateTicket';
 import MyTickets from './MyTickets';
+import RequesterTicketDetail from './RequesterTicketDetail';
 
 type HealthResponse = { status: string; service: string };
 type Category = { id: number; name: string };
@@ -223,6 +224,8 @@ function ApplicationShell({ requester, onChangeRequester }: { requester: Request
       </header>
       {activePath === '/tickets/new' ? (
         <CreateTicket requester={requester} />
+      ) : /^\/tickets\/[0-9a-f-]+$/i.test(activePath) ? (
+        <RequesterTicketDetail requester={requester} ticketId={activePath.split('/').pop()!} onBack={() => navigate('/tickets')} />
       ) : (
         <MyTickets requester={requester} />
       )}

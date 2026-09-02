@@ -1,7 +1,7 @@
 /* @vitest-environment jsdom */
 
 import '@testing-library/jest-dom/vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App, { REQUESTER_STORAGE_KEY } from '../../src/App';
 import { CREATE_TICKET_PENDING_KEY } from '../../src/CreateTicket';
@@ -244,7 +244,7 @@ describe('Create Ticket', () => {
     const postKeys: string[] = [];
     let postCount = 0;
     const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
-      if (init?.method === 'POST') {
+      if (init?.method === 'POST' && String(input).endsWith('/api/tickets')) {
         postKeys.push(new Headers(init.headers).get('Idempotency-Key') ?? '');
         postCount += 1;
         return Promise.resolve(
@@ -252,6 +252,9 @@ describe('Create Ticket', () => {
             ? jsonResponse({ error: { message: 'private SQL password' } }, 500)
             : jsonResponse(ticketResponse, 201),
         );
+      }
+      if (init?.method === 'POST' && String(input).includes('/attachments')) {
+        return Promise.resolve(jsonResponse({ data: { id: 'attachment-id', originalName: 'evidence.pdf' } }, 201));
       }
       return Promise.resolve(referenceResponse(input));
     });
@@ -320,5 +323,41 @@ describe('Create Ticket', () => {
     ).toBeInTheDocument();
     expect(postKeys).toHaveLength(2);
     expect(postKeys[0]).not.toBe(postKeys[1]);
+  });
+
+  it('retains successful post-create uploads and offers per-file Retry and Remove after a partial failure', async () => {
+    const attachmentAttempts = new Map<string, number>();
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+      if (init?.method === 'POST' && url.endsWith('/api/tickets')) return Promise.resolve(jsonResponse(ticketResponse, 201));
+      if (init?.method === 'POST' && url.includes('/attachments')) {
+        const file = (init.body as FormData).get('file') as File;
+        const attempts = (attachmentAttempts.get(file.name) ?? 0) + 1;
+        attachmentAttempts.set(file.name, attempts);
+        const shouldFail = file.name === 'failed.pdf' && attempts === 1;
+        return Promise.resolve(shouldFail
+          ? jsonResponse({ error: { code: 'ATTACHMENT_UPLOAD_FAILED', message: 'private storage path' } }, 500)
+          : jsonResponse({ data: { id: `attachment-${file.name}`, originalName: file.name } }, 201));
+      }
+      return Promise.resolve(referenceResponse(input));
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    renderCreateTicket();
+    await fillValidForm();
+    fireEvent.change(screen.getByLabelText('Attachments', { selector: 'input' }), { target: { files: [
+      new File(['safe'], 'uploaded.pdf', { type: 'application/pdf' }),
+      new File(['safe'], 'failed.pdf', { type: 'application/pdf' }),
+    ] } });
+    fireEvent.click(screen.getByRole('button', { name: 'Submit Ticket' }));
+    expect(await screen.findByText('The Attachment could not be uploaded. Try again.')).toBeInTheDocument();
+    expect(screen.getByText('uploaded.pdf').parentElement).toHaveTextContent('Uploaded');
+    expect(screen.getByText('failed.pdf').parentElement).toHaveTextContent('The Attachment could not be uploaded');
+    expect(screen.queryByText(/private storage path/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'View Ticket' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Remove selection' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Retry Upload' }));
+    await waitFor(() => expect(screen.getByText('failed.pdf').parentElement).toHaveTextContent('Uploaded'));
+    expect(attachmentAttempts.get('uploaded.pdf')).toBe(1);
+    expect(attachmentAttempts.get('failed.pdf')).toBe(2);
   });
 });
