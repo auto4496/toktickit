@@ -1,29 +1,23 @@
 import { PrismaClient } from '@prisma/client';
+import {
+  categoryNames,
+  relatedSystemNames,
+  requesterUsers,
+  seedDatabase,
+} from './seed-data.js';
 
 const prisma = new PrismaClient();
 
-const categoryNames = [
-  'Account and Access',
-  'Hardware',
-  'Software',
-  'Network',
-] as const;
-
 async function main() {
-  for (const name of categoryNames) {
-    await prisma.category.upsert({
-      where: { name },
-      update: {},
-      create: { name },
-    });
-  }
-
-  console.log(`Seeded ${categoryNames.length} IT request categories.`);
+  await seedDatabase(prisma);
+  console.log(
+    `Seeded ${categoryNames.length} categories, ${relatedSystemNames.length} related systems, and ${requesterUsers.length} requester users.`,
+  );
 }
 
 main()
   .catch((error: unknown) => {
-    console.error('Failed to seed IT request categories.', error);
+    console.error('Failed to seed Lab 2 reference data.', error);
     process.exitCode = 1;
   })
   .finally(async () => {
