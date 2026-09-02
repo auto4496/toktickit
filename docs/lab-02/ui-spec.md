@@ -324,16 +324,20 @@ artifacts/lab-02/screenshots/
     └── mobile.png
 ```
 
+Issue #17 also records eleven supplementary grading-state images without changing the required 13-file submission set: Requester Selection `desktop-loading.png`, `desktop-failure.png`, and `desktop-ready.png`; Create Ticket `desktop-invalid-attachment.png`, `desktop-submitting.png`, and `desktop-api-failure.png`; My Tickets `desktop-requester-switched.png`; and Ticket Detail `desktop-invalid-attachment.png`, `desktop-uploading-attachment.png`, `desktop-failed-attachment.png`, and `desktop-unavailable-attachment.png`.
+
 ### Visual Checklist
 
-- [ ] Zen Green tokens are used consistently; default Bootstrap blue is absent from product states.
-- [ ] Editable, read-only, invalid, disabled, focus, and busy controls are visually distinct.
-- [ ] Labels, required markers, helper text, and inline validation are consistently positioned.
-- [ ] Primary, secondary, tertiary, destructive, disabled, and busy button hierarchy is clear.
-- [ ] Requested Priority, IT Priority, Current Status, and Removed badges include readable text.
-- [ ] Desktop table and mobile cards present equivalent essential information.
-- [ ] Search, filters, sort, Clear Filters, and pagination remain usable at all required widths.
-- [ ] Empty and no-results states are visually and semantically distinct.
-- [ ] Active, uploading, invalid, failed, removed, and unavailable Attachment states are distinguishable.
-- [ ] No clipping, overlap, hidden action, unintended horizontal page scrolling, or unreadable Attachment name is present.
-- [ ] Keyboard focus, accessible names, and non-color indicators have been manually inspected.
+Completed on 2026-09-02 against the 13 required and 11 supplementary files in `artifacts/lab-02/screenshots/` after `VIS-01` and `RESP-01` passed. Peer approval remains pending with the Issue #17 Pull Request.
+
+- [x] Zen Green tokens are used consistently; default Bootstrap blue is absent from product states.
+- [x] Editable, read-only, invalid, disabled, focus, and busy controls are visually distinct.
+- [x] Labels, required markers, helper text, and inline validation are consistently positioned.
+- [x] Primary, secondary, tertiary, destructive, disabled, and busy button hierarchy is clear.
+- [x] Requested Priority, IT Priority, Current Status, and Removed badges include readable text.
+- [x] Desktop table and mobile cards present equivalent essential information.
+- [x] Search, filters, sort, Clear Filters, and pagination remain usable at all required widths.
+- [x] Empty and no-results states are visually and semantically distinct.
+- [x] Active, uploading, invalid, failed, removed, and unavailable Attachment states are visually distinguishable in the required and supplementary screenshots.
+- [x] No clipping, overlap, hidden action, unintended horizontal page scrolling, or unreadable Attachment name is present.
+- [x] Keyboard focus, accessible names, and non-color indicators have been manually inspected.

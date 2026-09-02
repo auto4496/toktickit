@@ -1,6 +1,6 @@
 # Lab 2 Peer Review Record
 
-Status: My Tickets peer-review corrections verified and returned for re-review
+Status: Issue #17 quality and release evidence verified locally; Pull Request handoff pending
 
 Workflow: feature branch -> peer-reviewed Pull Request -> `lab2-staging` -> release Pull Request -> `main`
 
@@ -22,9 +22,9 @@ GitHub assigns Issue and PR numbers when they are created. Existing Lab 1 Issue 
 | Engineering Contract | `feature/lab2-1-engineering-contract` | Specification, API, UI, test traceability, initial review/AI records | [#11](https://github.com/auto4496/toktickit/issues/11) | [#12](https://github.com/auto4496/toktickit/pull/12) | Approved at `522392e`; merged by the reviewer as `2bcdb54` |
 | Data and Requester Context | `feature/lab2-2-data-requester-context` | Prisma migration, idempotent seed, reference APIs, selector/context, tests | [#13](https://github.com/auto4496/toktickit/issues/13) | [#18](https://github.com/auto4496/toktickit/pull/18) | Approved at `5819232`; merged by reviewer as `9ab607d` |
 | Create Ticket | `feature/lab2-3-create-ticket` | Ticket API/UI, validation, idempotency, failure preservation, tests | [#14](https://github.com/auto4496/toktickit/issues/14) | [#19](https://github.com/auto4496/toktickit/pull/19) | Approved at `bbb3a1d`; merged by the reviewer as `8f78ab7` |
-| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Corrections verified at `995128c`; re-review requested |
-| Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | [#21](https://github.com/auto4496/toktickit/pull/21) | Corrections verified; re-review requested |
-| Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Planned |
+| My Tickets | `feature/lab2-4-my-tickets` | Ownership, search, filters, sort, pagination, states, tests | [#15](https://github.com/auto4496/toktickit/issues/15) | [#20](https://github.com/auto4496/toktickit/pull/20) | Approved at `3f05bfd`; merged by reviewer as `4f82246` |
+| Ticket Detail and Attachments | `feature/lab2-5-ticket-detail-attachments` | Detail ownership, upload/download/soft removal, compensation, tests | [#16](https://github.com/auto4496/toktickit/issues/16) | [#21](https://github.com/auto4496/toktickit/pull/21) | Approved at `003f817`; merged by reviewer as `05c6cc8` |
+| Quality and Release Evidence | `feature/lab2-6-quality-evidence` | Responsive/E2E/visual evidence, README, final test records | [#17](https://github.com/auto4496/toktickit/issues/17) | TBD | Local verification complete; PR handoff pending |
 | Lab 2 release | `lab2-staging` -> `main` | Integrated final contract, passing tests/builds, complete evidence | N/A | TBD | Planned |
 
 ## Review Checklist
@@ -122,6 +122,8 @@ Each review records the commit reviewed and checks:
 - Correction commit: `995128c`.
 - Verification after correction: focused coverage passed 3 files and 31 tests; `npm test` passed 18 files and 120 tests against isolated `toktickit_test`; server and client production builds passed; `git diff --check` passed.
 - Workflow status: Issue #15 moved from PR Review to Fixing while corrections were implemented. After both correction commits were pushed, all four threads received responses and were resolved, PR #20 was formally linked to Issue #15 through the Development panel, Issue #15 returned to PR Review, and re-review was requested from `@Datakung`.
+- Approval: Approved by `@Datakung` at `3f05bfd` on 2026-09-01 after the formal Development link and all requested corrections were verified.
+- Merge: Merged by the peer reviewer into `lab2-staging` as `4f82246` on 2026-09-01; Issue #15 then moved to Done and was closed.
 
 ### Ticket Detail and Attachment Lifecycle
 
@@ -135,6 +137,21 @@ Each review records the commit reviewed and checks:
 - Correction response: commit `5d56647` implements post-create per-file upload retention/Retry/Remove, owned upload preflight, contracted error codes, awaited cleanup and compensation coverage, functional Attachment UI updates with explicit busy/failure states, safe unavailable/ownership feedback, and complete dialog focus management. PR #21 is linked in Issue #16's Development panel.
 - Verification after correction: focused UI coverage passed 2 files and 19 tests; focused Attachment API coverage passed 1 file and 9 tests; `npm test` passed 22 files and 160 tests against isolated `toktickit_test`; server/client production builds and `git diff --check` passed. Evidence is recorded in `tests.md`.
 - Correction workflow: Issue #16 stayed in Fixing while corrections were implemented. Commits `5d56647` and `47d399d` were pushed, every review thread received a specific evidence reply and was resolved, the Issue returned to PR Review, and re-review was requested from `@Datakung` on 2026-09-02.
+- Approval: Approved by `@Datakung` at `003f817` on 2026-09-02 after all requested Attachment corrections, expanded tests, and the formal Development link were verified.
+- Merge: Merged by the peer reviewer into `lab2-staging` as `05c6cc8` on 2026-09-02; Issue #16 then moved to Done and was closed.
+
+### Quality, Responsive, Evidence, and Release Readiness
+
+- Issue: [#17](https://github.com/auto4496/toktickit/issues/17)
+- Branch: `feature/lab2-6-quality-evidence`
+- Pull Request: TBD until handoff
+- Requirements/ACs/Tests: FR-29-FR-32; all cross-cutting BR items; AC-22-AC-25 with regression evidence for AC-01-AC-21; STYLE-01, RESP-01, VIS-01, and E2E-01-E2E-03.
+- Implementation: added the guarded Playwright environment, complete requester and Attachment browser journeys, three-viewport overflow/action/focus checks, the required screenshot capture, eleven supplementary grading-state captures, complete Zen Green style coverage, responsive tablet/mobile refinements, and release-ready setup documentation.
+- Dependency decision: `@playwright/test` `1.62.1` is the only new development dependency and is required by the approved browser/E2E/visual test plan; no runtime dependency was added.
+- Verification before review: `npm test` passed 23 files and 165 tests against isolated `toktickit_test`; `npm run test:e2e` passed 2 files and 7 tests; both production builds and `git diff --check` passed.
+- Visual verification: 13 required plus 11 supplementary screenshots were manually inspected at 1440x900, 834x1112, and 390x844. The additions explicitly show Requester loading/failure/ready, Create invalid/submitting/API-failure, requester switching, and Attachment invalid/uploading/failed/unavailable states. No clipping, overlap, hidden action, horizontal document overflow, unreadable filename, or color-only state was found.
+- Test-first record: the planned test files were authored before the responsive implementation. The first executable Vitest attempt stopped safely before collection because `TEST_DATABASE_URL` was absent; the guard was retained. Playwright setup and locator failures were then corrected without weakening assertions, followed by passing targeted and full runs.
+- Workflow status: Issue #17 moved from Backlog to Started before implementation. PR link, PR Review status, review outcome, and reviewer merge remain pending and must be recorded after they occur.
 
 ## Pull Requests I Reviewed for My Partner
 

@@ -1,13 +1,13 @@
-# TokTickIT - Lab 02 in progress
+# TokTickIT - Lab 02 release candidate
 
-TokTickIT is an IT service-desk application. The current Lab 2 increment adds a Development Requester context and a complete Create Ticket workflow on top of the Lab 1 health/category foundation.
+TokTickIT is an IT service-desk application. Lab 2 provides a complete Development Requester workflow: select a temporary requester context, create a Ticket, search only owned Tickets, inspect read-only Ticket Detail, and upload, download, retry, and soft-remove permitted Attachments.
 
 ## Technology Stack
 
 - Frontend: React, TypeScript, Vite, Bootstrap
 - Backend: Node.js, Express, TypeScript
 - Database: PostgreSQL and Prisma
-- Testing: Vitest and Supertest
+- Testing: Vitest, Supertest, React Testing Library, and Playwright
 
 ## Repository Structure
 
@@ -26,15 +26,17 @@ toktickit/
 │   ├── tests/
 │   │   └── lab-01/
 │   └── package.json
+├── e2e/
+│   └── lab-02/
+├── artifacts/
+│   └── lab-02/screenshots/
 ├── docs/
-│   └── lab-01/
-│       ├── ai_use.md
-│       ├── db-evidence.md
-│       ├── reviewer.md
-│       └── tests.md
+│   ├── lab-01/
+│   └── lab-02/
 ├── .env.example
 ├── .gitignore
 ├── package.json
+├── playwright.config.ts
 └── vitest.config.ts
 ```
 
@@ -128,6 +130,9 @@ Default URLs:
 - Create Ticket endpoint: `POST http://localhost:5000/api/tickets`
 - My Tickets screen: `http://localhost:3000/tickets`
 - My Tickets endpoint: `GET http://localhost:5000/api/tickets`
+- Ticket Detail endpoint: `GET http://localhost:5000/api/tickets/:ticketId`
+- Attachment upload endpoint: `POST http://localhost:5000/api/tickets/:ticketId/attachments`
+- Attachment metadata/download/removal endpoints: `/api/attachments/:attachmentId`
 
 The health endpoint returns:
 
@@ -149,7 +154,7 @@ The category endpoint returns the seeded categories in ID order:
 ]
 ```
 
-Select an active Development Requester, then use **Create Ticket** or **My Tickets**. Ticket creation loads active reference values, validates fields and optional file selection, prevents duplicate submissions with an idempotency key, and shows the server-issued Ticket Number. My Tickets returns only the selected Requester's data and provides search, Category/Priority/Status filters, deterministic sorting, pagination, distinct empty/no-results/failure states, a desktop table, and mobile cards. This requester selection is a Lab 2 testing context, not authentication.
+Select an active Development Requester, then use **Create Ticket** or **My Tickets**. Ticket creation loads active reference values, validates fields and optional files, prevents duplicate submissions with an idempotency key, and uploads each selected Attachment separately after the Ticket is saved. My Tickets returns only the selected Requester's data and provides search, Category/Priority/Status filters, deterministic sorting, pagination, distinct empty/no-results/failure states, a desktop table, and mobile cards. Ticket Detail exposes safe owned data and the complete active/unavailable/removed Attachment lifecycle without inline Preview. This requester selection is a Lab 2 testing context, not authentication.
 
 ## Tests and Builds
 
@@ -161,13 +166,22 @@ in [`docs/lab-02/tests.md`](docs/lab-02/tests.md):
 Copy-Item .env.test.example .env.test.local
 ```
 
+Edit `.env.test.local` so `TEST_DATABASE_URL` points to a dedicated PostgreSQL database or schema whose name contains a distinct `test` marker. It must not match the development `DATABASE_URL`. Install the browser used by the reproducible E2E suite once:
+
+```bash
+npx playwright install chromium
+```
+
 Run all currently implemented automated tests. Vitest fails fast unless
 `TEST_DATABASE_URL` clearly identifies a test-only target distinct from
 `DATABASE_URL`:
 
 ```bash
 npm test
+npm run test:e2e
 ```
+
+The Playwright setup validates the same test-only URL guard before it deploys migrations, seeds reference data idempotently, or clears browser-test Ticket/Attachment rows. It never uses the development database. The E2E suite runs the API and client on isolated ports `5100` and `3100`, checks desktop `1440x900`, tablet `834x1112`, and mobile `390x844`, and writes the required screenshot evidence under `artifacts/lab-02/screenshots/`.
 
 Build both applications:
 
@@ -176,4 +190,4 @@ npm run build:server
 npm run build:client
 ```
 
-The current suite covers the Lab 1 foundation plus test-database safety, seeded reference data, requester context, Ticket validation/number generation, sequential and concurrent idempotent creation, safe failures, and Create Ticket UI/responsive states.
+The complete suite covers the Lab 1 foundation, test-database safety, seeded reference data, requester context, Ticket validation/number generation, sequential and concurrent idempotent creation, owned list/query behavior, Ticket Detail, Attachment validation/storage/compensation, safe errors, responsive/accessibility styles, complete requester E2E journeys, and visual evidence.
