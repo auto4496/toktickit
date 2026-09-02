@@ -11,15 +11,32 @@ const serverRequire = createRequire(path.join(root, 'server', 'package.json'));
 const { PrismaClient } = serverRequire('@prisma/client') as typeof import('@prisma/client');
 type PrismaClientInstance = InstanceType<typeof PrismaClient>;
 
+const e2eTicketFilter = {
+  OR: [
+    { summary: { startsWith: '[E2E-' } },
+    { summary: { startsWith: '[RESP-' } },
+    { summary: { startsWith: '[VIS-' } },
+  ],
+} as const;
+
 const testDatabaseUrl = () => requireTestDatabaseUrl({
   testDatabaseUrl: process.env.TEST_DATABASE_URL,
   developmentDatabaseUrl: process.env.DATABASE_URL,
 });
 
 const clearE2eData = async (prisma: PrismaClientInstance) => {
-  await prisma.attachment.deleteMany();
-  await prisma.ticketCreateRequest.deleteMany();
-  await prisma.ticket.deleteMany();
+  const tickets = await prisma.ticket.findMany({
+    where: e2eTicketFilter,
+    select: { id: true },
+  });
+  const ticketIds = tickets.map(({ id }) => id);
+  if (ticketIds.length === 0) return;
+
+  await prisma.$transaction([
+    prisma.attachment.deleteMany({ where: { ticketId: { in: ticketIds } } }),
+    prisma.ticketCreateRequest.deleteMany({ where: { ticketId: { in: ticketIds } } }),
+    prisma.ticket.deleteMany({ where: { id: { in: ticketIds } } }),
+  ]);
 };
 
 export async function prepareE2eEnvironment() {

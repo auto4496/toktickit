@@ -11,7 +11,9 @@ import {
   uploadAttachment,
 } from './helpers.js';
 
-const screenshotRoot = path.resolve('artifacts', 'lab-02', 'screenshots');
+const screenshotRoot = process.env.LAB2_CAPTURE_EVIDENCE === '1'
+  ? path.resolve('artifacts', 'lab-02', 'screenshots')
+  : path.resolve('test-results', 'lab-02', 'screenshots');
 const viewports = [
   { name: 'desktop', width: 1440, height: 900 },
   { name: 'tablet', width: 834, height: 1112 },

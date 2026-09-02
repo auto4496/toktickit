@@ -10,6 +10,7 @@
     "build:client": "npm --prefix client run build",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:capture": "node e2e/lab-02/capture-evidence.mjs",
     "test:integration": "vitest run server/tests/lab-02/reference-data.integration.test.ts",
     "test:watch": "vitest",
     "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
