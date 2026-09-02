@@ -27,6 +27,9 @@ pnpm-debug.log*
 coverage/
 .vitest/
 tmp/attachments/
+playwright-report/
+test-results/
+blob-report/
 
 # OS / Editor Files
 .DS_Store
