@@ -73,6 +73,8 @@ For each result record date, full commit SHA, branch, test-only database identif
 
 Required checks: numbered IDs unique; every AC referenced by at least one planned test; internal Markdown links resolve; six Issue scopes cover all FR and tests; endpoint roles/status rules align across documents; no claimed feature/test/peer approval before it exists. No runtime tests are required for these documentation-only edits; this does not establish application readiness.
 
+Author validation on 2026-09-08 for the initial contract: 18 FR, 30 BR and 24 AC IDs were unique; all 24 ACs were referenced by planned tests; all internal Markdown file links resolved across seven documents; staged git diff --check passed. The inherited attachment request/response and Requester sort metadata were cross-checked against baseline code. This is document validation only and leaves every runtime row Planned.
+
 ### Final execution record
 
 Pending implementation and final-main verification. All rows above remain Planned; no screenshots or passing feature results exist yet.

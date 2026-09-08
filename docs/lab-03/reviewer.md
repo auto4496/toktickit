@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Record
 
-Status: Engineering contract draft prepared; no Lab 3 peer review, approval or merge has occurred.
+Status: Engineering contract ready for peer review in [PR #31](https://github.com/auto4496/toktickit/pull/31); no Lab 3 peer review, approval or merge has occurred.
 
 Baseline: completed Lab 2 main f124c72. Flow: feature branches -> lab3-staging -> main. The existing local Lab 2 report edits are outside this worktree and this PR.
 
@@ -12,9 +12,11 @@ Author account: auto4496 (repository owner). Lab 2 records identify Phanuwit But
 
 - Scope: specification.md, api-spec.md, ui-spec.md, tests.md, issue-plan.md, reviewer.md, ai-use.md.
 - Branch: codex/lab3-1-engineering-contract; target lab3-staging.
-- GitHub Issue: [#25](https://github.com/auto4496/toktickit/issues/25). PR pending creation.
+- GitHub Issue: [#25](https://github.com/auto4496/toktickit/issues/25). Pull Request: [#31](https://github.com/auto4496/toktickit/pull/31), OPEN against lab3-staging.
+- Formal Development link: created through GitHub addCloseIssueReferences and verified in PR closingIssuesReferences; Issue #25 is PR Review on the existing Project. Issues #26-#30 are Backlog.
+- Initial contract commit: b006797c3fb185a36f84992bb99cfd453bc90e60; subsequent documentation-only handoff commit records the actual PR link. Review the current PR head, not an assumed unchanged SHA.
 - Reviewed commit / reviewer / outcome: pending actual peer review.
-- Author checks on 2026-09-08: 18 unique FRs, 30 unique BRs, 24 unique ACs; all 24 ACs reference planned tests; seven documents and their internal file links validated. Cross-check against existing code corrected the inherited attachment-removal body to `reason`, retained the bare attachment-metadata response and preserved Requester sort metadata. No runtime feature claims.
+- Author checks on 2026-09-08: 18 unique FRs, 30 unique BRs, 24 unique ACs; all 24 ACs reference planned tests; seven documents and their internal file links validated. Staged git diff --check passed. Cross-check against existing code corrected the inherited attachment-removal body to `reason`, retained the bare attachment-metadata response and preserved Requester sort metadata. No runtime feature claims.
 - Key decisions: narrow Admin ticket access, assignment eligibility, transition matrix, terminal conversations vs inherited attachments, password/session/CSRF policy, initial-password migration and concurrency safety.
 - UI direction: user specifically requested attractive UI consistent with the assignment; check queue density, responsive cards, hierarchy, and private/public separation against ui-spec.md.
 

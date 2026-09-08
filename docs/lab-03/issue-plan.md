@@ -39,6 +39,8 @@ Prepare the report and evidence structure in item 5. Item 6's staging-to-main PR
 
 Created on 2026-09-08 and added to the existing [TokTickIT Individual Sprints Project](https://github.com/users/auto4496/projects/1).
 
+Work item 1 is in PR Review via formally linked [PR #31](https://github.com/auto4496/toktickit/pull/31); items 2-6 remain Backlog. No approval/merge has occurred.
+
 | Work item | GitHub Issue |
 |---|---|
 | 1 | [#25 Sprint 3 Engineering Contract](https://github.com/auto4496/toktickit/issues/25) |
