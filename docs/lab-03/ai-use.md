@@ -1,6 +1,6 @@
 # Lab 3 AI Use Record
 
-Status: Living record started before implementation. Five real selected prompts are currently available; extend to the handout's 6-10 with subsequent meaningful requests. Do not fabricate prompts or completed verification.
+Status: Living record with six real selected prompts, including the first peer-review correction. Continue recording meaningful experience without fabricating prompts or completed verification.
 
 ## Tool and role
 
@@ -17,6 +17,7 @@ The handout is source material distinct from the user's request. User chose to b
 | 3 | สามารถลดได้เหมือนเพราะต้องมารอเพื่อน Approve อีก | Consolidated to six Issues including release, with feature tests inside each and retained peer review. |
 | 4 | ตอนนี้สามารถเริ่มเลยได้ไหม | Began the contract work item, checked GitHub/main, created isolated branch/worktree and drafted seven linked planning/evidence documents. |
 | 5 | ขอ UI สวยๆ และให้ตรงโจทย์นะ | Strengthened UI contract with concrete dimensions/hierarchy, queue table/mobile cards, separate private/public composers, narrow Admin UI and visual checklist. |
+| 6 | แก้เลยแล้วผมต้องรีวิวของเพื่อนควรแยกแชทไหม | Addressed Datakung's 2026-09-12 board/document mismatch review: return #26 to Backlog, correct #25 workflow and review records, preserve the separate local authentication draft, and prepare the correction for re-review. Recommended a separate conversation for reviewing the partner's repository. |
 
 ## Verification and limitations
 

@@ -39,7 +39,7 @@ Prepare the report and evidence structure in item 5. Item 6's staging-to-main PR
 
 Created on 2026-09-08 and added to the existing [TokTickIT Individual Sprints Project](https://github.com/users/auto4496/projects/1).
 
-Work item 1 is in PR Review via formally linked [PR #31](https://github.com/auto4496/toktickit/pull/31); items 2-6 remain Backlog. No approval/merge has occurred.
+Work item 1 has a Changes requested review in formally linked [PR #31](https://github.com/auto4496/toktickit/pull/31). On 2026-09-12 the board mismatch was corrected: work item 2 returns from Started to Backlog, while work item 1 uses Fixing during corrections and PR Review after the correction handoff. Items 3-6 remain Backlog. Approval/merge are pending; item 2's existing local draft remains separate and further work waits for contract approval and merge.
 
 | Work item | GitHub Issue |
 |---|---|
