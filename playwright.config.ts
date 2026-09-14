@@ -53,6 +53,7 @@ export default defineConfig({
         DATABASE_URL: testDatabaseUrl,
         TEST_DATABASE_URL: testDatabaseUrl,
         PORT: apiPort,
+        CLIENT_ORIGIN: clientUrl,
         ATTACHMENT_STORAGE_DIR: path.resolve('tmp', 'attachments', 'e2e'),
       },
     },

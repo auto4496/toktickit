@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   createTicket,
+  apiSession,
   fillTicketForm,
   pdfBytes,
   pngBytes,
@@ -49,9 +50,8 @@ test('E2E-02 switches requester and protects direct Ticket and Attachment access
   await page.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(page.getByText(ticket.ticketNumber).first()).toBeVisible();
 
-  await page.getByRole('button', { name: 'Change Requester' }).click();
-  await page.getByLabel('Development Requester', { exact: true }).selectOption(requesterB.id);
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Logout' }).click();
+  await selectRequester(page, requesterB);
   await expect(page.getByText(ticket.ticketNumber)).toHaveCount(0);
   await page.getByLabel('Search tickets').fill(ticket.ticketNumber);
   await page.getByRole('button', { name: 'Search', exact: true }).click();
@@ -61,14 +61,14 @@ test('E2E-02 switches requester and protects direct Ticket and Attachment access
   await expect(page.getByRole('heading', { name: 'Ticket not found' })).toBeVisible();
 
   const metadata = await request.get(`/api/attachments/${attachment.id}`, {
-    headers: { 'X-Requester-Id': requesterB.id },
+    headers: await apiSession(request, requesterB.id),
   });
   expect(metadata.status()).toBe(404);
   expect(await metadata.json()).toEqual({
     error: { code: 'RESOURCE_NOT_FOUND', message: 'The requested resource was not found.' },
   });
   const removal = await request.delete(`/api/attachments/${attachment.id}`, {
-    headers: { 'X-Requester-Id': requesterB.id },
+    headers: await apiSession(request, requesterB.id),
     data: { reason: 'Cross requester attempt' },
   });
   expect(removal.status()).toBe(404);
@@ -118,12 +118,12 @@ test('E2E-03 exercises invalid, limit, download, and soft-removal Attachment sta
   await expect(primaryRow.getByRole('button', { name: 'Download' })).toHaveCount(0);
 
   const detailResponse = await request.get(`/api/tickets/${ticket.id}`, {
-    headers: { 'X-Requester-Id': requesterA.id },
+    headers: await apiSession(request, requesterA.id),
   });
   const detail = await detailResponse.json() as { data: { attachments: Array<{ id: string; originalName: string }> } };
   const primary = detail.data.attachments.find((item) => item.originalName === 'primary-evidence.png');
   const removedDownload = await request.get(`/api/attachments/${primary!.id}/download`, {
-    headers: { 'X-Requester-Id': requesterA.id },
+    headers: await apiSession(request, requesterA.id),
   });
   expect(removedDownload.status()).toBe(404);
 });

@@ -7,6 +7,7 @@ import {
   fillTicketForm,
   pngBytes,
   requesterA,
+  requesterB,
   selectRequester,
   uploadAttachment,
 } from './helpers.js';
@@ -26,7 +27,7 @@ for (const viewport of viewports) {
     await page.goto('/');
     await page.evaluate(() => window.localStorage.clear());
     await page.goto('/select-requester');
-    await expect(page.getByRole('heading', { name: 'Select Development Requester' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sign in to TokTickIT' })).toBeVisible();
     await expectNoHorizontalOverflow(page);
 
     const longSummary = `[RESP-${viewport.name}] ${'Long requester-visible summary '.repeat(3)}`.slice(0, 120);
@@ -75,31 +76,13 @@ test('VIS-01 captures the complete Zen Green screenshot contract', async ({ page
   };
 
   await page.setViewportSize({ width: 1440, height: 900 });
-  const requesterApiUrl = 'http://127.0.0.1:5100/api/requesters';
-  let releaseRequesterFailure = () => {};
-  const requesterFailureGate = new Promise<void>((resolve) => { releaseRequesterFailure = resolve; });
-  await page.route(requesterApiUrl, async (route) => {
-    await requesterFailureGate;
-    await route.fulfill({
-      status: 500,
-      contentType: 'application/json',
-      body: JSON.stringify({ error: { code: 'INTERNAL_ERROR', message: 'The request could not be completed.' } }),
-    });
-  });
-  await page.goto('/select-requester');
-  await expect(page.getByText('Loading requesters...')).toBeVisible();
-  await capture('requester-selection/desktop-loading.png');
-  releaseRequesterFailure();
-  await expect(page.getByText('Unable to load Development Requesters. Try again.')).toBeVisible();
-  await capture('requester-selection/desktop-failure.png');
-  await page.unroute(requesterApiUrl);
-  await page.getByRole('button', { name: 'Retry' }).click();
-  const requesterSelect = page.getByLabel('Development Requester', { exact: true });
-  await expect(requesterSelect).toBeEnabled();
-  await capture('requester-selection/desktop-ready.png');
-  await requesterSelect.selectOption(requesterA.id);
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.getByRole('heading', { name: 'My Tickets' })).toBeVisible();
+  await page.goto('/login');
+  await expect(page.getByRole('heading', { name: 'Sign in to TokTickIT' })).toBeVisible();
+  await capture('login/desktop-ready.png');
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await expect(page.getByText('Enter your email address.')).toBeVisible();
+  await capture('login/desktop-validation.png');
+  await selectRequester(page);
 
   const detailTicket = await createTicket(request, '[VIS-01] Attachment lifecycle evidence');
   await uploadAttachment(request, detailTicket.id, 'active-evidence.png');
@@ -153,14 +136,10 @@ test('VIS-01 captures the complete Zen Green screenshot contract', async ({ page
   await page.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(page.getByText(detailTicket.ticketNumber).first()).toBeVisible();
   await capture('my-tickets/desktop-loaded.png');
-  await page.getByRole('button', { name: 'Change Requester' }).click();
-  await page.getByLabel('Development Requester', { exact: true }).selectOption('22222222-2222-4222-8222-222222222222');
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await selectRequester(page, requesterB);
   await expect(page.getByText(detailTicket.ticketNumber)).toHaveCount(0);
   await capture('my-tickets/desktop-requester-switched.png');
-  await page.getByRole('button', { name: 'Change Requester' }).click();
-  await page.getByLabel('Development Requester', { exact: true }).selectOption(requesterA.id);
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await selectRequester(page, requesterA);
   await page.getByLabel('Search tickets').fill('VISUAL-NO-RESULTS');
   await page.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'No tickets match these filters' })).toBeVisible();

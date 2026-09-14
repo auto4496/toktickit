@@ -2,15 +2,15 @@ import { randomUUID } from 'node:crypto';
 import { expect, type APIRequestContext, type Page } from '@playwright/test';
 
 export const requesterA = {
-  id: '11111111-1111-4111-8111-111111111111',
+  id: '99999999-9999-4999-8999-999999999993',
   name: 'Jennifer Anderson',
-  email: 'jennifer.anderson@example.com',
+  email: 'e2e.jennifer@example.test',
 };
 
 export const requesterB = {
-  id: '22222222-2222-4222-8222-222222222222',
+  id: '99999999-9999-4999-8999-999999999994',
   name: 'Michael Chen',
-  email: 'michael.chen@example.com',
+  email: 'e2e.michael@example.test',
 };
 
 export const pngBytes = Buffer.from([
@@ -20,18 +20,27 @@ export const pngBytes = Buffer.from([
 
 export const pdfBytes = Buffer.from('%PDF-1.4\n% TokTickIT E2E evidence\n');
 
+export const e2ePassword = 'Synthetic e2e green garden 2026';
 export async function selectRequester(page: Page, requester = requesterA) {
-  await page.goto('/');
-  await page.evaluate(() => {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-  });
-  await page.goto('/select-requester');
-  const requesterSelect = page.getByLabel('Development Requester', { exact: true });
-  await expect(requesterSelect).toBeEnabled();
-  await requesterSelect.selectOption(requester.id);
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.context().clearCookies();
+  await page.goto('/login');
+  await page.getByLabel('Email address').fill(requester.email);
+  await page.getByLabel('Password', { exact: true }).fill(e2ePassword);
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'My Tickets' })).toBeVisible();
+}
+const sessions = new WeakMap<APIRequestContext, { id: string; ready: Promise<Record<string,string>> }>();
+export async function apiSession(request: APIRequestContext, requesterId = requesterA.id): Promise<Record<string,string>> {
+  const previous = sessions.get(request);
+  if (previous?.id === requesterId) return previous.ready;
+  const ready = (async () => {
+    if (previous) await request.post('/api/auth/logout', { headers: await previous.ready, data: {} });
+    const boot = await request.get('/api/auth/csrf');
+    const response = await request.post('/api/auth/login', { headers: { Origin: 'http://127.0.0.1:3100', 'X-CSRF-Token': (await boot.json()).csrfToken }, data: { email: requesterId === requesterB.id ? requesterB.email : requesterA.email, password: e2ePassword } });
+    expect(response.status()).toBe(200);
+    return { Origin: 'http://127.0.0.1:3100', 'X-CSRF-Token': (await response.json()).csrfToken };
+  })();
+  sessions.set(request, { id: requesterId, ready }); return ready;
 }
 
 export async function referenceIds(request: APIRequestContext) {
@@ -54,10 +63,11 @@ export async function createTicket(
   summary: string,
   requesterId = requesterA.id,
 ) {
+  const authentication = await apiSession(request, requesterId);
   const references = await referenceIds(request);
   const response = await request.post('/api/tickets', {
     headers: {
-      'X-Requester-Id': requesterId,
+      ...authentication,
       'Idempotency-Key': randomUUID(),
     },
     data: {
@@ -78,7 +88,7 @@ export async function uploadAttachment(
   requesterId = requesterA.id,
 ) {
   const response = await request.post(`/api/tickets/${ticketId}/attachments`, {
-    headers: { 'X-Requester-Id': requesterId },
+    headers: await apiSession(request, requesterId),
     multipart: { file: { name, mimeType: 'image/png', buffer: pngBytes } },
   });
   expect(response.status()).toBe(201);

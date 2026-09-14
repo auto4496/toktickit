@@ -18,6 +18,10 @@ export default defineConfig(({ mode }) => {
     test: {
       globals: true,
       environment: 'node',
+      // API suites share one guarded database. Keep their fixture lifecycles
+      // separate and bound memory for real scrypt; concurrency cases run inside suites.
+      fileParallelism: false,
+      hookTimeout: 30_000,
       env: {
         DATABASE_URL: testDatabaseUrl,
         NODE_ENV: 'test',

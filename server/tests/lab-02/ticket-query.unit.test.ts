@@ -50,7 +50,7 @@ describe('Ticket list query parsing', () => {
     [{ categoryId: '0' }, 'categoryId'],
     [{ categoryId: '2147483648' }, 'categoryId'],
     [{ requestedPriority: 'high' }, 'requestedPriority'],
-    [{ currentStatus: 'CLOSED' }, 'currentStatus'],
+    [{ currentStatus: 'INVALID' }, 'currentStatus'],
     [{ sortBy: 'summary' }, 'sortBy'],
     [{ sortDirection: 'sideways' }, 'sortDirection'],
     [{ page: '0' }, 'page'],

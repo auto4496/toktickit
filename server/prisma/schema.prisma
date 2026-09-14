@@ -18,19 +18,78 @@ enum Priority {
 
 enum TicketStatus {
   NEW
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_REQUESTER
+  RESOLVED
+  CLOSED
+  REOPENED
+  CANCELLED
 }
 
-model RequesterUser {
+enum Role {
+  REQUESTER
+  IT_STAFF
+  ADMINISTRATOR
+}
+
+model User {
   id                  String                @id @default(uuid())
   name                String
   email               String                @unique
   isActive            Boolean               @default(true)
+  role                Role                  @default(REQUESTER)
+  passwordHash        String
+  mustChangePassword  Boolean               @default(true)
+  version             Int                   @default(1)
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @default(now()) @updatedAt
   tickets             Ticket[]
   ticketCreateRequests TicketCreateRequest[]
   uploadedAttachments Attachment[]          @relation("AttachmentUploadedBy")
   removedAttachments  Attachment[]          @relation("AttachmentRemovedBy")
+  ownedTickets        Ticket[]              @relation("TicketOwner")
+  sessions            AuthSession[]
+  publicComments      PublicComment[]
+  internalNotes       InternalNote[]
+}
+
+model AuthSession {
+  id           String   @id @default(uuid())
+  tokenHash    String   @unique
+  csrfToken    String
+  userId       String
+  userVersion  Int
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PublicComment {
+  id        String   @id @default(uuid())
+  ticketId  String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt, id])
+}
+
+model InternalNote {
+  id        String   @id @default(uuid())
+  ticketId  String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt, id])
 }
 
 model Category {
@@ -59,17 +118,26 @@ model Ticket {
   relatedSystemId   Int
   summary           String
   requestedPriority Priority
-  itPriority        Priority?
+  itPriority        Priority
+  ownerId           String?
+  version           Int                 @default(1)
+  requesterResolvedAt DateTime?
   description       String
   currentStatus     TicketStatus        @default(NEW)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @default(now()) @updatedAt
-  requester         RequesterUser       @relation(fields: [requesterId], references: [id], onDelete: Restrict)
+  requester         User                @relation(fields: [requesterId], references: [id], onDelete: Restrict)
+  owner             User?               @relation("TicketOwner", fields: [ownerId], references: [id], onDelete: Restrict)
   category          Category            @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   relatedSystem     RelatedSystem       @relation(fields: [relatedSystemId], references: [id], onDelete: Restrict)
   createRequest     TicketCreateRequest?
   attachments       Attachment[]
+  publicComments    PublicComment[]
+  internalNotes     InternalNote[]
 
+  @@index([currentStatus, updatedAt])
+  @@index([ownerId, updatedAt])
+  @@index([itPriority, updatedAt])
   @@index([requesterId, updatedAt])
   @@index([requesterId, currentStatus, updatedAt])
   @@index([requesterId, requestedPriority, updatedAt])
@@ -84,7 +152,7 @@ model TicketCreateRequest {
   ticketId       String?       @unique
   createdAt      DateTime      @default(now())
   completedAt    DateTime?
-  requester      RequesterUser @relation(fields: [requesterId], references: [id], onDelete: Restrict)
+  requester      User          @relation(fields: [requesterId], references: [id], onDelete: Restrict)
   ticket         Ticket?       @relation(fields: [ticketId], references: [id], onDelete: Restrict)
 
   @@unique([requesterId, idempotencyKey])
@@ -104,8 +172,8 @@ model Attachment {
   removalReason          String?
   removedByRequesterId   String?
   ticket                 Ticket         @relation(fields: [ticketId], references: [id], onDelete: Restrict)
-  uploadedBy             RequesterUser  @relation("AttachmentUploadedBy", fields: [uploadedByRequesterId], references: [id], onDelete: Restrict)
-  removedBy              RequesterUser? @relation("AttachmentRemovedBy", fields: [removedByRequesterId], references: [id], onDelete: Restrict)
+  uploadedBy             User           @relation("AttachmentUploadedBy", fields: [uploadedByRequesterId], references: [id], onDelete: Restrict)
+  removedBy              User?          @relation("AttachmentRemovedBy", fields: [removedByRequesterId], references: [id], onDelete: Restrict)
 
   @@index([ticketId, removedAt])
 }

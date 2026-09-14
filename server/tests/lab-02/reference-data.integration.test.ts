@@ -1,3 +1,4 @@
+import { sessionHeaders, fixtureCredential } from '../session-fixture.js';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import {
@@ -9,11 +10,15 @@ import {
 import app from '../../src/app.js';
 import prisma from '../../src/prisma.js';
 
+const accountId = '99999999-9999-4999-8999-999999999991';
+let headers: Awaited<ReturnType<typeof sessionHeaders>>;
 const inactiveCategory = 'ZZZ Inactive Integration Category';
 const inactiveRelatedSystem = 'ZZZ Inactive Integration System';
 
 beforeAll(async () => {
   await seedDatabase(prisma);
+  await prisma.user.upsert({ where: { id: accountId }, update: {}, create: { id: accountId, name: 'Reference Test', email: 'reference-test@example.test', ...fixtureCredential } });
+  headers = await sessionHeaders(accountId);
   await prisma.category.upsert({
     where: { name: inactiveCategory },
     update: { isActive: false },
@@ -27,13 +32,15 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await prisma.authSession.deleteMany({ where: { userId: accountId } });
+  await prisma.user.deleteMany({ where: { id: accountId } });
   await prisma.category.deleteMany({ where: { name: inactiveCategory } });
   await prisma.relatedSystem.deleteMany({ where: { name: inactiveRelatedSystem } });
 });
 
 describe('Lab 2 seeded reference data against PostgreSQL', () => {
   it('returns seeded active Categories only, ordered by ID', async () => {
-    const response = await request(app).get('/api/categories');
+    const response = await request(app).get('/api/categories').set(headers);
 
     expect(response.status).toBe(200);
     expect(response.body.map(({ name }: { name: string }) => name)).toEqual(
@@ -50,7 +57,7 @@ describe('Lab 2 seeded reference data against PostgreSQL', () => {
   });
 
   it('returns seeded active Related Systems only, case-insensitively sorted', async () => {
-    const response = await request(app).get('/api/related-systems');
+    const response = await request(app).get('/api/related-systems').set(headers);
     const names = response.body.map(({ name }: { name: string }) => name);
 
     expect(response.status).toBe(200);
@@ -63,24 +70,7 @@ describe('Lab 2 seeded reference data against PostgreSQL', () => {
     );
   });
 
-  it('returns seeded active Requesters only, ordered by name and email', async () => {
-    const response = await request(app).get('/api/requesters');
-    const activeRequesters = requesterUsers.filter((requester) => requester.isActive);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(
-      expect.arrayContaining(
-        activeRequesters.map(({ id, name, email }) => ({ id, name, email })),
-      ),
-    );
-    expect(response.body).not.toContainEqual(
-      expect.objectContaining({ email: 'archived.requester@example.com' }),
-    );
-    expect(response.body).toEqual(
-      [...response.body].sort(
-        (left, right) =>
-          left.name.localeCompare(right.name) || left.email.localeCompare(right.email),
-      ),
-    );
+  it('does not expose the former requester selector directory', async () => {
+    expect((await request(app).get('/api/requesters').set(headers)).status).toBe(404);
   });
 });

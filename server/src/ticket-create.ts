@@ -148,6 +148,7 @@ class ReferenceValidationError extends Error {
 }
 
 const ticketRelations = {
+  owner: { select: { id: true, name: true, role: true, isActive: true } },
   requester: { select: { id: true, name: true, email: true } },
   category: { select: { id: true, name: true } },
   relatedSystem: { select: { id: true, name: true } },
@@ -171,6 +172,9 @@ const formatTicketResponse = (ticket: TicketWithRelations) => ({
   itPriority: ticket.itPriority,
   description: ticket.description,
   currentStatus: ticket.currentStatus,
+  owner: ticket.owner,
+  version: ticket.version,
+  requesterResolvedAt: ticket.requesterResolvedAt?.toISOString() ?? null,
   attachments: [] as never[],
   updatedAt: ticket.updatedAt.toISOString(),
 });
@@ -260,7 +264,7 @@ export const createTicketForRequester = async (
               VALUES
                 (${randomUUID()}, ${ticketNumber}, ${requester.id}, ${input.categoryId},
                  ${input.relatedSystemId}, ${input.summary},
-                 CAST(${input.requestedPriority} AS "Priority"), NULL, ${input.description},
+                 CAST(${input.requestedPriority} AS "Priority"), CAST(${input.requestedPriority} AS "Priority"), ${input.description},
                  CAST('NEW' AS "TicketStatus"), ${createdAt}, ${createdAt})
               ON CONFLICT ("ticketNumber") DO NOTHING
               RETURNING "id"

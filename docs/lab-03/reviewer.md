@@ -41,3 +41,9 @@ Author account: auto4496 (Phanuwit Butchari, student ID 67070501070). Lab 3 peer
 - Reviewer verification: documentation-only scope; git diff --check, internal Markdown links and FR/AC traceability checked. No runtime tests expected for this PR.
 - Author correction verification: review the documentation diff, internal links and ID/test coverage; verify actual Project statuses after updating the board. The correction commit and reply are visible in this PR's history and linked review thread.
 - Follow-up approval and merge: pending the peer's actual decision. Resolving an addressed comment does not dismiss the Changes requested review or constitute approval.
+
+## Contract integration and foundation handoff
+
+The historical pending note above was superseded by Datakung's actual approval and merge of PR #31 on 2026-09-13 at 04:47:19 UTC. Merge commit: `ec5deceea1e00fa2ddb60572fa741f284eb89796`. Issue #25 is closed. Issue #26 implementation was explicitly authorized by “เริ่มทำต่อเลย” and started from that staging commit in its separate foundation worktree.
+
+Foundation review should inspect session/CSRF enforcement, the non-verifiable password sentinel refinement documented in foundation.md, preservation of legacy relations, safe repeat seed, real Requester regression coverage and screenshots. Staff/Admin operational features remain outside this PR. No independent review, approval or merge of #26 is claimed until the peer actually performs it.

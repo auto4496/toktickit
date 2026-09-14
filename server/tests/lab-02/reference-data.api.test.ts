@@ -5,7 +5,7 @@ vi.mock('../../src/prisma.js', () => ({
   default: {
     category: { findMany: vi.fn() },
     relatedSystem: { findMany: vi.fn() },
-    requesterUser: { findMany: vi.fn(), findUnique: vi.fn() },
+    authSession: { findUnique: vi.fn() },
   },
 }));
 
@@ -15,14 +15,12 @@ import prisma from '../../src/prisma.js';
 const prismaMock = prisma as unknown as {
   category: { findMany: ReturnType<typeof vi.fn> };
   relatedSystem: { findMany: ReturnType<typeof vi.fn> };
-  requesterUser: {
-    findMany: ReturnType<typeof vi.fn>;
-    findUnique: ReturnType<typeof vi.fn>;
-  };
+  authSession: { findUnique: ReturnType<typeof vi.fn> };
 };
 
 beforeEach(() => {
   vi.clearAllMocks();
+  prismaMock.authSession.findUnique.mockResolvedValue({ expiresAt: new Date(Date.now()+60_000), userVersion: 1, user: { isActive: true, version: 1, mustChangePassword: false, role: 'REQUESTER' } });
 });
 
 afterEach(() => {
@@ -36,7 +34,7 @@ describe('Lab 2 reference-data APIs', () => {
       { id: 4, name: 'Network' },
     ]);
 
-    const response = await request(app).get('/api/categories');
+    const response = await request(app).get('/api/categories').set('Cookie', 'toktickit.sid=' + 'a'.repeat(64));
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual([
@@ -56,7 +54,7 @@ describe('Lab 2 reference-data APIs', () => {
       { id: 2, name: 'Email and Collaboration' },
     ]);
 
-    const response = await request(app).get('/api/related-systems');
+    const response = await request(app).get('/api/related-systems').set('Cookie', 'toktickit.sid=' + 'a'.repeat(64));
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual([
@@ -69,37 +67,13 @@ describe('Lab 2 reference-data APIs', () => {
     });
   });
 
-  it('returns active Requesters ordered by name and email without private fields', async () => {
-    prismaMock.requesterUser.findMany.mockResolvedValue([
-      {
-        id: '11111111-1111-4111-8111-111111111111',
-        name: 'Jennifer Anderson',
-        email: 'jennifer.anderson@example.test',
-      },
-    ]);
-
-    const response = await request(app).get('/api/requesters');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual([
-      {
-        id: '11111111-1111-4111-8111-111111111111',
-        name: 'Jennifer Anderson',
-        email: 'jennifer.anderson@example.test',
-      },
-    ]);
-    expect(prismaMock.requesterUser.findMany).toHaveBeenCalledWith({
-      where: { isActive: true },
-      select: { id: true, name: true, email: true },
-      orderBy: [{ name: 'asc' }, { email: 'asc' }],
-    });
-    expect(response.text).not.toMatch(/password|token|role/i);
+  it('removes the development requester directory', async () => {
+    expect((await request(app).get('/api/requesters').set('Cookie', 'toktickit.sid=' + 'a'.repeat(64))).status).toBe(404);
   });
 
   it.each([
     ['/api/categories', 'category', 'REFERENCE_DATA_UNAVAILABLE', 'categories.list'],
     ['/api/related-systems', 'relatedSystem', 'REFERENCE_DATA_UNAVAILABLE', 'related-systems.list'],
-    ['/api/requesters', 'requesterUser', 'REQUESTERS_UNAVAILABLE', 'requesters.list'],
   ] as const)(
     'returns a safe error when %s lookup fails',
     async (path, model, code, operation) => {
@@ -109,7 +83,7 @@ describe('Lab 2 reference-data APIs', () => {
       const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       prismaMock[model].findMany.mockRejectedValue(internalError);
 
-      const response = await request(app).get(path);
+      const response = await request(app).get(path).set('Cookie', 'toktickit.sid=' + 'a'.repeat(64));
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({

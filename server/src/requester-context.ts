@@ -1,83 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
-import prisma from './prisma.js';
-import { sendExpectedError, sendUnexpectedError } from './api-error.js';
+import { NextFunction, Response } from 'express';
+import type { AuthRequest } from './auth/http.js';
+import { sendExpectedError } from './api-error.js';
 
-export type RequesterSummary = {
-  id: string;
-  name: string;
-  email: string;
-};
+export type RequesterSummary = { id: string; name: string; email: string };
+export interface RequesterContextRequest extends AuthRequest { requester?: RequesterSummary }
 
-export interface RequesterContextRequest extends Request {
-  requester?: RequesterSummary;
+// Identity is set only by the session middleware; the legacy header is ignored.
+export function requireRequesterContext(req: RequesterContextRequest, res: Response, next: NextFunction) {
+  const user = req.auth?.user;
+  if (!user?.isActive) return sendExpectedError(res, 401, 'AUTH_REQUIRED', 'Sign in to continue.');
+  if (user.role !== 'REQUESTER') return sendExpectedError(res, 403, 'FORBIDDEN', 'This action is available to Requesters only.');
+  req.requester = { id: user.id, name: user.name, email: user.email };
+  next();
 }
-
-const UUID_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-const INVALID_REQUESTER_MESSAGE = 'Select an active requester before continuing.';
-
-export const requireRequesterContext = async (
-  req: RequesterContextRequest,
-  res: Response,
-  next: NextFunction,
-) => {
-  const requesterId = req.header('X-Requester-Id');
-
-  if (!requesterId) {
-    sendExpectedError(
-      res,
-      400,
-      'REQUESTER_CONTEXT_REQUIRED',
-      INVALID_REQUESTER_MESSAGE,
-    );
-    return;
-  }
-
-  if (!UUID_PATTERN.test(requesterId)) {
-    sendExpectedError(
-      res,
-      400,
-      'REQUESTER_CONTEXT_INVALID',
-      INVALID_REQUESTER_MESSAGE,
-    );
-    return;
-  }
-
-  try {
-    const requester = await prisma.requesterUser.findUnique({
-      where: { id: requesterId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        isActive: true,
-      },
-    });
-
-    if (!requester?.isActive) {
-      sendExpectedError(
-        res,
-        400,
-        'REQUESTER_CONTEXT_INVALID',
-        INVALID_REQUESTER_MESSAGE,
-      );
-      return;
-    }
-
-    req.requester = {
-      id: requester.id,
-      name: requester.name,
-      email: requester.email,
-    };
-    next();
-  } catch (error) {
-    sendUnexpectedError(
-      res,
-      'REQUESTER_CONTEXT_UNAVAILABLE',
-      'Requester context could not be verified. Try again.',
-      'requester-context.verify',
-      error,
-    );
-  }
-};

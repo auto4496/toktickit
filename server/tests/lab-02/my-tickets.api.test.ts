@@ -1,3 +1,4 @@
+import { sessionHeaders, fixtureCredential } from '../session-fixture.js';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
 import { seedDatabase } from '../../prisma/seed-data.js';
@@ -6,7 +7,7 @@ import prisma from '../../src/prisma.js';
 
 const requesterAId = '77777777-7777-4777-8777-777777777771';
 const requesterBId = '77777777-7777-4777-8777-777777777772';
-const requesterAHeader = { 'X-Requester-Id': requesterAId };
+let requesterAHeader: Awaited<ReturnType<typeof sessionHeaders>>;
 
 let categoryOneId: number;
 let categoryTwoId: number;
@@ -23,27 +24,30 @@ beforeAll(async () => {
   await prisma.ticket.deleteMany({
     where: { requesterId: { in: [requesterAId, requesterBId] } },
   });
-  await prisma.requesterUser.deleteMany({
+  await prisma.authSession.deleteMany({ where: { userId: { in: [requesterAId, requesterBId] } },
+  });
+  await prisma.user.deleteMany({
     where: { id: { in: [requesterAId, requesterBId] } },
   });
 
-  await prisma.requesterUser.createMany({
+  await prisma.user.createMany({
     data: [
       {
         id: requesterAId,
         name: 'Issue 15 Requester A',
         email: 'issue15.a@example.test',
-        isActive: true,
+        isActive: true, ...fixtureCredential,
       },
       {
         id: requesterBId,
         name: 'Issue 15 Requester B',
         email: 'issue15.b@example.test',
-        isActive: true,
+        isActive: true, ...fixtureCredential,
       },
     ],
   });
 
+  requesterAHeader = await sessionHeaders(requesterAId);
   const categories = await prisma.category.findMany({
     where: { isActive: true },
     orderBy: { id: 'asc' },
@@ -75,6 +79,7 @@ beforeAll(async () => {
         index === 1
           ? 'The zebra marker appears only in this owned description.'
           : `Description for owned Ticket ${index + 1}.`,
+      itPriority: 'HIGH',
       currentStatus: 'NEW',
       createdAt: new Date(Date.UTC(2026, 8, 1, 0, index)),
       updatedAt: new Date(Date.UTC(2026, 8, 2, 0, Math.floor(index / 2))),
@@ -89,6 +94,7 @@ beforeAll(async () => {
       relatedSystemId,
       summary: 'VPN disconnect private requester data',
       requestedPriority: 'HIGH',
+      itPriority: 'HIGH',
       description: 'This zebra marker must never cross requester boundaries.',
       currentStatus: 'NEW',
       createdAt: new Date(Date.UTC(2026, 8, 3)),
@@ -104,7 +110,9 @@ afterAll(async () => {
   await prisma.ticket.deleteMany({
     where: { requesterId: { in: [requesterAId, requesterBId] } },
   });
-  await prisma.requesterUser.deleteMany({
+  await prisma.authSession.deleteMany({ where: { userId: { in: [requesterAId, requesterBId] } },
+  });
+  await prisma.user.deleteMany({
     where: { id: { in: [requesterAId, requesterBId] } },
   });
 });
@@ -134,7 +142,8 @@ describe('GET /api/tickets', () => {
       category: { id: expect.any(Number), name: expect.any(String) },
       relatedSystem: { id: expect.any(Number), name: expect.any(String) },
       requestedPriority: expect.stringMatching(/^(LOW|MEDIUM|HIGH)$/),
-      itPriority: null,
+      itPriority: 'HIGH',
+      owner: null, version: 1, requesterResolvedAt: null,
       currentStatus: 'NEW',
       updatedAt: expect.any(String),
     });
@@ -315,7 +324,7 @@ describe('GET /api/tickets', () => {
     ['?categoryId=0', 'categoryId'],
     ['?categoryId=2147483648', 'categoryId'],
     ['?requestedPriority=high', 'requestedPriority'],
-    ['?currentStatus=CLOSED', 'currentStatus'],
+    ['?currentStatus=INVALID', 'currentStatus'],
     ['?sortBy=summary', 'sortBy'],
     ['?sortDirection=sideways', 'sortDirection'],
     ['?page=0', 'page'],
@@ -349,10 +358,10 @@ describe('GET /api/tickets', () => {
       .get('/api/tickets')
       .set('X-Requester-Id', 'not-a-uuid');
 
-    expect(missing.status).toBe(400);
-    expect(malformed.status).toBe(400);
-    expect(missing.body.error.code).toBe('REQUESTER_CONTEXT_REQUIRED');
-    expect(malformed.body.error.code).toBe('REQUESTER_CONTEXT_INVALID');
+    expect(missing.status).toBe(401);
+    expect(malformed.status).toBe(401);
+    expect(missing.body.error.code).toBe('AUTH_REQUIRED');
+    expect(malformed.body.error.code).toBe('AUTH_REQUIRED');
   });
 
   it('returns a safe correlated failure without internal details', async () => {
