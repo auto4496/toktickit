@@ -51,3 +51,5 @@ Work item 1 has a Changes requested review in formally linked [PR #31](https://g
 | 6 | [#30 Release Integration and Submission](https://github.com/auto4496/toktickit/issues/30) |
 
 Update: the pending-review paragraph above describes 2026-09-12 history. Datakung approved and merged PR #31 on 2026-09-13; #25 is closed. Work item 2 (#26) then moved to Started and implementation proceeded from `ec5dece`. Work items 3–6 are still pending. Foundation results and remaining review boundary are in [foundation.md](foundation.md) and [tests.md](tests.md).
+
+Foundation handoff: [PR #32](https://github.com/auto4496/toktickit/pull/32) is open and #26 is in PR Review. Formal Development-panel linking awaits GitHub browser sign-in; peer approval/merge have not occurred.
