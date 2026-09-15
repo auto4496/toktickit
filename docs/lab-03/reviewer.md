@@ -41,6 +41,8 @@ Review this increment's queue query semantics, private-note exclusion, strict ro
 
 Author verification results and selected screenshot paths are recorded in tests.md and staff-workflow.md. These are author checks, not an independent peer review. No approval, resolved peer finding or reviewer merge of this increment is claimed in advance.
 
+Handoff: [PR #33](https://github.com/auto4496/toktickit/pull/33), implementation/evidence commit `f8c1f4971211ad2f385cfd956990d021515d4a0e`, targets `lab3-staging`. Issue #27 was formally linked through Development and moved to PR Review; both were verified through GitHub's API on 2026-09-16. Full author verification: 344 Vitest cases, ten browser journeys and both builds passed. Independent peer review/approval/merge remain pending.
+
 ### 2026-09-12: Project status and evidence mismatch
 
 - [Review finding](https://github.com/auto4496/toktickit/pull/31#discussion_r3995408941): the formal Issue link exists, but #25 was Specified and #26 Started. Return #25 to PR Review and #26 to Backlog until the contract is approved and merged; align the records with the live board.

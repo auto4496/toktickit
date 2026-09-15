@@ -104,7 +104,7 @@ Reviewed baseline: `7f2a5dd3bc57296d4c53fa4d942a767dfed791ee`. New `client/tests
 
 ### Staff workflow verification — Issue #27, 2026-09-16
 
-Branch `codex/lab3-3-staff-workflow`, based on `1bf45888cdf4691f198d2c3d9ca38b164b6516f0`. Commands ran on the implementation working tree; the containing PR records the final commit. No development database migration/reset. Unit/API fixtures used the guarded `lab3_test` database; browser journeys used the newly created `lab3_staff_test`, both on loopback port 55433. The existing foundation preview was left running separately.
+Branch `codex/lab3-3-staff-workflow`, based on `1bf45888cdf4691f198d2c3d9ca38b164b6516f0`. Commands ran on the implementation working tree, committed with its evidence as `f8c1f4971211ad2f385cfd956990d021515d4a0e` in [PR #33](https://github.com/auto4496/toktickit/pull/33). The subsequent handoff update changes documentation only. No development database migration/reset. Unit/API fixtures used the guarded `lab3_test` database; browser journeys used the newly created `lab3_staff_test`, both on loopback port 55433. The existing foundation preview was left running separately.
 
 | Check | Actual result |
 |---|---|
