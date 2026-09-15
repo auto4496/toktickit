@@ -21,6 +21,8 @@ The handout is source material distinct from the user's request. User chose to b
 
 ## Verification and limitations
 
+Selected implementation prompt: “ทำ 3 ต่อเลย”, followed by “ทำต่อเลย” after interruption. Codex implemented the Issue #27 queue/operations/conversation and Requester indication, then used real PostgreSQL/API/UI/browser tests to verify them. Testing caught a PostgreSQL advisory-lock result decoding defect; it was corrected to execute the lock without decoding its void result. Two browser test selectors were refined when the new UI added owner options and nested select labels. Original tests were retained and the failures are recorded in tests.md. The agent's observations are not the student's personal reflection.
+
 Compare the four contract documents and test mapping before handoff. Planned tests and screenshots remain Planned. Record actual checks in reviewer.md/tests.md after execution. Technical security decisions reference primary Node/OWASP sources in specification.md. A contract self-check is not an independent peer review.
 
 ## My Reflection

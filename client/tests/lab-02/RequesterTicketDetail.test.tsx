@@ -14,6 +14,9 @@ const response = (body: unknown, status = 200) => new Response(JSON.stringify(bo
 beforeEach(() => { window.localStorage.clear(); window.history.replaceState({}, '', `/tickets/${ticketId}`); clearAuthState(); acceptCsrf('test-csrf-token'); });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
+// This suite isolates the inherited attachment lifecycle. Conversation and
+// resolution behavior have their own Issue #27 integration/UI coverage.
+vi.mock('../../src/RequesterWorkflow', () => ({ default: () => null }));
 describe('Requester Ticket Detail', () => {
   it('renders owned read-only detail and Attachment actions without a Preview control', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ data: detail }))));

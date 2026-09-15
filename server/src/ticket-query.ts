@@ -41,7 +41,7 @@ type QueryValidation =
   | { success: true; value: TicketListQuery }
   | { success: false; fieldErrors: Record<string, string> };
 
-const ticketSummarySelect = {
+export const ticketSummarySelect = {
   id: true,
   ticketNumber: true,
   createdAt: true,
@@ -259,7 +259,7 @@ const buildWhere = (requesterId: string, query: TicketListQuery) => ({
   ...(query.currentStatus ? { currentStatus: query.currentStatus } : {}),
 }) satisfies Prisma.TicketWhereInput;
 
-const mapTicketSummary = (ticket: TicketSummaryRecord) => ({
+export const mapTicketSummary = (ticket: TicketSummaryRecord) => ({
   id: ticket.id,
   ticketNumber: ticket.ticketNumber,
   ticketDate: ticket.createdAt.toISOString(),

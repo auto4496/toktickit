@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Record
 
-Status: Changes requested by Datakung on 2026-09-12 in [PR #31](https://github.com/auto4496/toktickit/pull/31). Workflow corrections are recorded below; approval and merge remain pending.
+Status: PR #31 and PR #32 are merged. Issue #27 staff workflow is being prepared for peer review; its own approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
 
 Baseline: completed Lab 2 main f124c72. Flow: feature branches -> lab3-staging -> main. The existing local Lab 2 report edits are outside this worktree and this PR.
 
@@ -32,6 +32,16 @@ Author account: auto4496 (Phanuwit Butchari, student ID 67070501070). Lab 3 peer
 - [ ] Real findings have correction commits and individual responses; approvals/merges recorded only after they occur.
 
 ## Findings and responses
+
+### Issue #27 author verification — 2026-09-16
+
+The user requested “ทำ 3 ต่อเลย” and then “ทำต่อเลย”. Implementation is isolated on `codex/lab3-3-staff-workflow`, based on PR #32 merge `1bf45888cdf4691f198d2c3d9ca38b164b6516f0` (merged 2026-09-15 at 07:32:17 UTC). PR #32's two findings were corrected in `82d7019` before peer approval/merge. The live Project item for #27 was moved to Started.
+
+Review this increment's queue query semantics, private-note exclusion, strict role matrix, operational version checks, terminal exceptions and shared account-lock ordering. Real concurrent API tests and complete status-edge coverage are in `staff-workflow.api.test.ts`; browser journeys include Admin's restricted ticket view and Requester indication. No new database migration or development-data reset is included. The upcoming user-administration increment must use the documented shared lock and add actual Admin endpoint races.
+
+Author verification results and selected screenshot paths are recorded in tests.md and staff-workflow.md. These are author checks, not an independent peer review. No approval, resolved peer finding or reviewer merge of this increment is claimed in advance.
+
+Handoff: [PR #33](https://github.com/auto4496/toktickit/pull/33), implementation/evidence commit `f8c1f4971211ad2f385cfd956990d021515d4a0e`, targets `lab3-staging`. Issue #27 was formally linked through Development and moved to PR Review; both were verified through GitHub's API on 2026-09-16. Full author verification: 344 Vitest cases, ten browser journeys and both builds passed. Independent peer review/approval/merge remain pending.
 
 ### 2026-09-12: Project status and evidence mismatch
 
