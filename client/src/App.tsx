@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CreateTicket from './CreateTicket';
 import MyTickets from './MyTickets';
 import RequesterTicketDetail from './RequesterTicketDetail';
@@ -9,7 +9,21 @@ import './auth.css';
 export type Requester = { id: string; name: string; email: string };
 const landing = (user: AuthUser) => user.mustChangePassword ? '/change-password' : user.role === 'REQUESTER' ? '/tickets' : user.role === 'IT_STAFF' ? '/staff/tickets' : '/admin/users';
 const roleName = (role: AuthUser['role']) => ({ REQUESTER: 'Requester', IT_STAFF: 'IT Staff', ADMINISTRATOR: 'Administrator' })[role];
-function navigate(path: string) { history.pushState({}, '', path); window.dispatchEvent(new PopStateEvent('popstate')); }
+const ticketPath = /^\/tickets\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function internalDestination(value: unknown): string | null {
+  return typeof value === 'string' && (['/tickets', '/tickets/new', '/staff/tickets', '/admin/users'].includes(value) || ticketPath.test(value)) ? value : null;
+}
+function permittedDestination(value: unknown, user: AuthUser): string | null {
+  const route = internalDestination(value);
+  if (!route) return null;
+  if (user.role === 'REQUESTER') return route === '/tickets' || route === '/tickets/new' || ticketPath.test(route) ? route : null;
+  if (user.role === 'IT_STAFF') return route === '/staff/tickets' ? route : null;
+  return route === '/admin/users' || route === '/staff/tickets' ? route : null;
+}
+function navigate(path: string, intended: string | null = null) {
+  history.pushState(intended ? { toktickitReturnTo: intended } : {}, '', path);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+}
 
 export default function App() {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -19,12 +33,27 @@ export default function App() {
   const [path, setPath] = useState(location.pathname);
   const [menu, setMenu] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  // History retains only an allowlisted path across a login/password-gate reload.
+  // It is untrusted input and is revalidated against the authenticated role.
+  const intended = useRef(internalDestination(location.pathname) ?? internalDestination(history.state?.toktickitReturnTo));
+  const rememberDestination = () => {
+    intended.current = internalDestination(location.pathname) ?? intended.current;
+  };
+  const continueToDestination = (next: AuthUser) => {
+    if (next.mustChangePassword) {
+      rememberDestination(); navigate('/change-password', intended.current);
+    } else {
+      const destination = permittedDestination(intended.current, next) ?? landing(next);
+      intended.current = null; navigate(destination);
+    }
+  };
   useEffect(() => {
     const route = () => setPath(location.pathname);
     const expired = (event: Event) => {
+      rememberDestination();
       if ((event as CustomEvent).detail === 'password') {
-        setUser((current) => current ? { ...current, mustChangePassword: true } : null); navigate('/change-password');
-      } else { setUser(null); navigate('/login'); }
+        setUser((current) => current ? { ...current, mustChangePassword: true } : null); navigate('/change-password', intended.current);
+      } else { setUser(null); navigate('/login', intended.current); }
     };
     window.addEventListener('popstate', route); window.addEventListener(AUTH_EVENT, expired);
     return () => { window.removeEventListener('popstate', route); window.removeEventListener(AUTH_EVENT, expired); };
@@ -33,7 +62,8 @@ export default function App() {
     let active = true; resetCsrf(); localStorage.removeItem('toktickit.requester'); setLoading(true); setFailure('');
     authRequest('me').then((data) => {
       if (!active) return; setUser(data.user);
-      if (['/login', '/', '/select-requester'].includes(location.pathname) || data.user.mustChangePassword) navigate(landing(data.user));
+      if (['/login', '/', '/select-requester'].includes(location.pathname) || data.user.mustChangePassword) continueToDestination(data.user);
+      else if (location.pathname !== '/change-password') intended.current = null;
     }).catch((error) => {
       if (!active) return;
       if (error.message !== 'Sign in to continue.') setFailure('Unable to check your session. Please try again.');
@@ -42,11 +72,11 @@ export default function App() {
   }, [attempt]);
   async function logout() {
     if (loggingOut) return; setLoggingOut(true); setFailure('');
-    try { await authRequest('logout', {}); clearAuthState(); setUser(null); navigate('/login'); }
+    try { await authRequest('logout', {}); clearAuthState(); intended.current = null; setUser(null); navigate('/login'); }
     catch { setFailure('Sign out could not be completed. Please try again.'); }
     finally { setLoggingOut(false); }
   }
-  const signedIn = (next: AuthUser) => { setUser(next); setFailure(''); navigate(landing(next)); };
+  const signedIn = (next: AuthUser) => { setUser(next); setFailure(''); continueToDestination(next); };
   if (loading) return <main className="auth-page"><div className="auth-card" role="status">Checking your session…</div></main>;
   if (!user && failure) return <main className="auth-page"><div className="auth-card" role="alert"><h1>Connection unavailable</h1><p>{failure}</p><button className="auth-submit" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div></main>;
   if (!user) return <AuthForm onSuccess={signedIn} />;

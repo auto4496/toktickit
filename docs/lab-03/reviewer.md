@@ -49,3 +49,13 @@ The historical pending note above was superseded by Datakung's actual approval a
 Foundation review should inspect session/CSRF enforcement, the non-verifiable password sentinel refinement documented in foundation.md, preservation of legacy relations, safe repeat seed, real Requester regression coverage and screenshots. Staff/Admin operational features remain outside this PR. No independent review, approval or merge of #26 is claimed until the peer actually performs it.
 
 Handoff: [PR #32](https://github.com/auto4496/toktickit/pull/32), implementation commit `3c427117f18d705f79107e9c0e92a9f4cbd90ca1`, targets `lab3-staging`. Issue #26 is in PR Review and formally linked in Development, verified in the GitHub sidebar and closingIssuesReferences after the user signed in. Peer review and merge remain pending.
+
+## PR #32 requested changes — 2026-09-15
+
+Datakung reviewed `7f2a5dd` and requested changes for [stale CSRF recovery](https://github.com/auto4496/toktickit/pull/32#discussion_r4011398678) and [intended-route restoration](https://github.com/auto4496/toktickit/pull/32#discussion_r4011398684). The peer independently passed 51 client tests and both builds, reproduced the CSRF defect with an additional test, and explicitly did not rerun database/E2E checks.
+
+Corrections: discard the rejected cached CSRF token so only a subsequent deliberate mutation attempt bootstraps a fresh token; do not retry the failed mutation automatically. Preserve an allowlisted internal destination through login and the initial-password gate (including reload), then validate against the authenticated role before returning there. Invalid/external/disallowed destinations use the role landing page. Successful logout clears the pending destination.
+
+`ReviewRegressions.test.tsx` added nine cases. Before corrections, four cases failed (login/logout CSRF refresh and both destination-restoration cases); five rejected-destination cases passed. After correction, all 60 client tests across nine files passed, with both production builds passing. No database/E2E rerun is claimed for this frontend correction.
+
+The live board was independently found at Specified despite the earlier handoff record. It was moved to Fixing during correction; the handoff returns it to PR Review and verifies the persisted value. Corrections do not dismiss the peer's Changes requested review; follow-up approval/merge remain pending.

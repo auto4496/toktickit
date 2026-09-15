@@ -34,6 +34,9 @@ export async function apiFetch(input: string, init: RequestInit = {}) {
     clearAuthState(); window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail: 'expired' }));
   } else if (response.status === 403) {
     const data = await response.clone().json().catch(() => null);
+    // Do not replay the mutation. Its next explicit retry obtains fresh CSRF.
+    // A late rejection must not discard a newer token accepted in the meantime.
+    if (data?.error?.code === 'CSRF_REJECTED' && csrfToken === headers.get('X-CSRF-Token')) resetCsrf();
     if (data?.error?.code === 'PASSWORD_CHANGE_REQUIRED') window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail: 'password' }));
   }
   return response;
