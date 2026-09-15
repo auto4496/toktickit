@@ -3,6 +3,9 @@ import CreateTicket from './CreateTicket';
 import MyTickets from './MyTickets';
 import RequesterTicketDetail from './RequesterTicketDetail';
 import AuthForm from './AuthForm';
+import StaffTicketQueue from './StaffTicketQueue';
+import StaffTicketDetail from './StaffTicketDetail';
+import './workflow.css';
 import { AUTH_EVENT, AuthUser, authRequest, clearAuthState, resetCsrf } from './auth-api';
 import './auth.css';
 
@@ -11,14 +14,15 @@ const landing = (user: AuthUser) => user.mustChangePassword ? '/change-password'
 const roleName = (role: AuthUser['role']) => ({ REQUESTER: 'Requester', IT_STAFF: 'IT Staff', ADMINISTRATOR: 'Administrator' })[role];
 const ticketPath = /^\/tickets\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 function internalDestination(value: unknown): string | null {
-  return typeof value === 'string' && (['/tickets', '/tickets/new', '/staff/tickets', '/admin/users'].includes(value) || ticketPath.test(value)) ? value : null;
+  return typeof value === 'string' && (['/tickets', '/tickets/new', '/staff/tickets', '/admin/users'].includes(value) || ticketPath.test(value) || value.startsWith('/staff/') && ticketPath.test(value.slice(6))) ? value : null;
 }
 function permittedDestination(value: unknown, user: AuthUser): string | null {
   const route = internalDestination(value);
   if (!route) return null;
   if (user.role === 'REQUESTER') return route === '/tickets' || route === '/tickets/new' || ticketPath.test(route) ? route : null;
-  if (user.role === 'IT_STAFF') return route === '/staff/tickets' ? route : null;
-  return route === '/admin/users' || route === '/staff/tickets' ? route : null;
+  const staffRoute = route === '/staff/tickets' || route.startsWith('/staff/') && ticketPath.test(route.slice(6));
+  if (user.role === 'IT_STAFF') return staffRoute ? route : null;
+  return route === '/admin/users' || staffRoute ? route : null;
 }
 function navigate(path: string, intended: string | null = null) {
   history.pushState(intended ? { toktickitReturnTo: intended } : {}, '', path);
@@ -93,7 +97,7 @@ export default function App() {
       <div className="requester-chip"><span><strong>{user.name}</strong><small>{roleName(user.role)}</small></span><button type="button" onClick={() => navigate('/change-password')}>Password</button><button type="button" onClick={logout} disabled={loggingOut}>{loggingOut ? 'Signing out…' : 'Logout'}</button></div>
     </header>
     {failure && <div role="alert" className="auth-error">{failure}</div>}
-    {requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
+    {user.role !== 'REQUESTER' && (path === '/staff/tickets' || path.startsWith('/staff/') && ticketPath.test(path.slice(6))) ? path === '/staff/tickets' ? <StaffTicketQueue user={user} onOpen={id => navigate(`/staff/tickets/${id}`)} /> : <StaffTicketDetail key={path} user={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/staff/tickets')} /> : requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail key={path} requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
       <main className="requester-page"><section className="requester-card"><p className="eyebrow">{roleName(user.role)}</p><h1>{laterRoute ? 'Your account is ready' : 'Access unavailable'}</h1><p>{laterRoute ? 'You are securely signed in. This workspace will be available with the next Lab 3 increment.' : 'This page is not available for your role.'}</p>{!laterRoute && <button className="auth-submit" onClick={() => navigate(landing(user))}>Return to your workspace</button>}</section></main>}
   </div>;
 }

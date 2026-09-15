@@ -60,7 +60,7 @@ export const safeUnlink = async (filePath: string | undefined) => {
   }
 };
 
-export const getOwnedTicketDetail = async (client: PrismaClient, requesterId: string, ticketId: string) => {
+export const getOwnedTicketDetail = async (client: PrismaClient | Prisma.TransactionClient, requesterId: string | undefined, ticketId: string) => {
   const ticket = await client.ticket.findFirst({
     where: { id: ticketId, requesterId },
     include: {

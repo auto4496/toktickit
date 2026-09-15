@@ -101,3 +101,25 @@ Reviewed baseline: `7f2a5dd3bc57296d4c53fa4d942a767dfed791ee`. New `client/tests
 - After source fix: `node node_modules/vitest/vitest.mjs run client/tests` passed all 60 tests in nine files, no skips (13.24s; 09:44 Bangkok).
 - `npm run build:client` and `npm run build:server`: passed.
 - The test-only URL satisfies the runner guard; these client tests mock network calls and do not use PostgreSQL. Earlier database/E2E results remain historical and were not rerun for this correction.
+
+### Staff workflow verification — Issue #27, 2026-09-16
+
+Branch `codex/lab3-3-staff-workflow`, based on `1bf45888cdf4691f198d2c3d9ca38b164b6516f0`. Commands ran on the implementation working tree; the containing PR records the final commit. No development database migration/reset. Unit/API fixtures used the guarded `lab3_test` database; browser journeys used the newly created `lab3_staff_test`, both on loopback port 55433. The existing foundation preview was left running separately.
+
+| Check | Actual result |
+|---|---|
+| `node node_modules/vitest/vitest.mjs run` | 31 files, **344 tests passed**, zero skipped; 127.71s, started 2026-09-16 01:15:51 Bangkok |
+| `npm run build:server` | Passed after final code changes |
+| `npm run build:client` | Passed after final code changes |
+| `node node_modules/@playwright/test/cli.js test --config playwright.staff.config.ts` | **10 passed**, zero skipped; about 1 minute, 2026-09-16. Eight retained login/Requester/attachment/responsive journeys plus two staff workflow/visual journeys |
+| `git diff --check` | Passed |
+
+Browser invocation set `E2E_CLIENT_PORT=3200` and `E2E_API_PORT=5200` to avoid the existing preview, plus a guarded `TEST_DATABASE_URL`. The staff config includes both `e2e/lab-02` and `e2e/lab-03`, with additional synthetic staff/admin users. Default `playwright.config.ts` still runs the eight inherited journeys.
+
+The new API suite contains 127 cases: the complete 64-edge status matrix, confirmation/owner/terminal rules, actual competing claim/priority requests, ownership and note privacy, queue validation/ranking/totals, indication repeats/reopening, and append-only Unicode/plain-text validation. Three account-lock tests observe a real waiting advisory lock in PostgreSQL before releasing a competing account change, then check assignment/start/resolve eligibility again. These test the shared lock contract; actual Administrator mutation endpoints arrive in #28. Queue/conversation failures return a safe correlation ID and avoid logging submitted content.
+
+The new UI suite has 11 cases for deliberate filters/page reset, error/empty states, assignment confirmation, retained selections after conflict, restricted Admin controls, terminal history, separated drafts/keyboard tabs, uncertain-post refresh without automatic retry, and Requester indication. It maps UI-04..07. Existing attachment/shell test cases are retained, with their new workflow/queue child isolated; feature behavior is tested in the new suite and integrated browser journeys. Actual filenames and mappings are detailed in [staff-workflow.md](staff-workflow.md).
+
+Failures retained honestly: the first new API run found PostgreSQL's void advisory-lock return was incompatible with `$queryRaw`; the lock now uses `$executeRaw`. The first staff browser run passed responsive checks but failed its exact nested-label selector; it now targets the verified `IT Priority` combobox. The first inherited browser rerun passed seven cases and found an ambiguous user-name selector because the new owner list also contains that name; the assertion now targets the banner. The final ten-case run passed all cases. Earlier counts (136 focused, 342 full) precede the two additional lock-contention cases and are not added to the final totals.
+
+Selected evidence: [staff-workflow screenshots](../../artifacts/lab-03/screenshots/staff-workflow/). Twelve PNGs show queue, detail/public conversation and internal-note views at 1440, 834, 390 and 320 widths. Automated overflow checks passed at all four widths. Agent visual inspection covered the desktop queue/private detail, tablet cards and mobile/narrow detail: readable groups/actions, distinct amber private notice, wrapped long content and no horizontal clipping. These checks do not claim a student/peer visual approval or the full-system/final-main acceptance reserved for #29/#30.

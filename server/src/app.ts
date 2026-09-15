@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
+import { workflowRouter } from './staff-workflow.js';
 import cors from 'cors';
 import { authRouter, authError, clientOrigin, loadAuth, requireFullSession, AuthRequest, hasExactKeys } from './auth/http.js';
 import multer from 'multer';
@@ -86,6 +87,7 @@ app.use('/api', (req, res, next) => req.path === '/health' ? next() : loadAuth(r
 app.use('/api/auth', authRouter);
 app.all('/api/requesters', (_req, res) => res.status(404).json({ error: { code: 'RESOURCE_NOT_FOUND', message: 'The requested resource was not found.' } }));
 app.use('/api', requireFullSession);
+app.use('/api', workflowRouter);
 
 app.get('/api/categories', async (_req: Request, res: Response) => {
   try {

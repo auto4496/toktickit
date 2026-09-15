@@ -23,7 +23,7 @@ test('AUTH-E2E initial-password gate, change, role landing and logout on a real 
   await page.getByLabel('Confirm new password', { exact: true }).fill('Changed e2e garden passphrase 2026');
   await page.getByRole('button', { name: 'Save password and continue' }).click();
   await expect(page).toHaveURL(/\/staff\/tickets$/);
-  await expect(page.getByText('Initial Staff E2E')).toBeVisible();
+  await expect(page.getByRole('banner').getByText('Initial Staff E2E')).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await page.getByRole('button', { name: 'Logout' }).click();
   await expect(page.getByRole('heading', { name: 'Sign in to TokTickIT' })).toBeVisible();

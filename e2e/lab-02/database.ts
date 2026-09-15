@@ -35,6 +35,8 @@ const clearE2eData = async (prisma: PrismaClientInstance) => {
   if (ticketIds.length === 0) return;
 
   await prisma.$transaction([
+    prisma.publicComment.deleteMany({ where: { ticketId: { in: ticketIds } } }),
+    prisma.internalNote.deleteMany({ where: { ticketId: { in: ticketIds } } }),
     prisma.attachment.deleteMany({ where: { ticketId: { in: ticketIds } } }),
     prisma.ticketCreateRequest.deleteMany({ where: { ticketId: { in: ticketIds } } }),
     prisma.ticket.deleteMany({ where: { id: { in: ticketIds } } }),

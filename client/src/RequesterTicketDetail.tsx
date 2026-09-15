@@ -1,10 +1,11 @@
 import { apiFetch } from './auth-api';
+import RequesterWorkflow from './RequesterWorkflow';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import type { Requester } from './App';
 
 type RefItem = { id: number; name: string };
 type Attachment = { id: string; ticketId: string; originalName: string; mimeType: string; sizeBytes: number; uploadedAt: string; removedAt: string | null; removalReason: string | null; canDownload: boolean };
-type TicketDetail = { id: string; ticketNumber: string; ticketDate: string; requester: Requester; category: RefItem; relatedSystem: RefItem; summary: string; requestedPriority: string; itPriority: string | null; description: string; currentStatus: string; attachments: Attachment[]; updatedAt: string };
+type TicketDetail = { id: string; ticketNumber: string; ticketDate: string; requester: Requester; category: RefItem; relatedSystem: RefItem; summary: string; requestedPriority: string; itPriority: string | null; description: string; currentStatus: string; attachments: Attachment[]; updatedAt: string; version?: number; requesterResolvedAt?: string | null };
 type UploadState = { file: File; status: 'uploading' | 'invalid' | 'failed'; message: string };
 
 const apiUrl = () => import.meta.env.VITE_API_URL ?? '';
@@ -216,5 +217,6 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
       {detail.attachments.length === 0 ? <p className="empty-attachments">No Attachments yet.</p> : <ul className="attachment-list">{detail.attachments.map((attachment) => <li key={attachment.id} className="attachment-row"><div><strong>{attachment.originalName}</strong><span>{attachment.mimeType} · {formatSize(attachment.sizeBytes)} · Uploaded {formatDate(attachment.uploadedAt)}</span>{attachment.removedAt && <span className="ticket-badge removed-badge">Removed {formatDate(attachment.removedAt)}: {attachment.removalReason}</span>}{unavailable[attachment.id] && <><span className="ticket-badge unavailable-badge">Unavailable</span><span className="attachment-unavailable">This file cannot be downloaded right now.</span></>}</div>{!attachment.removedAt && <div className="attachment-actions"><button className="btn btn-outline-success" onClick={() => void download(attachment)}>{unavailable[attachment.id] ? 'Retry Download' : 'Download'}</button><button className="btn btn-outline-danger" onClick={(event) => { removeButton.current = event.currentTarget; setRemovalError(null); setRemoving(attachment); }}>Remove</button></div>}</li>)}</ul>}
     </section>
     {removing && <div className="dialog-backdrop" role="presentation"><section ref={dialogRef} className="removal-dialog" role="dialog" aria-modal="true" aria-labelledby="remove-title"><h2 id="remove-title">Remove {removing.originalName}?</h2><p>The file can no longer be opened through TokTickIT. Its metadata will remain visible.</p><label htmlFor="removal-reason">Removal reason</label><textarea id="removal-reason" value={reason} onChange={(event) => { setReason(event.target.value); setRemovalError(null); }} minLength={5} maxLength={200} required disabled={removingBusy} aria-invalid={Boolean(removalError)} aria-describedby={removalError ? 'removal-error' : undefined} autoFocus />{removalError && <p id="removal-error" className="field-error" role="alert">{removalError}</p>}<div className="form-actions"><button className="btn btn-outline-secondary" disabled={removingBusy} onClick={closeRemoval}>Cancel</button><button className="btn btn-danger" disabled={removingBusy || reason.trim().length < 5} onClick={() => void remove()}>{removingBusy ? 'Removing…' : 'Remove Attachment'}</button></div></section></div>}
+    <RequesterWorkflow key={`${detail.id}-${retry}`} ticket={detail} onUpdated={() => setRetry(value => value + 1)} />
   </main>;
 }
