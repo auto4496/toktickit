@@ -77,4 +77,27 @@ Author validation on 2026-09-08 for the initial contract: 18 FR, 30 BR and 24 AC
 
 ### Final execution record
 
-Pending implementation and final-main verification. All rows above remain Planned; no screenshots or passing feature results exist yet.
+Final-main verification remains pending for work item 6. The table above is the original full-Lab-3 plan; the narrower foundation results below supersede its Planned status only for the scenarios explicitly exercised. Workflow/admin scenarios remain pending.
+
+### Foundation verification — Issue #26
+
+Branch `codex/lab3-2-auth-requester`, based on approved contract merge `ec5deceea1e00fa2ddb60572fa741f284eb89796`. Test database: `lab3_test` on loopback port 55433; no development database reset/migration. Source was an uncommitted working tree during execution; final source commit is recorded in the PR.
+
+- Full `node node_modules/vitest/vitest.mjs run`: 27 files, 187 cases passed, zero skips (132.05s, run starting 2026-09-14 23:59 Bangkok time).
+- After final server guard/error additions: focused `auth.api.test.ts`, `authorization.api.test.ts` and Lab 2 `attachments.api.test.ts` verification passed 24 cases across three files, zero skips (2026-09-15 00:06, 12.84s). This includes ten newly added cases; it is not presented as a second full-suite run.
+- Client and server production builds passed; server was rebuilt successfully after the final guard/error additions.
+- `node node_modules/@playwright/test/cli.js test`: eight cases passed, zero skips, about one minute. Real Login/initial-password change/role landing/logout, Requester create/search/detail, cross-account Ticket/Attachment protection, Attachment lifecycle and desktop/tablet/mobile layout. Initial-password screen additionally checked at 320px.
+- Earlier red results came from obsolete null IT Priority/invalid CLOSED assertions and incomplete test fixtures; these were corrected explicitly. An earlier browser run had six passes and one interrupted login during a concurrent dev-server reload. The subsequent frozen-source run passed all eight.
+
+Actual paths: crypto in `server/tests/lab-03/auth.unit.test.ts`; session/password/CSRF in `auth.api.test.ts`; implemented role matrix in `authorization.api.test.ts`; MIG-01..03 in `migration.integration.test.ts` (seed cases live in this file). REG-01/02 stay in existing `server/tests/lab-02/*` suites using the real session middleware. Login/change/shell tests live in `client/tests/lab-03/`; Requester UI regressions stay in `client/tests/lab-02/`. Browser files stay in `e2e/lab-02/` for continuity, with the new `authentication.spec.ts` covering the foundation gate.
+
+Selected screenshots: `artifacts/lab-03/screenshots/`. Agent visual inspection covered desktop Login, 320px Login/Change Password and the mobile Ticket list: readable hierarchy, visible labels/actions, no overlap or horizontal clipping. This is an agent visual check, not fabricated student/peer review. Full queue/admin scenes and the final human checklist remain work items 3–5. Migration tests preserve historical metadata and relationships but do not claim a checksum audit of the user's development upload directory.
+
+### Peer-review correction verification — 2026-09-15
+
+Reviewed baseline: `7f2a5dd3bc57296d4c53fa4d942a767dfed791ee`. New `client/tests/lab-03/ReviewRegressions.test.tsx` covers stale CSRF on deliberate login/logout retry without automatic replay, signed-out Ticket deep links, login/password-gate remounts, role-disallowed destinations, malformed IDs, and external/encoded redirect inputs.
+
+- Before source fix: nine new tests ran; four failed and five passed, reproducing both findings.
+- After source fix: `node node_modules/vitest/vitest.mjs run client/tests` passed all 60 tests in nine files, no skips (13.24s; 09:44 Bangkok).
+- `npm run build:client` and `npm run build:server`: passed.
+- The test-only URL satisfies the runner guard; these client tests mock network calls and do not use PostgreSQL. Earlier database/E2E results remain historical and were not rerun for this correction.

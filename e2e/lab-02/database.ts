@@ -1,3 +1,5 @@
+import { hashPassword } from '../../server/src/auth/password.js';
+import { requesterA, requesterB, e2ePassword } from './helpers.js';
 import { execFileSync } from 'node:child_process';
 import { rm } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -52,6 +54,16 @@ export async function prepareE2eEnvironment() {
   try {
     await clearE2eData(prisma);
     await seedDatabase(prisma);
+    const passwordHash = await hashPassword(e2ePassword);
+    for (const user of [requesterA, requesterB]) {
+      await prisma.authSession.deleteMany({ where: { userId: user.id } });
+      await prisma.user.upsert({ where: { id: user.id }, update: { passwordHash, mustChangePassword: false }, create: { ...user, passwordHash, mustChangePassword: false } });
+    }
+    const initialId = '99999999-9999-4999-8999-999999999995';
+    await prisma.authSession.deleteMany({ where: { userId: initialId } });
+    await prisma.user.upsert({ where: { id: initialId }, update: { passwordHash, mustChangePassword: true }, create: {
+      id: initialId, name: 'Initial Staff E2E', email: 'e2e.initial@example.test', role: 'IT_STAFF', passwordHash, mustChangePassword: true,
+    } });
   } finally {
     await prisma.$disconnect();
   }

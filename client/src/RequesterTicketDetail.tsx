@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-api';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import type { Requester } from './App';
 
@@ -7,7 +8,7 @@ type TicketDetail = { id: string; ticketNumber: string; ticketDate: string; requ
 type UploadState = { file: File; status: 'uploading' | 'invalid' | 'failed'; message: string };
 
 const apiUrl = () => import.meta.env.VITE_API_URL ?? '';
-const headers = (requester: Requester) => ({ 'X-Requester-Id': requester.id });
+const headers = (_requester: Requester) => ({});
 const formatDate = (value: string) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
 const formatSize = (size: number) => size < 1024 * 1024 ? `${Math.ceil(size / 1024)} KB` : `${(size / (1024 * 1024)).toFixed(1)} MiB`;
 const maximumFileBytes = 5 * 1024 * 1024;
@@ -75,7 +76,7 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
     setUploadState(null);
     setOperationMessage(null);
     setUnavailable({});
-    fetch(`${apiUrl()}/api/tickets/${ticketId}`, { headers: headers(requester) })
+    apiFetch(`${apiUrl()}/api/tickets/${ticketId}`, { headers: headers(requester) })
       .then(async (response) => {
         if (response.status === 404) return { kind: 'not-found' as const };
         const body = await response.json();
@@ -131,7 +132,7 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
     const form = new FormData();
     form.append('file', file);
     try {
-      const response = await fetch(`${apiUrl()}/api/tickets/${detail.id}/attachments`, { method: 'POST', headers: headers(requester), body: form });
+      const response = await apiFetch(`${apiUrl()}/api/tickets/${detail.id}/attachments`, { method: 'POST', headers: headers(requester), body: form });
       if (!response.ok) {
         setUploadState({ file, ...uploadFailure(await readErrorCode(response)) });
         return;
@@ -156,7 +157,7 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
   const download = async (attachment: Attachment) => {
     setOperationMessage(null);
     try {
-      const response = await fetch(`${apiUrl()}/api/attachments/${attachment.id}/download`, { headers: headers(requester) });
+      const response = await apiFetch(`${apiUrl()}/api/attachments/${attachment.id}/download`, { headers: headers(requester) });
       if (!response.ok) {
         const code = await readErrorCode(response);
         if (code === 'ATTACHMENT_FILE_UNAVAILABLE') setUnavailable((value) => ({ ...value, [attachment.id]: true }));
@@ -179,7 +180,7 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
     setRemovingBusy(true);
     setRemovalError(null);
     try {
-      const response = await fetch(`${apiUrl()}/api/attachments/${removing.id}`, { method: 'DELETE', headers: { ...headers(requester), 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+      const response = await apiFetch(`${apiUrl()}/api/attachments/${removing.id}`, { method: 'DELETE', headers: { ...headers(requester), 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
       if (!response.ok) {
         const code = await readErrorCode(response);
         setRemovalError(code === 'RESOURCE_NOT_FOUND' ? 'The requested Attachment is unavailable.' : 'The Attachment could not be removed. Check the reason and try again.');

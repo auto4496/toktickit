@@ -11,7 +11,8 @@ import {
   within,
 } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import App, { REQUESTER_STORAGE_KEY } from '../../src/App';
+import MyTickets from '../../src/MyTickets';
+import { acceptCsrf, clearAuthState } from '../../src/auth-api';
 
 const requesterA = {
   id: '11111111-1111-4111-8111-111111111111',
@@ -70,9 +71,9 @@ const ticketResponse = (
 });
 
 const renderMyTickets = () => {
-  window.localStorage.setItem(REQUESTER_STORAGE_KEY, JSON.stringify(requesterA));
+  clearAuthState(); acceptCsrf('test-csrf-token');
   window.history.replaceState({}, '', '/tickets');
-  return render(<App />);
+  return render(<MyTickets requester={requesterA} />);
 };
 
 beforeEach(() => {
@@ -129,9 +130,8 @@ describe('My Tickets', () => {
     expect(String(ticketCall?.[0])).toContain(
       'sortBy=updatedAt&sortDirection=desc&page=1&pageSize=10',
     );
-    expect(new Headers(ticketCall?.[1]?.headers).get('X-Requester-Id')).toBe(
-      requesterA.id,
-    );
+    expect(new Headers(ticketCall?.[1]?.headers).get('X-Requester-Id')).toBeNull();
+    expect(ticketCall?.[1]?.credentials).toBe('include');
   });
 
   it('distinguishes first-use empty from filtered no-results and clears filters', async () => {
@@ -325,42 +325,14 @@ describe('My Tickets', () => {
     expect(filteredUrls[0]).toBe(filteredUrls[1]);
   });
 
-  it('clears stale ticket data while changing Requester context', async () => {
-    const requesterBTicket = {
-      ...ticket,
-      id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
-      ticketNumber: 'TKT-20260901-B1B2C3D4',
-      summary: 'Michael owned Ticket',
-    };
-    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
-      if (url.endsWith('/api/categories')) return Promise.resolve(jsonResponse(categories));
-      if (url.endsWith('/api/requesters')) {
-        return Promise.resolve(jsonResponse([requesterA, requesterB]));
-      }
-      if (url.includes('/api/tickets?')) {
-        const requesterId = new Headers(init?.headers).get('X-Requester-Id');
-        return Promise.resolve(
-          jsonResponse(
-            ticketResponse(requesterId === requesterB.id ? [requesterBTicket] : [ticket]),
-          ),
-        );
-      }
-      throw new Error(`Unexpected URL: ${url}`);
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    renderMyTickets();
+  it('remounts with no stale data when the authenticated account changes', async () => {
+    let secondAccount = false;
+    vi.stubGlobal('fetch', vi.fn((input) => Promise.resolve(jsonResponse(String(input).endsWith('/api/categories') ? categories : ticketResponse(secondAccount ? [] : [ticket])))));
+    const view = renderMyTickets();
     expect(await screen.findAllByText(ticket.ticketNumber)).toHaveLength(2);
-    fireEvent.click(screen.getByRole('button', { name: 'Change Requester' }));
-
+    secondAccount = true;
+    view.rerender(<MyTickets key={requesterB.id} requester={requesterB} />);
     expect(screen.queryByText(ticket.ticketNumber)).not.toBeInTheDocument();
-    const selector = await screen.findByLabelText('Development Requester');
-    fireEvent.change(selector, { target: { value: requesterB.id } });
-    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
-
-    expect(screen.queryByText(ticket.ticketNumber)).not.toBeInTheDocument();
-    expect(await screen.findAllByText(requesterBTicket.ticketNumber)).toHaveLength(2);
-    expect(screen.getAllByText('Tickets owned by Michael Chen')).toHaveLength(2);
+    expect(await screen.findByText('You have not created any tickets yet')).toBeInTheDocument();
   });
 });

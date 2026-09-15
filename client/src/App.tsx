@@ -1,271 +1,99 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CreateTicket from './CreateTicket';
 import MyTickets from './MyTickets';
 import RequesterTicketDetail from './RequesterTicketDetail';
+import AuthForm from './AuthForm';
+import { AUTH_EVENT, AuthUser, authRequest, clearAuthState, resetCsrf } from './auth-api';
+import './auth.css';
 
-type HealthResponse = { status: string; service: string };
-type Category = { id: number; name: string };
 export type Requester = { id: string; name: string; email: string };
-
-export const REQUESTER_STORAGE_KEY = 'toktickit.requester';
-
-const isCategory = (value: unknown): value is Category => {
-  if (typeof value !== 'object' || value === null) return false;
-  const category = value as Record<string, unknown>;
-  return typeof category.id === 'number' && typeof category.name === 'string';
-};
-
-const isRequester = (value: unknown): value is Requester => {
-  if (typeof value !== 'object' || value === null) return false;
-  const requester = value as Record<string, unknown>;
-  return (
-    typeof requester.id === 'string' &&
-    typeof requester.name === 'string' &&
-    typeof requester.email === 'string'
-  );
-};
-
-const readStoredRequester = (): Requester | null => {
-  try {
-    const stored = window.localStorage.getItem(REQUESTER_STORAGE_KEY);
-    if (!stored) return null;
-    const parsed = JSON.parse(stored) as unknown;
-    return isRequester(parsed) ? parsed : null;
-  } catch {
-    window.localStorage.removeItem(REQUESTER_STORAGE_KEY);
-    return null;
-  }
-};
-
-const navigate = (path: string) => {
-  window.history.pushState({}, '', path);
+const landing = (user: AuthUser) => user.mustChangePassword ? '/change-password' : user.role === 'REQUESTER' ? '/tickets' : user.role === 'IT_STAFF' ? '/staff/tickets' : '/admin/users';
+const roleName = (role: AuthUser['role']) => ({ REQUESTER: 'Requester', IT_STAFF: 'IT Staff', ADMINISTRATOR: 'Administrator' })[role];
+const ticketPath = /^\/tickets\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function internalDestination(value: unknown): string | null {
+  return typeof value === 'string' && (['/tickets', '/tickets/new', '/staff/tickets', '/admin/users'].includes(value) || ticketPath.test(value)) ? value : null;
+}
+function permittedDestination(value: unknown, user: AuthUser): string | null {
+  const route = internalDestination(value);
+  if (!route) return null;
+  if (user.role === 'REQUESTER') return route === '/tickets' || route === '/tickets/new' || ticketPath.test(route) ? route : null;
+  if (user.role === 'IT_STAFF') return route === '/staff/tickets' ? route : null;
+  return route === '/admin/users' || route === '/staff/tickets' ? route : null;
+}
+function navigate(path: string, intended: string | null = null) {
+  history.pushState(intended ? { toktickitReturnTo: intended } : {}, '', path);
   window.dispatchEvent(new PopStateEvent('popstate'));
-};
-
-function LegacySystemCheck() {
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<'online' | 'offline' | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const checkSystem = async () => {
-    setLoading(true);
-    setStatus(null);
-    setCategories([]);
-    setErrorMessage(null);
-    const apiUrl = import.meta.env.VITE_API_URL ?? '';
-
-    try {
-      const [healthResponse, categoriesResponse] = await Promise.all([
-        fetch(`${apiUrl}/api/health`),
-        fetch(`${apiUrl}/api/categories`),
-      ]);
-      if (!healthResponse.ok || !categoriesResponse.ok) throw new Error();
-
-      const healthData = (await healthResponse.json()) as HealthResponse;
-      const categoryData = (await categoriesResponse.json()) as unknown;
-      if (
-        healthData.status !== 'ok' ||
-        healthData.service !== 'TokTickIT API' ||
-        !Array.isArray(categoryData) ||
-        !categoryData.every(isCategory)
-      ) {
-        throw new Error();
-      }
-
-      setCategories(categoryData);
-      setStatus('online');
-    } catch {
-      setStatus('offline');
-      setErrorMessage('Unable to connect to TokTickIT API');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="container my-5">
-      <div className="p-5 mb-4 bg-body-tertiary rounded-3 border shadow-sm">
-        <div className="container-fluid py-3">
-          <h1 className="display-5 fw-bold text-primary mb-3">
-            <i className="bi bi-ticket-perforated me-2" />TokTickIT IT Service Desk
-          </h1>
-          <p className="col-md-8 fs-5 text-secondary mb-4">System Health Check &amp; Verification</p>
-          <button className="btn btn-primary btn-lg mb-4" type="button" onClick={checkSystem} disabled={loading}>
-            {loading ? 'Loading...' : 'Check System'}
-          </button>
-          {loading && <div className="alert alert-info" role="status">Loading...</div>}
-          {status === 'online' && (
-            <>
-              <div className="alert alert-success" role="status"><strong>System Status: Online</strong></div>
-              <section aria-labelledby="category-list-heading">
-                <h2 id="category-list-heading" className="h4 mb-3">Supported Request Categories</h2>
-                <ol className="list-group list-group-numbered">
-                  {categories.map((category) => <li className="list-group-item" key={category.id}>{category.name}</li>)}
-                </ol>
-              </section>
-            </>
-          )}
-          {status === 'offline' && (
-            <div className="alert alert-danger" role="alert">
-              <strong>System Status: Offline</strong>
-              {errorMessage && <div className="mt-1">{errorMessage}</div>}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function RequesterSelection({ onSelected }: { onSelected: (requester: Requester) => void }) {
-  const [requesters, setRequesters] = useState<Requester[]>([]);
-  const [selectedId, setSelectedId] = useState('');
-  const [state, setState] = useState<'loading' | 'ready' | 'empty' | 'failure'>('loading');
-  const [attempt, setAttempt] = useState(0);
-
-  useEffect(() => {
-    let active = true;
-    setState('loading');
-    fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/requesters`)
-      .then(async (response) => {
-        if (!response.ok) throw new Error();
-        const body = (await response.json()) as unknown;
-        if (!Array.isArray(body) || !body.every(isRequester)) throw new Error();
-        if (!active) return;
-        setRequesters(body);
-        setState(body.length === 0 ? 'empty' : 'ready');
-      })
-      .catch(() => {
-        if (active) setState('failure');
-      });
-    return () => {
-      active = false;
-    };
-  }, [attempt]);
-
-  const retry = () => setAttempt((value) => value + 1);
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-    const requester = requesters.find((item) => item.id === selectedId);
-    if (requester) onSelected(requester);
-  };
-
-  return (
-    <main className="requester-page">
-      <section className="requester-card" aria-labelledby="requester-heading">
-        <div className="brand-mark" aria-hidden="true"><i className="bi bi-ticket-perforated" /></div>
-        <p className="eyebrow">TokTickIT development access</p>
-        <h1 id="requester-heading">Select Development Requester</h1>
-        <p className="intro">Choose who you are testing as. This is a testing mechanism, not authentication.</p>
-
-        {state === 'loading' && <p className="state-message" role="status">Loading requesters...</p>}
-        {state === 'empty' && (
-          <div className="state-panel">
-            <p>No active Development Requesters are available</p>
-            <button className="btn btn-outline-success" type="button" onClick={retry}>Retry</button>
-          </div>
-        )}
-        {state === 'failure' && (
-          <div className="alert alert-danger state-panel" role="alert">
-            <p>Unable to load Development Requesters. Try again.</p>
-            <button className="btn btn-outline-danger" type="button" onClick={retry}>Retry</button>
-          </div>
-        )}
-        {state === 'ready' && (
-          <form onSubmit={submit}>
-            <label className="form-label fw-semibold" htmlFor="requester-select">Development Requester</label>
-            <select
-              id="requester-select"
-              className="form-select form-select-lg"
-              value={selectedId}
-              onChange={(event) => setSelectedId(event.target.value)}
-            >
-              <option value="">Choose a requester</option>
-              {requesters.map((requester) => (
-                <option key={requester.id} value={requester.id}>{requester.name} — {requester.email}</option>
-              ))}
-            </select>
-            <button className="btn btn-success btn-lg w-100 mt-4" type="submit" disabled={!selectedId}>Continue</button>
-          </form>
-        )}
-      </section>
-    </main>
-  );
-}
-
-function ApplicationShell({ requester, onChangeRequester }: { requester: Requester; onChangeRequester: () => void }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const activePath = window.location.pathname;
-
-  return (
-    <div className="app-shell">
-      <header className="topbar">
-        <a className="wordmark" href="/tickets" onClick={(event) => { event.preventDefault(); navigate('/tickets'); }}>
-          <i className="bi bi-ticket-perforated" /> TokTickIT
-        </a>
-        <button
-          className="menu-button"
-          type="button"
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((value) => !value)}
-        >
-          <i className={menuOpen ? 'bi bi-x-lg' : 'bi bi-list'} /> Menu
-        </button>
-        <nav className={menuOpen ? 'is-open' : ''} aria-label="Primary navigation">
-          <a aria-current={activePath === '/tickets' ? 'page' : undefined} href="/tickets" onClick={(event) => { event.preventDefault(); setMenuOpen(false); navigate('/tickets'); }}>My Tickets</a>
-          <a aria-current={activePath === '/tickets/new' ? 'page' : undefined} href="/tickets/new" onClick={(event) => { event.preventDefault(); setMenuOpen(false); navigate('/tickets/new'); }}>Create Ticket</a>
-        </nav>
-        <div className="requester-chip">
-          <span><strong>{requester.name}</strong><small>Testing context — not authentication</small></span>
-          <button type="button" onClick={onChangeRequester}>Change Requester</button>
-        </div>
-      </header>
-      {activePath === '/tickets/new' ? (
-        <CreateTicket requester={requester} />
-      ) : /^\/tickets\/[0-9a-f-]+$/i.test(activePath) ? (
-        <RequesterTicketDetail requester={requester} ticketId={activePath.split('/').pop()!} onBack={() => navigate('/tickets')} />
-      ) : (
-        <MyTickets requester={requester} />
-      )}
-    </div>
-  );
 }
 
 export default function App() {
-  const [path, setPath] = useState(window.location.pathname);
-  const [requester, setRequester] = useState<Requester | null>(readStoredRequester);
-
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [failure, setFailure] = useState('');
+  const [attempt, setAttempt] = useState(0);
+  const [path, setPath] = useState(location.pathname);
+  const [menu, setMenu] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  // History retains only an allowlisted path across a login/password-gate reload.
+  // It is untrusted input and is revalidated against the authenticated role.
+  const intended = useRef(internalDestination(location.pathname) ?? internalDestination(history.state?.toktickitReturnTo));
+  const rememberDestination = () => {
+    intended.current = internalDestination(location.pathname) ?? intended.current;
+  };
+  const continueToDestination = (next: AuthUser) => {
+    if (next.mustChangePassword) {
+      rememberDestination(); navigate('/change-password', intended.current);
+    } else {
+      const destination = permittedDestination(intended.current, next) ?? landing(next);
+      intended.current = null; navigate(destination);
+    }
+  };
   useEffect(() => {
-    const updatePath = () => setPath(window.location.pathname);
-    window.addEventListener('popstate', updatePath);
-    return () => window.removeEventListener('popstate', updatePath);
+    const route = () => setPath(location.pathname);
+    const expired = (event: Event) => {
+      rememberDestination();
+      if ((event as CustomEvent).detail === 'password') {
+        setUser((current) => current ? { ...current, mustChangePassword: true } : null); navigate('/change-password', intended.current);
+      } else { setUser(null); navigate('/login', intended.current); }
+    };
+    window.addEventListener('popstate', route); window.addEventListener(AUTH_EVENT, expired);
+    return () => { window.removeEventListener('popstate', route); window.removeEventListener(AUTH_EVENT, expired); };
   }, []);
-
-  if (path === '/lab-01') return <LegacySystemCheck />;
-
-  if (!requester) {
-    if (path !== '/select-requester') window.history.replaceState({}, '', '/select-requester');
-    return (
-      <RequesterSelection
-        onSelected={(selectedRequester) => {
-          window.localStorage.setItem(REQUESTER_STORAGE_KEY, JSON.stringify(selectedRequester));
-          setRequester(selectedRequester);
-          navigate('/tickets');
-        }}
-      />
-    );
+  useEffect(() => {
+    let active = true; resetCsrf(); localStorage.removeItem('toktickit.requester'); setLoading(true); setFailure('');
+    authRequest('me').then((data) => {
+      if (!active) return; setUser(data.user);
+      if (['/login', '/', '/select-requester'].includes(location.pathname) || data.user.mustChangePassword) continueToDestination(data.user);
+      else if (location.pathname !== '/change-password') intended.current = null;
+    }).catch((error) => {
+      if (!active) return;
+      if (error.message !== 'Sign in to continue.') setFailure('Unable to check your session. Please try again.');
+    }).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [attempt]);
+  async function logout() {
+    if (loggingOut) return; setLoggingOut(true); setFailure('');
+    try { await authRequest('logout', {}); clearAuthState(); intended.current = null; setUser(null); navigate('/login'); }
+    catch { setFailure('Sign out could not be completed. Please try again.'); }
+    finally { setLoggingOut(false); }
   }
-
-  return (
-    <ApplicationShell
-      requester={requester}
-      onChangeRequester={() => {
-        window.localStorage.removeItem(REQUESTER_STORAGE_KEY);
-        setRequester(null);
-        navigate('/select-requester');
-      }}
-    />
-  );
+  const signedIn = (next: AuthUser) => { setUser(next); setFailure(''); continueToDestination(next); };
+  if (loading) return <main className="auth-page"><div className="auth-card" role="status">Checking your session…</div></main>;
+  if (!user && failure) return <main className="auth-page"><div className="auth-card" role="alert"><h1>Connection unavailable</h1><p>{failure}</p><button className="auth-submit" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div></main>;
+  if (!user) return <AuthForm onSuccess={signedIn} />;
+  if (user.mustChangePassword || path === '/change-password') return <><AuthForm change onSuccess={signedIn} onLogout={logout} />{failure && <p className="auth-floating-error" role="alert">{failure}</p>}</>;
+  const requesterRoute = user.role === 'REQUESTER' && (path === '/tickets' || path === '/tickets/new' || /^\/tickets\/[0-9a-f-]+$/i.test(path));
+  const laterRoute = path === landing(user) || (user.role === 'ADMINISTRATOR' && path === '/staff/tickets');
+  return <div className="app-shell" key={user.id}>
+    <header className="topbar">
+      <a className="wordmark" href={landing(user)} onClick={(e) => { e.preventDefault(); navigate(landing(user)); }}><i className="bi bi-ticket-perforated" aria-hidden="true" /> TokTickIT</a>
+      <button className="menu-button" type="button" aria-expanded={menu} aria-label="Toggle navigation menu" onClick={() => setMenu(!menu)}>Menu</button>
+      <nav className={menu ? 'is-open' : ''} aria-label="Primary navigation">
+        {(user.role === 'REQUESTER' ? [['/tickets', 'My Tickets'], ['/tickets/new', 'Create Ticket']] : user.role === 'IT_STAFF' ? [['/staff/tickets', 'Ticket Queue']] : [['/admin/users', 'Users'], ['/staff/tickets', 'Ticket Lookup']]).map(([url, label]) => <a key={url} href={url} aria-current={path === url ? 'page' : undefined} onClick={(e) => { e.preventDefault(); setMenu(false); navigate(url); }}>{label}</a>)}
+      </nav>
+      <div className="requester-chip"><span><strong>{user.name}</strong><small>{roleName(user.role)}</small></span><button type="button" onClick={() => navigate('/change-password')}>Password</button><button type="button" onClick={logout} disabled={loggingOut}>{loggingOut ? 'Signing out…' : 'Logout'}</button></div>
+    </header>
+    {failure && <div role="alert" className="auth-error">{failure}</div>}
+    {requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
+      <main className="requester-page"><section className="requester-card"><p className="eyebrow">{roleName(user.role)}</p><h1>{laterRoute ? 'Your account is ready' : 'Access unavailable'}</h1><p>{laterRoute ? 'You are securely signed in. This workspace will be available with the next Lab 3 increment.' : 'This page is not available for your role.'}</p>{!laterRoute && <button className="auth-submit" onClick={() => navigate(landing(user))}>Return to your workspace</button>}</section></main>}
+  </div>;
 }

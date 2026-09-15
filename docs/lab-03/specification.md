@@ -149,6 +149,8 @@ Existing seed/test consumers are updated to User explicitly. Lab 2 tests of sele
 
 ## 8. API Contract
 
+Foundation implementation refinement for peer review: the migration sequence in section 7 now enforces a non-null `passwordHash` immediately, using a non-verifiable `!INITIAL_PASSWORD_REQUIRED` marker until the same private-map initializer completes. No default credential is embedded in the migration; maintenance continues until all markers are replaced. AuthSession also stores `userVersion` to invalidate stale sessions on account changes. Rationale, actual regression coverage and remaining rollout checks are in [foundation.md](foundation.md). This refines the intermediate schema mechanics without relaxing credential initialization or data-preservation requirements.
+
 See [api-spec.md](./api-spec.md) for exact routes, body/response shapes, cookies, CSRF, limits, query handling and safe errors. Lab 2 APIs retain their resource shapes except explicit authenticated identity, non-null IT Priority and additive workflow fields.
 
 ## 9. Acceptance Criteria

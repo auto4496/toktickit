@@ -1,6 +1,6 @@
-# TokTickIT - Lab 02 release candidate
+# TokTickIT - Lab 3 Authentication and Requester Foundation
 
-TokTickIT is an IT service-desk application. Lab 2 provides a complete Development Requester workflow: select a temporary requester context, create a Ticket, search only owned Tickets, inspect read-only Ticket Detail, and upload, download, retry, and soft-remove permitted Attachments.
+TokTickIT is an IT service-desk application. This Lab 3 increment adds secure login, initial-password change, sessions and role navigation while preserving Requester Ticket and Attachment workflows. See [foundation setup, migration and scope](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database. Staff operations and user administration are subsequent increments.
 
 ## Technology Stack
 
@@ -93,12 +93,12 @@ The Prisma scripts run from `server/` and explicitly load the repository-root `.
 ```bash
 cd server
 npm run prisma:generate
-npm run prisma:migrate
+npm run prisma:deploy
 npm run prisma:seed
 cd ..
 ```
 
-The seed is idempotent and can be run repeatedly. It creates exactly these category names:
+For existing Lab 2 data, complete the private account initialization in [the migration guide](docs/lab-03/foundation.md) before restarting the application. Seed is idempotent and preserves existing edits/passwords. It includes accounts, sample Tickets/conversations and these category names:
 
 1. Account and Access
 2. Hardware
@@ -154,7 +154,7 @@ The category endpoint returns the seeded categories in ID order:
 ]
 ```
 
-Select an active Development Requester, then use **Create Ticket** or **My Tickets**. Ticket creation loads active reference values, validates fields and optional files, prevents duplicate submissions with an idempotency key, and uploads each selected Attachment separately after the Ticket is saved. My Tickets returns only the selected Requester's data and provides search, Category/Priority/Status filters, deterministic sorting, pagination, distinct empty/no-results/failure states, a desktop table, and mobile cards. Ticket Detail exposes safe owned data and the complete active/unavailable/removed Attachment lifecycle without inline Preview. This requester selection is a Lab 2 testing context, not authentication.
+Open `/login`, sign in with an active account and replace its initial password if prompted. Requesters can then use **Create Ticket** and **My Tickets**. Creation validates fields/files, prevents duplicate submissions with an idempotency key, and uploads attachments after saving the Ticket. My Tickets exposes only the signed-in Requester's records with filters, sorting, pagination, desktop tables and mobile cards. Ticket Detail preserves owned Attachment upload/download/soft-removal. Reference and Ticket endpoints now require a session; the health endpoint remains public.
 
 ## Tests and Builds
 

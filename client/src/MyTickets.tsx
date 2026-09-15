@@ -1,9 +1,11 @@
+import { apiFetch } from './auth-api';
 import { FormEvent, useEffect, useState } from 'react';
 import type { Requester } from './App';
 
 type Category = { id: number; name: string };
 type Priority = 'LOW' | 'MEDIUM' | 'HIGH';
-type TicketStatus = 'NEW';
+type TicketStatus = 'NEW' | 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_REQUESTER' | 'RESOLVED' | 'CLOSED' | 'REOPENED' | 'CANCELLED';
+const statuses: TicketStatus[] = ['NEW', 'OPEN', 'IN_PROGRESS', 'WAITING_FOR_REQUESTER', 'RESOLVED', 'CLOSED', 'REOPENED', 'CANCELLED'];
 type SortBy = 'createdAt' | 'updatedAt' | 'ticketNumber' | 'requestedPriority';
 type SortDirection = 'asc' | 'desc';
 type PageSize = 10 | 20 | 50;
@@ -85,7 +87,7 @@ const isTicketSummary = (value: unknown): value is TicketSummary => {
     isCategory(value.relatedSystem) &&
     isPriority(value.requestedPriority) &&
     (value.itPriority === null || isPriority(value.itPriority)) &&
-    value.currentStatus === 'NEW' &&
+    statuses.includes(value.currentStatus as TicketStatus) &&
     typeof value.updatedAt === 'string'
   );
 };
@@ -170,7 +172,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
   useEffect(() => {
     let active = true;
     setCategoryState('loading');
-    fetch(`${apiUrl()}/api/categories`)
+    apiFetch(`${apiUrl()}/api/categories`)
       .then(async (response) => {
         if (!response.ok) throw new Error('Category request failed.');
         const body = (await response.json()) as unknown;
@@ -195,8 +197,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
     setTickets([]);
     setMeta(null);
     setListState('loading');
-    fetch(`${apiUrl()}/api/tickets?${buildQueryString(query)}`, {
-      headers: { 'X-Requester-Id': requester.id },
+    apiFetch(`${apiUrl()}/api/tickets?${buildQueryString(query)}`, {
     })
       .then(async (response) => {
         if (!response.ok) throw new Error('Ticket request failed.');
@@ -326,7 +327,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
               }
             >
               <option value="">All statuses</option>
-              <option value="NEW">New</option>
+              {statuses.map((status) => <option key={status} value={status}>{status.toLowerCase().split('_').join(' ')}</option>)}
             </select>
           </label>
           <label htmlFor="ticket-sort">
@@ -477,7 +478,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
                         <td>{ticket.category.name}</td>
                         <td><span className={`ticket-badge priority-${ticket.requestedPriority.toLowerCase()}`}>{priorityLabel(ticket.requestedPriority)}</span></td>
                         <td>{ticket.itPriority ? priorityLabel(ticket.itPriority) : 'Not assigned'}</td>
-                        <td><span className="ticket-badge status-new">New</span></td>
+                        <td><span className={`ticket-badge status-${ticket.currentStatus.toLowerCase()}`}>{ticket.currentStatus.split('_').map((word) => word[0] + word.slice(1).toLowerCase()).join(' ')}</span></td>
                         <td><time dateTime={ticket.updatedAt}>{formatDate(ticket.updatedAt)}</time></td>
                         <td><TicketViewLink ticket={ticket} /></td>
                       </tr>
@@ -495,7 +496,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
                       <div><dt>Category</dt><dd>{ticket.category.name}</dd></div>
                       <div><dt>Requested Priority</dt><dd>{priorityLabel(ticket.requestedPriority)}</dd></div>
                       <div><dt>IT Priority</dt><dd>{ticket.itPriority ? priorityLabel(ticket.itPriority) : 'Not assigned'}</dd></div>
-                      <div><dt>Current Status</dt><dd><span className="ticket-badge status-new">New</span></dd></div>
+                      <div><dt>Current Status</dt><dd><span className={`ticket-badge status-${ticket.currentStatus.toLowerCase()}`}>{ticket.currentStatus.split('_').map((word) => word[0] + word.slice(1).toLowerCase()).join(' ')}</span></dd></div>
                       <div><dt>Last Updated</dt><dd><time dateTime={ticket.updatedAt}>{formatDate(ticket.updatedAt)}</time></dd></div>
                     </dl>
                     <TicketViewLink ticket={ticket} />

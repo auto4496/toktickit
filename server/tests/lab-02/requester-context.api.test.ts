@@ -1,127 +1,30 @@
 import express from 'express';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import request from 'supertest';
+import type { User } from '@prisma/client';
+import { RequesterContextRequest, requireRequesterContext } from '../../src/requester-context.js';
 
-vi.mock('../../src/prisma.js', () => ({
-  default: {
-    requesterUser: { findUnique: vi.fn() },
-  },
-}));
-
-import prisma from '../../src/prisma.js';
-import {
-  RequesterContextRequest,
-  requireRequesterContext,
-} from '../../src/requester-context.js';
-
-const findUnique = (
-  prisma as unknown as {
-    requesterUser: { findUnique: ReturnType<typeof vi.fn> };
-  }
-).requesterUser.findUnique;
-
-const app = express();
-app.get('/probe', requireRequesterContext, (req, res) => {
-  res.status(200).json({ requester: (req as RequesterContextRequest).requester });
-});
-
-beforeEach(() => {
-  vi.clearAllMocks();
-});
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-describe('X-Requester-Id context middleware', () => {
-  it('rejects a missing header', async () => {
-    const response = await request(app).get('/probe');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error.code).toBe('REQUESTER_CONTEXT_REQUIRED');
-    expect(findUnique).not.toHaveBeenCalled();
+function probe(user?: Partial<User>) {
+  const app = express();
+  app.use((req: RequesterContextRequest, _res, next) => {
+    if (user) req.auth = { user: user as User, session: {} as NonNullable<RequesterContextRequest['auth']>['session'] };
+    next();
   });
-
-  it('rejects a malformed UUID without querying the database', async () => {
-    const response = await request(app)
-      .get('/probe')
-      .set('X-Requester-Id', 'not-a-uuid');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error.code).toBe('REQUESTER_CONTEXT_INVALID');
-    expect(findUnique).not.toHaveBeenCalled();
+  app.get('/probe', requireRequesterContext, (req: RequesterContextRequest, res) => res.json({ requester: req.requester }));
+  return app;
+}
+describe('Requester adapter for authenticated sessions', () => {
+  it.each([undefined, 'not-a-uuid', '11111111-1111-4111-8111-111111111111'])('ignores legacy identity %s', async (header) => {
+    const call = request(probe()).get('/probe');
+    if (header) call.set('X-Requester-Id', header);
+    expect((await call).status).toBe(401);
   });
-
-  it('rejects an unknown or inactive Requester with the same safe response', async () => {
-    findUnique.mockResolvedValue({
-      id: '11111111-1111-4111-8111-111111111111',
-      name: 'Inactive Requester',
-      email: 'inactive@example.test',
-      isActive: false,
-    });
-
-    const response = await request(app)
-      .get('/probe')
-      .set('X-Requester-Id', '11111111-1111-4111-8111-111111111111');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error.code).toBe('REQUESTER_CONTEXT_INVALID');
+  it.each(['IT_STAFF', 'ADMINISTRATOR'] as const)('rejects %s', async role => {
+    expect((await request(probe({ role, isActive: true })).get('/probe')).status).toBe(403);
   });
-
-  it('rejects an unknown Requester with the same safe response', async () => {
-    findUnique.mockResolvedValue(null);
-
-    const response = await request(app)
-      .get('/probe')
-      .set('X-Requester-Id', '11111111-1111-4111-8111-111111111111');
-
-    expect(response.status).toBe(400);
-    expect(response.body.error.code).toBe('REQUESTER_CONTEXT_INVALID');
-  });
-
-  it('logs an unexpected lookup failure and returns its safe correlation ID', async () => {
-    const internalError = new Error('private database detail');
-    const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    findUnique.mockRejectedValue(internalError);
-
-    const response = await request(app)
-      .get('/probe')
-      .set('X-Requester-Id', '11111111-1111-4111-8111-111111111111');
-
-    expect(response.status).toBe(500);
-    expect(response.body.error).toEqual({
-      code: 'REQUESTER_CONTEXT_UNAVAILABLE',
-      message: expect.any(String),
-      correlationId: expect.any(String),
-    });
-    expect(response.text).not.toContain('private database detail');
-    expect(logSpy).toHaveBeenCalledWith('Unexpected API failure', {
-      correlationId: response.body.error.correlationId,
-      code: 'REQUESTER_CONTEXT_UNAVAILABLE',
-      operation: 'requester-context.verify',
-      error: internalError,
-    });
-  });
-
-  it('attaches a safe active Requester context and reaches the handler', async () => {
-    findUnique.mockResolvedValue({
-      id: '11111111-1111-4111-8111-111111111111',
-      name: 'Jennifer Anderson',
-      email: 'jennifer.anderson@example.test',
-      isActive: true,
-    });
-
-    const response = await request(app)
-      .get('/probe')
-      .set('X-Requester-Id', '11111111-1111-4111-8111-111111111111');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      requester: {
-        id: '11111111-1111-4111-8111-111111111111',
-        name: 'Jennifer Anderson',
-        email: 'jennifer.anderson@example.test',
-      },
-    });
+  it('returns only the session requester identity, even with a forged header', async () => {
+    const user = { id: 'real-session-user', name: 'Jennifer', email: 'jennifer@example.test', role: 'REQUESTER' as const, isActive: true, passwordHash: 'private' };
+    const result = await request(probe(user)).get('/probe').set('X-Requester-Id', 'someone-else');
+    expect(result.body).toEqual({ requester: { id: user.id, name: user.name, email: user.email } });
   });
 });
