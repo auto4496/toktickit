@@ -9,10 +9,24 @@ export default function TicketConversation({ ticketId, role, terminal }: { ticke
   const [data, setData] = useState<Page<Entry> | null>(null), [error, setError] = useState('');
   const [notice, setNotice] = useState(''), [busy, setBusy] = useState(false), [reloadRequired, setReloadRequired] = useState(false);
   const requestGeneration = useRef(0);
+  // An uncertain append must be reconciled independently for each resource.
+  // Switching tabs or a failed GET must not allow a retry against old history.
+  const pendingRecovery = useRef(new Set<string>());
   useEffect(() => { setDrafts({ comments: '', 'internal-notes': '' }); setNotice(''); }, [ticketId]);
   useEffect(() => {
     const generation = ++requestGeneration.current; setData(null); setError('');
-    workflow<Page<Entry>>(`/tickets/${ticketId}/${tab}?page=${page}&pageSize=20`).then(result => { if (generation === requestGeneration.current) { setData(result); setReloadRequired(false); } }).catch(e => { if (generation === requestGeneration.current) setError(e.message); });
+    const resource = `${ticketId}/${tab}`;
+    setReloadRequired(pendingRecovery.current.has(resource));
+    workflow<Page<Entry>>(`/tickets/${ticketId}/${tab}?page=${page}&pageSize=20`).then(result => {
+      if (generation !== requestGeneration.current) return;
+      if (pendingRecovery.current.has(resource)) {
+        const latestPage = Math.max(1, result.meta.totalPages);
+        if (page !== latestPage) { setPage(latestPage); return; }
+        // Only a successful read of the latest page unlocks deliberate retry.
+        pendingRecovery.current.delete(resource);
+      }
+      setData(result); setReloadRequired(false);
+    }).catch(e => { if (generation === requestGeneration.current) setError(e.message); });
     return () => { requestGeneration.current++; };
   }, [ticketId, tab, page, retry]);
   const changeTab = (value: typeof tab) => { if (!busy && value !== tab) { setData(null); setError(''); setTab(value); setPage(1); setNotice(''); } };
@@ -24,6 +38,8 @@ export default function TicketConversation({ ticketId, role, terminal }: { ticke
       setDrafts(current => ({ ...current, [tab]: '' })); setNotice(tab === 'comments' ? 'Public comment posted.' : 'Internal note added.');
       setPage(Math.max(1, Math.ceil((data.meta.totalItems + 1) / 20))); setRetry(value => value + 1);
     } catch (e) {
+      pendingRecovery.current.add(`${ticketId}/${tab}`);
+      setData(null);
       setNotice(`${(e as Error).message} Your draft is retained. Review the refreshed conversation before posting again.`);
       setReloadRequired(true); setRetry(value => value + 1);
     } finally { setBusy(false); }

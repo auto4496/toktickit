@@ -104,6 +104,8 @@ Reviewed baseline: `7f2a5dd3bc57296d4c53fa4d942a767dfed791ee`. New `client/tests
 
 ### Staff workflow verification — Issue #27, 2026-09-16
 
+**Subsequent peer correction:** Datakung's review of `4196fc9` reproduced pagination recovery after a lost append response. `client/tests/lab-03/ConversationRecovery.test.tsx` adds three regression cases: saved 21st public comment, saved 21st internal note, and failed latest-page recovery across a tab switch. All three failed before the fix. After the correction, `node node_modules/vitest/vitest.mjs run client/tests` passed **74 cases across 11 files**, zero skipped, in 20.62s (2026-09-16 13:50:45 Bangkok). Both production builds passed. Tests use mocked fetch with a synthetic guarded test URL and do not access a database. Full API/E2E results below belong to the earlier implementation; they were not rerun for this frontend-only correction.
+
 Branch `codex/lab3-3-staff-workflow`, based on `1bf45888cdf4691f198d2c3d9ca38b164b6516f0`. Commands ran on the implementation working tree, committed with its evidence as `f8c1f4971211ad2f385cfd956990d021515d4a0e` in [PR #33](https://github.com/auto4496/toktickit/pull/33). The subsequent handoff update changes documentation only. No development database migration/reset. Unit/API fixtures used the guarded `lab3_test` database; browser journeys used the newly created `lab3_staff_test`, both on loopback port 55433. The existing foundation preview was left running separately.
 
 | Check | Actual result |

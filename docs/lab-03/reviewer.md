@@ -33,6 +33,12 @@ Author account: auto4496 (Phanuwit Butchari, student ID 67070501070). Lab 3 peer
 
 ## Findings and responses
 
+### PR #33 conversation recovery correction — 2026-09-16
+
+Datakung requested changes on `4196fc9` after independently passing all 344 tests, ten browser journeys and both builds. [The inline finding](https://github.com/auto4496/toktickit/pull/33#discussion_r4023073618) reproduces a saved 21st entry whose response is lost: reloading page 1 hid that entry on page 2 while enabling retry.
+
+Correction: retain an uncertain-post recovery marker per ticket/conversation resource. Read pagination metadata, follow the current last page and display its entries before enabling a deliberate retry. Failed reads and tab switches do not clear the marker. Retain the relevant draft and never automatically replay POST. Three new regression cases cover public comments, internal notes, delayed last-page loading and failed recovery followed by a tab switch. All three failed on the reviewed implementation and pass after the correction. Client-suite/build verification is recorded in tests.md. This correction does not claim peer approval.
+
 ### Issue #27 author verification — 2026-09-16
 
 The user requested “ทำ 3 ต่อเลย” and then “ทำต่อเลย”. Implementation is isolated on `codex/lab3-3-staff-workflow`, based on PR #32 merge `1bf45888cdf4691f198d2c3d9ca38b164b6516f0` (merged 2026-09-15 at 07:32:17 UTC). PR #32's two findings were corrected in `82d7019` before peer approval/merge. The live Project item for #27 was moved to Started.
