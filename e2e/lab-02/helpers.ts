@@ -36,9 +36,9 @@ export async function apiSession(request: APIRequestContext, requesterId = reque
   const ready = (async () => {
     if (previous) await request.post('/api/auth/logout', { headers: await previous.ready, data: {} });
     const boot = await request.get('/api/auth/csrf');
-    const response = await request.post('/api/auth/login', { headers: { Origin: 'http://127.0.0.1:3100', 'X-CSRF-Token': (await boot.json()).csrfToken }, data: { email: requesterId === requesterB.id ? requesterB.email : requesterA.email, password: e2ePassword } });
+    const response = await request.post('/api/auth/login', { headers: { Origin: `http://127.0.0.1:${process.env.E2E_CLIENT_PORT ?? '3100'}`, 'X-CSRF-Token': (await boot.json()).csrfToken }, data: { email: requesterId === requesterB.id ? requesterB.email : requesterA.email, password: e2ePassword } });
     expect(response.status()).toBe(200);
-    return { Origin: 'http://127.0.0.1:3100', 'X-CSRF-Token': (await response.json()).csrfToken };
+    return { Origin: `http://127.0.0.1:${process.env.E2E_CLIENT_PORT ?? '3100'}`, 'X-CSRF-Token': (await response.json()).csrfToken };
   })();
   sessions.set(request, { id: requesterId, ready }); return ready;
 }

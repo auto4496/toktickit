@@ -1,6 +1,6 @@
 # TokTickIT - Lab 3 Authentication and Requester Foundation
 
-TokTickIT is an IT service-desk application. This Lab 3 increment adds secure login, initial-password change, sessions and role navigation while preserving Requester Ticket and Attachment workflows. See [foundation setup, migration and scope](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database. Staff operations and user administration are subsequent increments.
+TokTickIT is an IT service-desk application. Lab 3 adds secure login, sessions, the IT Staff queue and ticket workflow while preserving Requester Ticket and Attachment workflows. See [foundation setup and migration](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database, and [staff workflow and verification](docs/lab-03/staff-workflow.md) for the current screens. Administrator user management is the next increment.
 
 ## Technology Stack
 
