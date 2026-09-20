@@ -27,6 +27,8 @@ Compare the four contract documents and test mapping before handoff. Planned tes
 
 ## My Reflection
 
+Issue #28 continuation (2026-09-20): the user asked “จัดการต่อเลย”. Codex continued the administrator API/UI on an isolated branch based on the approved PR #33 merge, wrote concurrency and UI/browser tests, and checked real responsive screenshots. The first browser run identified missing opener focus after dismissing the reset dialog; the implementation was corrected rather than weakening the assertion. Docker startup was recovered by preserving stale socket-only runtime directories; no factory reset or development-data migration was performed. Actual execution results belong in tests.md, not a claimed student reflection or peer review.
+
 Implementation update: after actual contract approval/merge, the user requested “เริ่มทำต่อเลย”. Codex implemented the #26 schema/session/authentication/UI increment, migrated old tests to session identity, ran real PostgreSQL migration/regression tests and browser tests, and inspected selected screenshots. Initial failing tests and the interrupted browser run are retained in tests.md rather than presented as passes. The user's later “ถึงไหนแล้ว” prompted a factual progress report. This work does not constitute peer approval or the student's own reflection.
 
 Pending the student's own reflection after specification review and implementation experience. Do not present AI-written first-person claims as the student's experience or verification. Suggested topics: whether the larger six-Issue scope reduced waiting, which assumptions peer review corrected, how contract-first tests preserved Lab 2 data, and how visual inspection changed the UI.

@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Record
 
-Status: PR #31 and PR #32 are merged. Issue #27 staff workflow is being prepared for peer review; its own approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
+Status: PR #31, PR #32 and PR #33 are merged. Issue #28 administrator user management is being prepared for peer review; its approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
 
 Baseline: completed Lab 2 main f124c72. Flow: feature branches -> lab3-staging -> main. The existing local Lab 2 report edits are outside this worktree and this PR.
 

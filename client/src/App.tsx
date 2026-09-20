@@ -5,6 +5,7 @@ import RequesterTicketDetail from './RequesterTicketDetail';
 import AuthForm from './AuthForm';
 import StaffTicketQueue from './StaffTicketQueue';
 import StaffTicketDetail from './StaffTicketDetail';
+import UserManagement from './UserManagement';
 import './workflow.css';
 import { AUTH_EVENT, AuthUser, authRequest, clearAuthState, resetCsrf } from './auth-api';
 import './auth.css';
@@ -33,6 +34,7 @@ export default function App() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [failure, setFailure] = useState('');
+  const [authNotice, setAuthNotice] = useState('');
   const [attempt, setAttempt] = useState(0);
   const [path, setPath] = useState(location.pathname);
   const [menu, setMenu] = useState(false);
@@ -80,10 +82,10 @@ export default function App() {
     catch { setFailure('Sign out could not be completed. Please try again.'); }
     finally { setLoggingOut(false); }
   }
-  const signedIn = (next: AuthUser) => { setUser(next); setFailure(''); continueToDestination(next); };
+  const signedIn = (next: AuthUser) => { setUser(next); setFailure(''); setAuthNotice(''); continueToDestination(next); };
   if (loading) return <main className="auth-page"><div className="auth-card" role="status">Checking your session…</div></main>;
   if (!user && failure) return <main className="auth-page"><div className="auth-card" role="alert"><h1>Connection unavailable</h1><p>{failure}</p><button className="auth-submit" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div></main>;
-  if (!user) return <AuthForm onSuccess={signedIn} />;
+  if (!user) return <AuthForm onSuccess={signedIn} notice={authNotice} />;
   if (user.mustChangePassword || path === '/change-password') return <><AuthForm change onSuccess={signedIn} onLogout={logout} />{failure && <p className="auth-floating-error" role="alert">{failure}</p>}</>;
   const requesterRoute = user.role === 'REQUESTER' && (path === '/tickets' || path === '/tickets/new' || /^\/tickets\/[0-9a-f-]+$/i.test(path));
   const laterRoute = path === landing(user) || (user.role === 'ADMINISTRATOR' && path === '/staff/tickets');
@@ -97,7 +99,7 @@ export default function App() {
       <div className="requester-chip"><span><strong>{user.name}</strong><small>{roleName(user.role)}</small></span><button type="button" onClick={() => navigate('/change-password')}>Password</button><button type="button" onClick={logout} disabled={loggingOut}>{loggingOut ? 'Signing out…' : 'Logout'}</button></div>
     </header>
     {failure && <div role="alert" className="auth-error">{failure}</div>}
-    {user.role !== 'REQUESTER' && (path === '/staff/tickets' || path.startsWith('/staff/') && ticketPath.test(path.slice(6))) ? path === '/staff/tickets' ? <StaffTicketQueue user={user} onOpen={id => navigate(`/staff/tickets/${id}`)} /> : <StaffTicketDetail key={path} user={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/staff/tickets')} /> : requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail key={path} requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
+    {user.role === 'ADMINISTRATOR' && path === '/admin/users' ? <UserManagement user={user} onSelfChanged={(value, signedOut) => { if (signedOut) { setAuthNotice(value.mustChangePassword ? 'Your initial password was updated. Sign in with it, then choose a personal password.' : 'Your role was updated. Sign in again to open your new workspace.'); clearAuthState(); intended.current = null; setUser(null); navigate('/login'); } else setUser(value); }} /> : user.role !== 'REQUESTER' && (path === '/staff/tickets' || path.startsWith('/staff/') && ticketPath.test(path.slice(6))) ? path === '/staff/tickets' ? <StaffTicketQueue user={user} onOpen={id => navigate(`/staff/tickets/${id}`)} /> : <StaffTicketDetail key={path} user={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/staff/tickets')} /> : requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail key={path} requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
       <main className="requester-page"><section className="requester-card"><p className="eyebrow">{roleName(user.role)}</p><h1>{laterRoute ? 'Your account is ready' : 'Access unavailable'}</h1><p>{laterRoute ? 'You are securely signed in. This workspace will be available with the next Lab 3 increment.' : 'This page is not available for your role.'}</p>{!laterRoute && <button className="auth-submit" onClick={() => navigate(landing(user))}>Return to your workspace</button>}</section></main>}
   </div>;
 }
