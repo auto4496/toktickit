@@ -1,6 +1,15 @@
 # Lab 3 Peer Review Record
 
-Status: PR #31, PR #32 and PR #33 are merged. Issue #28 administrator user management is being prepared for peer review; its approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
+Status: PR #31, PR #32 and PR #33 are merged. Issue #28 administrator user management is ready in [PR #34](https://github.com/auto4496/toktickit/pull/34); peer approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
+
+## Administrator handoff — 2026-09-20
+
+- Issue [#28](https://github.com/auto4496/toktickit/issues/28), [PR #34](https://github.com/auto4496/toktickit/pull/34), target lab3-staging.
+- Implementation/evidence commit: 25776f3. The follow-up handoff commit changes documentation only; review the live PR head.
+- Formal Development relationship is verified by the PR closingIssuesReferences API. Project status: PR Review.
+- Author verification: 378 Vitest cases in 34 files, 12 browser journeys, both builds and diff check passed. Actual results, initial failures and screenshot inspection are in tests.md; implementation decisions are in user-management.md.
+- Requested reviewer attention: shared account/ticket lock ordering, real concurrent last-admin and owner eligibility protection, reset/session revocation, and explicit conflict review without losing draft values.
+- No independent review is claimed. No review request or message was sent on the user's behalf for this new PR. Await peer feedback and approval; do not self-merge.
 
 Baseline: completed Lab 2 main f124c72. Flow: feature branches -> lab3-staging -> main. The existing local Lab 2 report edits are outside this worktree and this PR.
 

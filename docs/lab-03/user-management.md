@@ -2,6 +2,8 @@
 
 Branch: `codex/lab3-4-user-administration`, based on the approved staff-workflow merge `f13469cdbbcb3da6459409ae14ae58dc8b3ef034`. Target: `lab3-staging`.
 
+Review: [PR #34](https://github.com/auto4496/toktickit/pull/34), formally linked to [Issue #28](https://github.com/auto4496/toktickit/issues/28). Implementation/evidence commit: `25776f3`; peer approval and merge remain pending.
+
 ## Delivered behavior
 
 Administrators can search names/emails, filter by role, create accounts, edit complete account details, activate/deactivate accounts, and set a new initial password. Each account has exactly one role. Desktop uses a directory table and side form; tablet/mobile use account cards and a full-width form. There is no account deletion, bulk editing, public registration, or email-reset flow.
