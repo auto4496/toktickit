@@ -4,6 +4,18 @@ Status: The matrix below began as a plan. Executed results are recorded in the d
 
 ## Administrator verification — Issue #28, 2026-09-20
 
+### Peer correction verification — 2026-09-21
+
+Reviewed head: `88922cb`. Datakung's independent run passed 378 tests and both builds but had one ambiguous status-locator failure in the full browser suite; its passing targeted rerun did not establish a clean full browser run. The two findings and links are recorded in reviewer.md.
+
+- Before the navigation fix, all five new App-level regression cases in AdminNavigation.test.tsx failed because navigation unmounted the dirty form without the required prompt.
+- After the fix, `npx vitest run client/tests` passed **85 cases across 13 files**, zero skipped, 74.36 seconds (started 15:07:31 Bangkok). Tests use mocked requests with a guarded synthetic URL, not a database.
+- `npx playwright test --config playwright.staff.config.ts` passed **all 13 browser journeys**, zero skipped, in 2.6 minutes. This is one complete run, including the new native Back/Forward case and both corrected success-notice assertions. No fixed waits, arbitrary first matches or retries were added.
+- Both production builds passed. The final staged diff check passed.
+- Browser execution used isolated lab3_admin_test with ports 3300/5300. Existing development data was not migrated or reset. Docker's repeated stale socket startup failure was recovered by backing up its verified socket-only runtime directories.
+
+The corrected router asks before header/password-page navigation and restores blocked history traversal before prompting. Cancel retains the draft; Confirm replays the intended Back/Forward entry. Tests also verify that logout, session expiry and mandatory password change bypass a pending prompt. This is a frontend/test correction; the full 378-case API/unit result below remains historical and was not claimed as rerun for this patch.
+
 Based on the approved PR #33 merge f13469c; branch codex/lab3-4-user-administration targets lab3-staging. See [implementation and contract mapping](user-management.md).
 
 | Check | Actual result |

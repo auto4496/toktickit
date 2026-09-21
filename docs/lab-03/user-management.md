@@ -20,12 +20,14 @@ Every successful edit increments the user version. Role/activity changes and pas
 
 A stale form receives USER_CONFLICT. The UI retains the draft, disables saving, loads the current account, and requires an explicit choice to keep the draft against the reviewed version or use current values, followed by a separate Save action. It never automatically retries account mutations. Closing a dirty form asks for discard confirmation; password drafts clear on cancel/unmount. Reset dialogs use native modal focus containment, Escape handling, and opener focus restoration.
 
+The editor reports unsaved non-password changes to the application navigation guard. Header navigation and voluntary password-page navigation wait for discard confirmation. For browser Back/Forward, the router restores the current indexed history entry before prompting; Cancel retains the editor and draft, while Confirm replays the original traversal without replacing the destination or erasing the forward stack. Reload/document exit still uses beforeunload. Logout, session expiry, mandatory password changes and self-account revocation bypass the guard and clear any pending navigation prompt.
+
 ## Verification mapping
 
 | Contract | Evidence |
 |---|---|
 | API-12–14, relevant API-04/05 | `server/tests/lab-03/admin-users.api.test.ts`: 25 real database/API cases covering authorization/CSRF/initial gate, safe shapes/search/validation, duplicate email races, version races, session lifecycle, last-admin concurrency, assigned-owner safety, and claim/assign/start/resolve racing account changes |
-| UI-08, relevant UI-01/02 | `client/tests/lab-03/UserManagement.test.tsx`: six form/filter/error/conflict/discard/self-reset cases; existing shell and authentication cases retained |
+| UI-08, relevant UI-01/02 | `client/tests/lab-03/UserManagement.test.tsx`: six form/filter/error/conflict/discard/self-reset cases; `AdminNavigation.test.tsx`: five App-level cases covering cancelled/confirmed header and Back navigation, Forward history, voluntary password navigation, logout and mandatory authentication changes |
 | E2E-03 | `e2e/lab-03/admin-users.spec.ts`: create → edit → reset → initial-password login/change → Staff landing and direct Admin denial |
 | Responsive/visual | Directory, editor and reset dialog at 1440, 834, 390 and 320 widths, including overflow checks |
 

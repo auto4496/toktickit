@@ -4,6 +4,12 @@ Status: PR #31, PR #32 and PR #33 are merged. Issue #28 administrator user manag
 
 ## Administrator handoff — 2026-09-20
 
+### Peer correction — 2026-09-21
+
+Datakung requested changes on reviewed head `88922cb`: [dirty in-app navigation](https://github.com/auto4496/toktickit/pull/34#discussion_r4060222962) and [ambiguous success notices in browser assertions](https://github.com/auto4496/toktickit/pull/34#discussion_r4060222970). The reviewer independently passed all 378 tests and both builds; their full browser run had 11 passes and one timing-sensitive failure, followed by a passing targeted rerun. That targeted rerun is not recorded as a clean full-suite pass.
+
+The correction connects the editor's dirty state to the App router, confirms shell navigation and native Back/Forward before unmounting, preserves the draft on Cancel, and bypasses the guard for logout/mandatory authentication changes. Both success assertions now filter by their intended notice text, without sleeps or arbitrary first matches. Five new App-level tests failed before the fix and pass afterward; a real browser Back/Forward journey was added. Current correction verification is recorded in tests.md. Peer re-approval remains pending; no review reply or re-review request has been sent on the user's behalf for this correction.
+
 - Issue [#28](https://github.com/auto4496/toktickit/issues/28), [PR #34](https://github.com/auto4496/toktickit/pull/34), target lab3-staging.
 - Implementation/evidence commit: 25776f3. The follow-up handoff commit changes documentation only; review the live PR head.
 - Formal Development relationship is verified by the PR closingIssuesReferences API. Project status: PR Review.

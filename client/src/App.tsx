@@ -6,6 +6,8 @@ import AuthForm from './AuthForm';
 import StaffTicketQueue from './StaffTicketQueue';
 import StaffTicketDetail from './StaffTicketDetail';
 import UserManagement from './UserManagement';
+import { useAppNavigation } from './useAppNavigation';
+import { Confirmation } from './WorkflowParts';
 import './workflow.css';
 import { AUTH_EVENT, AuthUser, authRequest, clearAuthState, resetCsrf } from './auth-api';
 import './auth.css';
@@ -25,18 +27,13 @@ function permittedDestination(value: unknown, user: AuthUser): string | null {
   if (user.role === 'IT_STAFF') return staffRoute ? route : null;
   return route === '/admin/users' || staffRoute ? route : null;
 }
-function navigate(path: string, intended: string | null = null) {
-  history.pushState(intended ? { toktickitReturnTo: intended } : {}, '', path);
-  window.dispatchEvent(new PopStateEvent('popstate'));
-}
-
 export default function App() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [failure, setFailure] = useState('');
   const [authNotice, setAuthNotice] = useState('');
   const [attempt, setAttempt] = useState(0);
-  const [path, setPath] = useState(location.pathname);
+  const { path, navigate, forceNavigate, setDirty, blocked, cancel, confirm } = useAppNavigation();
   const [menu, setMenu] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   // History retains only an allowlisted path across a login/password-gate reload.
@@ -47,22 +44,21 @@ export default function App() {
   };
   const continueToDestination = (next: AuthUser) => {
     if (next.mustChangePassword) {
-      rememberDestination(); navigate('/change-password', intended.current);
+      rememberDestination(); forceNavigate('/change-password', intended.current);
     } else {
       const destination = permittedDestination(intended.current, next) ?? landing(next);
-      intended.current = null; navigate(destination);
+      intended.current = null; forceNavigate(destination);
     }
   };
   useEffect(() => {
-    const route = () => setPath(location.pathname);
     const expired = (event: Event) => {
       rememberDestination();
       if ((event as CustomEvent).detail === 'password') {
-        setUser((current) => current ? { ...current, mustChangePassword: true } : null); navigate('/change-password', intended.current);
-      } else { setUser(null); navigate('/login', intended.current); }
+        setUser((current) => current ? { ...current, mustChangePassword: true } : null); forceNavigate('/change-password', intended.current);
+      } else { setUser(null); forceNavigate('/login', intended.current); }
     };
-    window.addEventListener('popstate', route); window.addEventListener(AUTH_EVENT, expired);
-    return () => { window.removeEventListener('popstate', route); window.removeEventListener(AUTH_EVENT, expired); };
+    window.addEventListener(AUTH_EVENT, expired);
+    return () => { window.removeEventListener(AUTH_EVENT, expired); };
   }, []);
   useEffect(() => {
     let active = true; resetCsrf(); localStorage.removeItem('toktickit.requester'); setLoading(true); setFailure('');
@@ -78,7 +74,7 @@ export default function App() {
   }, [attempt]);
   async function logout() {
     if (loggingOut) return; setLoggingOut(true); setFailure('');
-    try { await authRequest('logout', {}); clearAuthState(); intended.current = null; setUser(null); navigate('/login'); }
+    try { await authRequest('logout', {}); clearAuthState(); intended.current = null; setUser(null); forceNavigate('/login'); }
     catch { setFailure('Sign out could not be completed. Please try again.'); }
     finally { setLoggingOut(false); }
   }
@@ -99,7 +95,8 @@ export default function App() {
       <div className="requester-chip"><span><strong>{user.name}</strong><small>{roleName(user.role)}</small></span><button type="button" onClick={() => navigate('/change-password')}>Password</button><button type="button" onClick={logout} disabled={loggingOut}>{loggingOut ? 'Signing out…' : 'Logout'}</button></div>
     </header>
     {failure && <div role="alert" className="auth-error">{failure}</div>}
-    {user.role === 'ADMINISTRATOR' && path === '/admin/users' ? <UserManagement user={user} onSelfChanged={(value, signedOut) => { if (signedOut) { setAuthNotice(value.mustChangePassword ? 'Your initial password was updated. Sign in with it, then choose a personal password.' : 'Your role was updated. Sign in again to open your new workspace.'); clearAuthState(); intended.current = null; setUser(null); navigate('/login'); } else setUser(value); }} /> : user.role !== 'REQUESTER' && (path === '/staff/tickets' || path.startsWith('/staff/') && ticketPath.test(path.slice(6))) ? path === '/staff/tickets' ? <StaffTicketQueue user={user} onOpen={id => navigate(`/staff/tickets/${id}`)} /> : <StaffTicketDetail key={path} user={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/staff/tickets')} /> : requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail key={path} requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
+    {blocked && <Confirmation title="Discard account changes?" onCancel={cancel} onConfirm={confirm}>Your unsaved account details will be lost if you leave this page.</Confirmation>}
+    {user.role === 'ADMINISTRATOR' && path === '/admin/users' ? <UserManagement user={user} onDirtyChange={setDirty} onSelfChanged={(value, signedOut) => { if (signedOut) { setAuthNotice(value.mustChangePassword ? 'Your initial password was updated. Sign in with it, then choose a personal password.' : 'Your role was updated. Sign in again to open your new workspace.'); clearAuthState(); intended.current = null; setUser(null); forceNavigate('/login'); } else setUser(value); }} /> : user.role !== 'REQUESTER' && (path === '/staff/tickets' || path.startsWith('/staff/') && ticketPath.test(path.slice(6))) ? path === '/staff/tickets' ? <StaffTicketQueue user={user} onOpen={id => navigate(`/staff/tickets/${id}`)} /> : <StaffTicketDetail key={path} user={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/staff/tickets')} /> : requesterRoute ? path === '/tickets/new' ? <CreateTicket requester={user} /> : path === '/tickets' ? <MyTickets requester={user} /> : <RequesterTicketDetail key={path} requester={user} ticketId={path.split('/').pop()!} onBack={() => navigate('/tickets')} /> :
       <main className="requester-page"><section className="requester-card"><p className="eyebrow">{roleName(user.role)}</p><h1>{laterRoute ? 'Your account is ready' : 'Access unavailable'}</h1><p>{laterRoute ? 'You are securely signed in. This workspace will be available with the next Lab 3 increment.' : 'This page is not available for your role.'}</p>{!laterRoute && <button className="auth-submit" onClick={() => navigate(landing(user))}>Return to your workspace</button>}</section></main>}
   </div>;
 }
