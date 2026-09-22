@@ -1,6 +1,37 @@
 # Lab 3 Test Plan and Traceability
 
-Status: Planned before implementation. No test listed here has been run as a Lab 3 test. Planned paths become actual evidence only when files and results exist.
+Status: The matrix below began as a plan. Executed results are recorded in the dated implementation sections; unexecuted final-system/release checks remain planned.
+
+## Administrator verification — Issue #28, 2026-09-20
+
+### Peer correction verification — 2026-09-21
+
+Reviewed head: `88922cb`. Datakung's independent run passed 378 tests and both builds but had one ambiguous status-locator failure in the full browser suite; its passing targeted rerun did not establish a clean full browser run. The two findings and links are recorded in reviewer.md.
+
+- Before the navigation fix, all five new App-level regression cases in AdminNavigation.test.tsx failed because navigation unmounted the dirty form without the required prompt.
+- After the fix, `npx vitest run client/tests` passed **85 cases across 13 files**, zero skipped, 74.36 seconds (started 15:07:31 Bangkok). Tests use mocked requests with a guarded synthetic URL, not a database.
+- `npx playwright test --config playwright.staff.config.ts` passed **all 13 browser journeys**, zero skipped, in 2.6 minutes. This is one complete run, including the new native Back/Forward case and both corrected success-notice assertions. No fixed waits, arbitrary first matches or retries were added.
+- Both production builds passed. The final staged diff check passed.
+- Browser execution used isolated lab3_admin_test with ports 3300/5300. Existing development data was not migrated or reset. Docker's repeated stale socket startup failure was recovered by backing up its verified socket-only runtime directories.
+
+The corrected router asks before header/password-page navigation and restores blocked history traversal before prompting. Cancel retains the draft; Confirm replays the intended Back/Forward entry. Tests also verify that logout, session expiry and mandatory password change bypass a pending prompt. This is a frontend/test correction; the full 378-case API/unit result below remains historical and was not claimed as rerun for this patch.
+
+Based on the approved PR #33 merge f13469c; branch codex/lab3-4-user-administration targets lab3-staging. See [implementation and contract mapping](user-management.md).
+
+| Check | Actual result |
+|---|---|
+| Full Vitest regression suite | **378 passed in 34 files**, zero skipped; started 16:15:29 Bangkok, 263.22 seconds |
+| Focused administrator API suite | **25 passed**, real PostgreSQL and HTTP middleware; includes concurrent duplicates, stale versions, last-admin protection and account changes racing claim/assignment/start/resolve |
+| Client suite | **80 passed in 12 files**; includes six new administrator UI cases; the full regression run above includes them again after the final focus correction |
+| Full browser suite using playwright.staff.config.ts | **12 passed**, zero skipped, about two minutes; ten inherited journeys plus account lifecycle and four-width administrator visual checks |
+| Server and client production builds | Passed; client rebuilt after modal-focus and layout corrections |
+| Responsive checks | Directory, editor and reset dialog at 1440, 834, 390 and 320 widths; no horizontal overflow |
+
+Vitest used guarded lab3_test; browser journeys used newly created lab3_admin_test on loopback port 55433, with client/API ports 3300/5300. No development database migration/reset. Both use the local test-only PostgreSQL container. Docker initially failed on inaccessible stale runtime sockets; only the socket directories were backed up so Docker could recreate them. No factory reset, container removal or volume removal occurred.
+
+The first focused browser run passed responsive checks but failed the assertion that Escape restores focus to the reset opener. React Strict Mode exposed the modal cleanup timing. The fix preserves the original opener and closes the native dialog before restoring focus after unmount; the same assertion passed in the final full run. Screenshot inspection also found cramped desktop Edit labels while the side form was open; the page width and button wrapping were corrected before the final capture. No failing assertions were removed.
+
+Evidence: [12 administrator screenshots](../../artifacts/lab-03/screenshots/user-management/). Agent visual inspection covered the desktop side form, tablet directory cards, mobile editor and 320px reset dialog. These observations are not a student visual approval or independent peer review. #29/#30 still own full-system/final-main acceptance.
 
 Contract: [specification.md](./specification.md), [api-spec.md](./api-spec.md), [ui-spec.md](./ui-spec.md).
 

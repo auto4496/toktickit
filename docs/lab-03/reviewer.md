@@ -1,6 +1,21 @@
 # Lab 3 Peer Review Record
 
-Status: PR #31 and PR #32 are merged. Issue #27 staff workflow is being prepared for peer review; its own approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
+Status: PR #31, PR #32 and PR #33 are merged. Issue #28 administrator user management is ready in [PR #34](https://github.com/auto4496/toktickit/pull/34); peer approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
+
+## Administrator handoff — 2026-09-20
+
+### Peer correction — 2026-09-21
+
+Datakung requested changes on reviewed head `88922cb`: [dirty in-app navigation](https://github.com/auto4496/toktickit/pull/34#discussion_r4060222962) and [ambiguous success notices in browser assertions](https://github.com/auto4496/toktickit/pull/34#discussion_r4060222970). The reviewer independently passed all 378 tests and both builds; their full browser run had 11 passes and one timing-sensitive failure, followed by a passing targeted rerun. That targeted rerun is not recorded as a clean full-suite pass.
+
+The correction connects the editor's dirty state to the App router, confirms shell navigation and native Back/Forward before unmounting, preserves the draft on Cancel, and bypasses the guard for logout/mandatory authentication changes. Both success assertions now filter by their intended notice text, without sleeps or arbitrary first matches. Five new App-level tests failed before the fix and pass afterward; a real browser Back/Forward journey was added. Current correction verification is recorded in tests.md. Peer re-approval remains pending; no review reply or re-review request has been sent on the user's behalf for this correction.
+
+- Issue [#28](https://github.com/auto4496/toktickit/issues/28), [PR #34](https://github.com/auto4496/toktickit/pull/34), target lab3-staging.
+- Implementation/evidence commit: 25776f3. The follow-up handoff commit changes documentation only; review the live PR head.
+- Formal Development relationship is verified by the PR closingIssuesReferences API. Project status: PR Review.
+- Author verification: 378 Vitest cases in 34 files, 12 browser journeys, both builds and diff check passed. Actual results, initial failures and screenshot inspection are in tests.md; implementation decisions are in user-management.md.
+- Requested reviewer attention: shared account/ticket lock ordering, real concurrent last-admin and owner eligibility protection, reset/session revocation, and explicit conflict review without losing draft values.
+- No independent review is claimed. No review request or message was sent on the user's behalf for this new PR. Await peer feedback and approval; do not self-merge.
 
 Baseline: completed Lab 2 main f124c72. Flow: feature branches -> lab3-staging -> main. The existing local Lab 2 report edits are outside this worktree and this PR.
 

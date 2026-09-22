@@ -14,6 +14,8 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 // Queue internals are covered by StaffWorkflow.test.tsx; shell tests exercise
 // identity, role navigation and cache clearing without feature data requests.
 vi.mock('../../src/StaffTicketQueue', () => ({ default: () => <main>Queue workspace</main> }));
+// User forms have their own behavior tests; keep shell fixtures about identity.
+vi.mock('../../src/UserManagement', () => ({ default: () => <main>Users workspace</main> }));
 describe('Authenticated application shell (replaces development selector/system-check UI)', () => {
   it.each(['/tickets', '/tickets/new', '/staff/tickets', '/admin/users', '/lab-01'])('guards direct anonymous access to %s', async path => {
     history.replaceState({}, '', path);

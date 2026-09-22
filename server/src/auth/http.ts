@@ -33,7 +33,7 @@ function cookie(req: Request, name: string) {
   const values = (req.headers.cookie ?? '').split(';').map((v) => v.trim()).filter((v) => v.startsWith(`${name}=`));
   return values.length === 1 ? values[0].slice(name.length + 1) : undefined;
 }
-function clearCookies(res: Response) { res.clearCookie(SID, cookieOptions); res.clearCookie(PRE, cookieOptions); }
+export function clearCookies(res: Response) { res.clearCookie(SID, cookieOptions); res.clearCookie(PRE, cookieOptions); }
 function setSession(res: Response, material: ReturnType<typeof createSessionMaterial>) {
   res.cookie(SID, material.token, { ...cookieOptions, maxAge: material.maxAgeSeconds * 1000 });
 }

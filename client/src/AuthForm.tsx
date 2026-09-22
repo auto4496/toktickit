@@ -1,7 +1,7 @@
 import { FormEvent, useRef, useState } from 'react';
 import { AuthUser, authRequest } from './auth-api';
 
-export default function AuthForm({ change = false, onSuccess, onLogout }: { change?: boolean; onSuccess: (user: AuthUser) => void; onLogout?: () => void }) {
+export default function AuthForm({ change = false, onSuccess, onLogout, notice }: { change?: boolean; onSuccess: (user: AuthUser) => void; onLogout?: () => void; notice?: string }) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
@@ -38,6 +38,7 @@ export default function AuthForm({ change = false, onSuccess, onLogout }: { chan
       <div className="auth-symbol"><i className={change ? 'bi bi-key' : 'bi bi-shield-check'} aria-hidden="true" /></div>
       <p className="eyebrow">YOUR IT SUPPORT, IN ONE PLACE</p>
       <h1 id="auth-title">{change ? 'Choose your new password' : 'Sign in to TokTickIT'}</h1>
+      {notice && <p className="wf-notice" role="status">{notice}</p>}
       <p className="auth-intro">{change ? 'Set a personal password to keep your account secure and continue to TokTickIT.' : 'Sign in to track requests and keep work moving.'}</p>
       {message && <div className="auth-error" role="alert">{message}</div>}
       <form ref={form} onSubmit={submit} noValidate aria-busy={busy}>
