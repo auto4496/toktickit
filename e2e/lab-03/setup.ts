@@ -14,6 +14,10 @@ export default async function setup() {
     for (const [id, name, email, role] of [
       ['99999999-9999-4999-8999-999999999996', 'Alex Morgan', 'e2e.staff@example.test', 'IT_STAFF'],
       ['99999999-9999-4999-8999-999999999997', 'Taylor Admin', 'e2e.admin@example.test', 'ADMINISTRATOR'],
-    ]) await prisma.user.upsert({ where: { id }, create: { id, name, email, role, passwordHash, mustChangePassword: false }, update: { passwordHash, mustChangePassword: false, isActive: true } });
+      ['99999999-9999-4999-8999-999999999998', 'Initial Password Evidence', 'e2e.visual-initial@example.test', 'IT_STAFF'],
+    ]) {
+      const mustChangePassword = email === 'e2e.visual-initial@example.test';
+      await prisma.user.upsert({ where: { id }, create: { id, name, email, role, passwordHash, mustChangePassword }, update: { passwordHash, mustChangePassword, isActive: true } });
+    }
   } finally { await prisma.$disconnect(); }
 }

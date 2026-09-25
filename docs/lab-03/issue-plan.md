@@ -2,6 +2,8 @@
 
 Status: Agreed decomposition; actual GitHub links are recorded below after creation. Six work items include the release itself, reducing planned peer-review rounds without omitting tests.
 
+Current state (2026-09-25): work items 1–4 (#25–28) are approved, merged and closed. Work item 5 (#29) is in progress on `codex/lab3-5-system-verification`, based on PR #34 merge `2c6f79938ec17573e8727639c34e60eefbc190c5`. Work item 6 (#30) still waits for reviewed integration of #29. Earlier status paragraphs below are dated history, not the live board state.
+
 | Work item | Title | Dependency | Scope / completion boundary | Branch / PR target |
 |---|---|---|---|---|
 | 1 | Sprint 3 Engineering Contract | Completed Lab 2 main | Reviewed specification, API/UI spec, AC-mapped test plan, issue plan and initial honest review/AI records. | codex/lab3-1-engineering-contract -> lab3-staging |

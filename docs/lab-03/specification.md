@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Draft for peer review before implementation. No Lab 3 feature or test is claimed complete.
+Status (2026-09-25): Contract approved in PR #31; authentication, Staff workflow and Administrator increments are integrated through PRs #32–34. Issue #29 verifies the combined staging system. Final-main acceptance remains Issue #30. Dated historical plans are retained; current execution evidence is in [system-verification.md](system-verification.md).
 
 Source: CPE 334 Lab 3 handout, "TokTickIT Users, Roles, IT Staff Ticketing, and Admin Screens", 18 pages. This contract interprets the handout; explicit exclusions take precedence over extra controls in its illustrative screenshots.
 
