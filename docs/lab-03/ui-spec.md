@@ -1,6 +1,6 @@
 # Lab 3 Zen Green UI Specification
 
-Status (2026-09-25): Implemented through PRs #32–34; integrated evidence and accessibility corrections are prepared in Issue #29. [System verification](system-verification.md) records actual image inspection and distinguishes it from final human approval.
+Status (2026-09-26): Implementation, integrated evidence and accessibility corrections are peer-approved and merged through PR #35. Issue #30 prepares the final release. [System verification](system-verification.md) records actual image inspection and distinguishes it from the final human checklist, which remains pending.
 
 User direction (2026-09-08): polished, attractive UI that follows the assignment. Reuse the Lab 2 design system; make the first staff/admin increment feel like one coherent product.
 

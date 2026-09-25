@@ -1,6 +1,6 @@
 # TokTickIT - Lab 3 Service Desk
 
-TokTickIT is an IT service-desk application with session authentication, Requester tickets and attachments, an IT Staff queue and workflow, and Administrator account management. See [foundation setup and migration](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database, [staff workflow](docs/lab-03/staff-workflow.md), and [user management](docs/lab-03/user-management.md). Integrated verification and submission preparation are tracked in [Issue #29](https://github.com/auto4496/toktickit/issues/29); final-main verification and the submission PDF belong to [Issue #30](https://github.com/auto4496/toktickit/issues/30).
+TokTickIT is an IT service-desk application with session authentication, Requester tickets and attachments, an IT Staff queue and workflow, and Administrator account management. See [foundation setup and migration](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database, [staff workflow](docs/lab-03/staff-workflow.md), and [user management](docs/lab-03/user-management.md). Integrated verification in [Issue #29](https://github.com/auto4496/toktickit/issues/29) is peer-approved and merged. The [release checklist and review-report command](docs/lab-03/release.md) track [Issue #30](https://github.com/auto4496/toktickit/issues/30), including the remaining final-main checks and submission PDF.
 
 | Role | Main screens | Responsibilities |
 |---|---|---|

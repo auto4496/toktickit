@@ -1,12 +1,12 @@
 # Lab 3 Peer Review Record
 
-Status (2026-09-26): PRs #31–35 are approved and merged into staging. Work items #25–29 are complete. Issue #30 remains Backlog; final-main verification and submission are not yet complete. Earlier pending statements below are historical.
+Status (2026-09-26): PRs #31–35 are approved and merged into staging. Work items #25–29 are complete. Issue #30 is Started; the staging-to-main release and review PDF are being prepared. Final-main verification and submission are not yet complete. See [release checklist](release.md). Earlier pending statements below are historical.
 
 ## System verification integration — 2026-09-26
 
 Datakung approved PR #35 commit `3d251ce2ecdf074bb18792f0b7aae85a0589645a` at 2026-09-25 18:07:08 UTC (2026-09-26 01:07:08 Bangkok). The reviewer independently passed all 389 tests, all 17 browser journeys and both production builds, verified all 109 screenshot checksums, and reported no blocking findings. The peer merged at 18:07:29 UTC as `e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31`.
 
-[Actual review and merge](https://github.com/auto4496/toktickit/pull/35). No correction or additional approval is needed for #29. Final-main verification, final PDF, native browser zoom/final human inspection and the student's reading of the Reflection remain #30. This post-merge documentation closeout is prepared for inclusion in that reviewed release, without directly modifying staging or main.
+[Actual review and merge](https://github.com/auto4496/toktickit/pull/35). No correction or additional approval is needed for #29. Final-main verification, final PDF, native browser zoom/final human inspection and the student's reading of the Reflection remain #30. This post-merge documentation closeout is included in the staging-to-main release review; it does not alter the approved application.
 
 ## Administrator integration — verified 2026-09-25
 
