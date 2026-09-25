@@ -1,6 +1,6 @@
 # Lab 3 REST API Contract
 
-Status: Draft for peer review. Base `/api`; JSON except multipart uploads and binary downloads. Complements [specification.md](./specification.md); supersedes Lab 2 identity and IT Priority defaults only where explicitly stated.
+Status (2026-09-25): Approved contract, implemented through PRs #32–34 and under integrated verification in Issue #29. Base `/api`; JSON except multipart uploads and binary downloads. Complements [specification.md](./specification.md); supersedes Lab 2 identity and IT Priority defaults only where explicitly stated. This verification increment adds failure/rollback evidence without changing endpoint contracts.
 
 ## 1. Authentication, transport and CSRF
 

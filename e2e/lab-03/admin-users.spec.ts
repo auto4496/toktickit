@@ -31,6 +31,11 @@ test('RESP/VIS administrator directory, editor and reset dialog at four widths',
     await page.getByRole('button', { name: 'Edit Taylor Admin' }).click(); await expect(page.getByRole('switch')).toBeDisabled(); await expectNoHorizontalOverflow(page);
     await page.screenshot({ path: `test-results/lab-03/user-management/editor-${width}.png`, fullPage: true });
     await page.getByRole('button', { name: 'Set new initial password' }).click(); await expect(page.getByRole('dialog')).toBeVisible(); await expectNoHorizontalOverflow(page);
+    await page.getByLabel('Initial password', { exact: true }).focus();
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.getByRole('button', { name: 'Set initial password', exact: true })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.getByLabel('Initial password', { exact: true })).toBeFocused();
     await page.screenshot({ path: `test-results/lab-03/user-management/reset-${width}.png`, fullPage: true }); await page.keyboard.press('Escape'); await page.getByRole('button', { name: 'Cancel', exact: true }).click();
   }
 });

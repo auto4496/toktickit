@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { AuthUser } from './auth-api';
 import { ApiFailure, label, workflow } from './workflow-api';
-import { Confirmation } from './WorkflowParts';
+import { Confirmation, keepDialogFocus } from './WorkflowParts';
 import './users.css';
 
 export type ManagedUser = AuthUser & { isActive: boolean; version: number; createdAt: string; updatedAt: string };
@@ -36,7 +36,7 @@ function ResetPassword({ user, own, onClose, onSaved, onConflict }: { user: Mana
     catch (error) { if (error instanceof ApiFailure && error.code === 'USER_CONFLICT') { onConflict(); onClose(); } else { setMessage(error instanceof Error ? error.message : 'Unable to reset password.'); setErrors(error instanceof ApiFailure ? error.fieldErrors ?? {} : {}); focusError(form.current); } }
     finally { setBusy(false); }
   }
-  return <dialog ref={dialog} className="wf-dialog users-reset" aria-labelledby="reset-title" onCancel={e => { e.preventDefault(); if (!busy) onClose(); }}><form ref={form} onSubmit={submit} noValidate><p className="eyebrow">Account security</p><h2 id="reset-title">Set a new initial password</h2><p>All existing sessions for <strong>{user.name}</strong> will end. They must change this password when they next sign in.</p>{own && <p className="wf-conflict">This is your account. You will return to sign in after saving.</p>}{message && <p role="alert" className="users-error">{message}</p>}<fieldset disabled={busy}><PasswordFields {...{ password, confirm, setPassword, setConfirm, errors }} /></fieldset><div className="wf-actions"><button type="button" disabled={busy} onClick={onClose}>Cancel</button><button className="wf-primary" disabled={busy}>{busy ? 'Saving…' : 'Set initial password'}</button></div></form></dialog>;
+  return <dialog ref={dialog} className="wf-dialog users-reset" aria-labelledby="reset-title" onKeyDown={keepDialogFocus} onCancel={e => { e.preventDefault(); if (!busy) onClose(); }}><form ref={form} onSubmit={submit} noValidate><p className="eyebrow">Account security</p><h2 id="reset-title">Set a new initial password</h2><p>All existing sessions for <strong>{user.name}</strong> will end. They must change this password when they next sign in.</p>{own && <p className="wf-conflict">This is your account. You will return to sign in after saving.</p>}{message && <p role="alert" className="users-error">{message}</p>}<fieldset disabled={busy}><PasswordFields {...{ password, confirm, setPassword, setConfirm, errors }} /></fieldset><div className="wf-actions"><button type="button" disabled={busy} onClick={onClose}>Cancel</button><button className="wf-primary" disabled={busy}>{busy ? 'Saving…' : 'Set initial password'}</button></div></form></dialog>;
 }
 
 function UserEditor({ selected, actor, onClose, onSaved, onDirtyChange }: { onDirtyChange?: (dirty: boolean) => void; selected: ManagedUser | null; actor: AuthUser; onClose: () => void; onSaved: (v: ManagedUser, reset?: boolean) => void }) {

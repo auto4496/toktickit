@@ -1,6 +1,14 @@
-# TokTickIT - Lab 3 Authentication and Requester Foundation
+# TokTickIT - Lab 3 Service Desk
 
-TokTickIT is an IT service-desk application. Lab 3 adds secure login, sessions, the IT Staff queue and ticket workflow while preserving Requester Ticket and Attachment workflows. See [foundation setup and migration](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database, and [staff workflow and verification](docs/lab-03/staff-workflow.md) for the current screens. Administrator user management is the next increment.
+TokTickIT is an IT service-desk application with session authentication, Requester tickets and attachments, an IT Staff queue and workflow, and Administrator account management. See [foundation setup and migration](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database, [staff workflow](docs/lab-03/staff-workflow.md), and [user management](docs/lab-03/user-management.md). Integrated verification and submission preparation are tracked in [Issue #29](https://github.com/auto4496/toktickit/issues/29); final-main verification and the submission PDF belong to [Issue #30](https://github.com/auto4496/toktickit/issues/30).
+
+| Role | Main screens | Responsibilities |
+|---|---|---|
+| Requester | `/tickets`, `/tickets/new`, `/tickets/:id` | Own tickets, attachments, public comments and resolution indication |
+| IT Staff | `/staff/tickets`, `/staff/tickets/:id` | Search/filter queue, claim/assign, priority/status, public comments and private notes |
+| Administrator | `/admin/users`, `/staff/tickets` | Create/edit/reset accounts; read ticket conversations and change IT Priority |
+
+Initial-password accounts must change their password before using the application. There is no self-registration, email reset or account deletion. Authorization is enforced by the API as well as the interface.
 
 ## Technology Stack
 
@@ -24,15 +32,20 @@ toktickit/
 │   │   └── seed.ts
 │   ├── src/
 │   ├── tests/
-│   │   └── lab-01/
+│   │   ├── lab-01/
+│   │   ├── lab-02/
+│   │   └── lab-03/
 │   └── package.json
 ├── e2e/
-│   └── lab-02/
+│   ├── lab-02/
+│   └── lab-03/
 ├── artifacts/
-│   └── lab-02/screenshots/
+│   ├── lab-02/screenshots/
+│   └── lab-03/screenshots/
 ├── docs/
 │   ├── lab-01/
-│   └── lab-02/
+│   ├── lab-02/
+│   └── lab-03/
 ├── .env.example
 ├── .gitignore
 ├── package.json
@@ -178,7 +191,7 @@ Run all currently implemented automated tests. Vitest fails fast unless
 
 ```bash
 npm test
-npm run test:e2e
+npm run test:e2e:lab3
 ```
 
 `npm run test:e2e` writes generated screenshots only under the ignored
@@ -198,4 +211,12 @@ npm run build:server
 npm run build:client
 ```
 
-The complete suite covers the Lab 1 foundation, test-database safety, seeded reference data, requester context, Ticket validation/number generation, sequential and concurrent idempotent creation, owned list/query behavior, Ticket Detail, Attachment validation/storage/compensation, safe errors, responsive/accessibility styles, complete requester E2E journeys, and visual evidence.
+`test:e2e:lab3` includes the retained Lab 2 journeys plus authentication, Staff and Administrator workflows and cross-role system verification. `test:e2e` remains the Lab 2 subset. Override `E2E_CLIENT_PORT` and `E2E_API_PORT` if the defaults are already in use. Never run two suites against the same test database concurrently.
+
+```bash
+npm run test:e2e:capture:lab3
+```
+
+This explicit command runs the complete browser suite, then copies its Lab 3 screenshots to `artifacts/lab-03/screenshots/system/` only after success. A manifest records the capture time, Git baseline/working-tree state and PNG checksums. Routine runs write only to ignored `test-results/`. Synthetic failure/empty-state captures are labelled in filenames; they do not prove server behavior. Real HTTP/database tests provide that evidence separately.
+
+See [system verification](docs/lab-03/system-verification.md), [test traceability](docs/lab-03/tests.md), [review history](docs/lab-03/reviewer.md), [AI use and reflection draft](docs/lab-03/ai-use.md), and the [nine-part submission draft](docs/lab-03/submission-draft.md). Historical run results are dated and are not final-main acceptance.

@@ -1,6 +1,16 @@
 # Lab 3 Peer Review Record
 
-Status: PR #31, PR #32 and PR #33 are merged. Issue #28 administrator user management is ready in [PR #34](https://github.com/auto4496/toktickit/pull/34); peer approval and merge are pending. Earlier pending statements below are historical records superseded by the integration entries.
+Status (2026-09-25): PRs #31–34 are approved and merged into staging. Issues #25–28 are closed. Issue #29 is undergoing integrated verification; its independent review has not happened. Earlier pending statements below are historical records superseded by the integration entries.
+
+## Administrator integration — verified 2026-09-25
+
+Datakung approved correction `c84ad03e191a9ce8f81d2829dd50c0de4b9b6cf3` on 2026-09-22 at 14:30:11 UTC. Their re-review passed 85 client cases, the original independent reproduction, all 13 browser tests and both builds. The peer did not rerun the full API/unit suite for that frontend correction. PR #34 merged at 14:30:21 UTC as `2c6f79938ec17573e8727639c34e60eefbc190c5`.
+
+The user authorized replies confirming both fixes; actual replies are [navigation correction](https://github.com/auto4496/toktickit/pull/34#discussion_r4072766062) and [specific success assertion](https://github.com/auto4496/toktickit/pull/34#discussion_r4072767621). Issue #28 was closed and moved to Done after the verified merge. This supersedes the earlier pending/reply-not-sent notes.
+
+## System verification — Issue #29
+
+Branch `codex/lab3-5-system-verification` starts at the PR #34 merge above. Scope: integrated regression, failure rollback, responsive/state captures, evidence mapping, README and the nine-part submission draft. [System verification](system-verification.md) records actual checks and limitations. Review capture provenance, real versus simulated evidence, retained migration/data checks and accessibility assertions. Only the approving peer may merge; no independent approval or final-main run is claimed.
 
 ## Administrator handoff — 2026-09-20
 

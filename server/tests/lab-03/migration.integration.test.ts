@@ -1,5 +1,7 @@
 import { execFileSync } from 'node:child_process';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
+import { mkdtempSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { describe, expect, it } from 'vitest';
@@ -17,17 +19,26 @@ async function isolated(run: (db: PrismaClient, migrate: (index: number) => void
   const url = new URL(target); url.searchParams.set('schema', schema);
   const db = new PrismaClient({ datasources: { db: { url: url.href } } });
   await admin.$executeRawUnsafe(`CREATE SCHEMA "${schema}"`);
+  const storage = mkdtempSync(path.join(tmpdir(), 'toktickit-migration-test-'));
+  const attachmentPath = path.join(storage, 'retained.pdf');
+  writeFileSync(attachmentPath, Buffer.from('%PDF-1.4\nSynthetic retained migration bytes'));
+  const checksum = () => createHash('sha256').update(readFileSync(attachmentPath)).digest('hex');
+  const originalChecksum = checksum();
   try {
-    const migrate = (index: number) => execFileSync(process.execPath, [
+    const migrate = (index: number) => { execFileSync(process.execPath, [
       path.join(root, 'server/node_modules/prisma/build/index.js'), 'db', 'execute',
       '--file', path.join(root, 'server/prisma/migrations', migrations[index], 'migration.sql'), '--url', url.href,
     ], { stdio: 'pipe', timeout: 30_000 });
+      expect(checksum()).toBe(originalChecksum);
+    };
     await run(db, migrate);
   } finally {
     await db.$disconnect();
     // Only this randomly named schema, created in a guarded test DB above.
     await admin.$executeRawUnsafe(`DROP SCHEMA "${schema}" CASCADE`);
     await admin.$disconnect();
+    unlinkSync(attachmentPath);
+    rmdirSync(storage);
   }
 }
 

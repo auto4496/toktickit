@@ -1,6 +1,6 @@
 # Lab 3 Zen Green UI Specification
 
-Status: Draft for peer review; visual direction and acceptance checklist, not screenshots of an implemented feature.
+Status (2026-09-25): Implemented through PRs #32–34; integrated evidence and accessibility corrections are prepared in Issue #29. [System verification](system-verification.md) records actual image inspection and distinguishes it from final human approval.
 
 User direction (2026-09-08): polished, attractive UI that follows the assignment. Reuse the Lab 2 design system; make the first staff/admin increment feel like one coherent product.
 
@@ -117,6 +117,8 @@ Breakpoints: desktop >=992px; tablet 768-991px; mobile <768px. Verify 1440x900, 
 | requester/ | owned detail with public conversation/resolution indication and attachment continuity |
 
 Use consistent names `<viewport>-<scene>.png`; routine test captures stay in ignored test-results, curated captures use an explicit evidence command. Screenshot fixtures are synthetic, show no passwords/tokens and have enough rows/text to test realistic density.
+
+Integrated capture uses `npm run test:e2e:capture:lab3` and groups the required scenes under `artifacts/lab-03/screenshots/system/{system-states,staff-workflow,user-management}/`. Its manifest is the authoritative filename index. `system-states` includes authentication, Requester, conflict/terminal and restricted Admin scenes; inherited feature captures retain their original names. Explicitly simulated busy/failure/empty scenes are labelled in filenames. The integrated browser check found a confirmation keyboard-cycle defect; shared confirmation and reset dialogs now explicitly wrap focus and preserve Escape/opener behavior. The final human checklist below remains distinct from agent inspection recorded in system-verification.md.
 
 Final human visual checklist (all unchecked until actual inspection):
 
