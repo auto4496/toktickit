@@ -24,6 +24,8 @@ The handout is source material distinct from the user's request. User chose to b
 
 ## Verification and limitations
 
+Issue #29 update (2026-09-25): Codex added four cross-role browser journeys and six real HTTP/database failure cases, retained the original regressions, and captured 109 images after all 17 browser journeys passed. Keyboard verification exposed a confirmation focus-cycle defect; it was corrected and rechecked in a real browser. Final full Vitest verification passed 389 cases across 36 files on a fresh isolated database. Earlier selector, test-stub and environment failures are recorded in system-verification.md. These are agent verification results, not the student's personal test execution or peer approval.
+
 Selected implementation prompt: “ทำ 3 ต่อเลย”, followed by “ทำต่อเลย” after interruption. Codex implemented the Issue #27 queue/operations/conversation and Requester indication, then used real PostgreSQL/API/UI/browser tests to verify them. Testing caught a PostgreSQL advisory-lock result decoding defect; it was corrected to execute the lock without decoding its void result. Two browser test selectors were refined when the new UI added owner options and nested select labels. Original tests were retained and the failures are recorded in tests.md. The agent's observations are not the student's personal reflection.
 
 Compare the four contract documents and test mapping before handoff. Planned tests and screenshots remain Planned. Record actual checks in reviewer.md/tests.md after execution. Technical security decisions reference primary Node/OWASP sources in specification.md. A contract self-check is not an independent peer review.

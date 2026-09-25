@@ -2,6 +2,13 @@
 
 Current integrated record: [system-verification.md](system-verification.md). It maps consolidated files, records failed attempts and corrections, and distinguishes staging checks from final-main acceptance. The matrix's original scenario descriptions are acceptance intent; use the actual named test cases and scope notes when stating what a run proves.
 
+## Integrated verification — Issue #29, 2026-09-25
+
+- `npm test`: **389 passed, 36 files, zero skipped**, exit 0, 194.97 seconds, started 23:35:56 Bangkok. Commit `5a0934e8e4c89c75f03b5817bfc48fdf1cd30479`; fresh guarded database `lab3_verification_unit_test`.
+- `npm run test:e2e:capture:lab3`: **17 browser journeys passed**, zero skipped, exit 0, 3.8 minutes; isolated `lab3_verification_test`, ports 3400/5400. Captured **109 PNGs** with verified SHA-256 values from application/browser source `08d37115e4f8c3367642a8753260044fb3181975`; the later commit only completes a jsdom test stub.
+- Both production builds passed after the dialog correction. Local Markdown links: 157 valid. Diff whitespace check passed.
+- Initial failed/interrupted runs, actual coverage mapping, synthetic versus real evidence and agent visual observations are retained in the integrated record. This is staging author verification, not peer approval or final-main acceptance.
+
 Status: The matrix began as a plan; its filenames now point to the implemented suites. See system-verification.md for current consolidated coverage, actual results, simulated evidence and remaining final-main/human acceptance. Historical dated results remain below.
 
 ## Administrator verification — Issue #28, 2026-09-20
@@ -47,13 +54,13 @@ Use existing Vitest, Supertest, React Testing Library and Playwright. Database t
 
 Every row initially has Final = Planned. Multiple test cases within a row cover its full expected-result statement, not just one happy path.
 
-| Test ID | Type | AC | What it tests / expected result | Planned automated file | Final |
+| Test ID | Type | AC | What it tests / expected result | Actual automated file(s) | Current evidence |
 |---|---|---|---|---|---|
 | UNIT-01 | Unit | AC-03 | Email/name normalization, 15/128 code-point and 512-byte password boundaries, no truncation, confirmation, whitespace and real salted scrypt verification; wrong passwords fail. | server/tests/lab-03/auth.unit.test.ts | Implemented; see integrated execution/scope |
 | UNIT-02 | Unit | AC-03, AC-04 | Fixed-window limits and expiry with controlled clock, safe dummy-hash path, random session/digest generation and restricted/full expiry. | server/tests/lab-03/auth.unit.test.ts | Implemented; see integrated execution/scope |
-| UNIT-03 | Unit | AC-10 | Strict queue keys/types/duplicates, rank ordering, pagination and deterministic tie-break parsing. | server/tests/lab-03/staff-workflow.api.test.ts + server/tests/lab-02/ticket-query.unit.test.ts | Implemented; see integrated execution/scope |
-| UNIT-04 | Unit | AC-12, AC-14, AC-15 | Enumerate all eight-by-eight status pairs, owner/terminal/confirmation preconditions and requester indication states. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
-| UNIT-05 | Unit | AC-16, AC-17, AC-18 | Comment normalization/length and admin fields/one-role validation including Unicode and unknown properties. | server/tests/lab-03/staff-workflow.api.test.ts + server/tests/lab-03/admin-users.api.test.ts | Implemented; see integrated execution/scope |
+| UNIT-03 | Unit/API | AC-10 | Strict queue keys/types/duplicates, rank ordering, pagination and deterministic tie-break parsing. | server/tests/lab-03/staff-workflow.api.test.ts + server/tests/lab-02/ticket-query.unit.test.ts | Implemented; see integrated execution/scope |
+| UNIT-04 | API | AC-12, AC-14, AC-15 | Enumerate all eight-by-eight status pairs, owner/terminal/confirmation preconditions and requester indication states. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| UNIT-05 | API | AC-16, AC-17, AC-18 | Comment normalization/length and admin fields/one-role validation including Unicode and unknown properties. | server/tests/lab-03/staff-workflow.api.test.ts + server/tests/lab-03/admin-users.api.test.ts | Implemented; see integrated execution/scope |
 | API-01 | API | AC-01, AC-03 | Active valid login; unknown/wrong/inactive same safe 401; normalized email; invalid body and failed-attempt 429/Retry-After. | server/tests/lab-03/auth.api.test.ts | Implemented; see integrated execution/scope |
 | API-02 | API | AC-02, AC-03 | Initial-password gate on every protected endpoint; correct change, wrong current password, mismatch, same-password and exact boundaries; token rotation. | server/tests/lab-03/auth.api.test.ts | Implemented; see integrated execution/scope |
 | API-03 | API | AC-04 | me/logout/idempotent logout/expiration and old-cookie rejection after change/reset/role/activity changes; cookie flags, no-store, no secrets. | server/tests/lab-03/auth.api.test.ts | Implemented; see integrated execution/scope |
@@ -87,7 +94,7 @@ Every row initially has Final = Planned. Multiple test cases within a row cover 
 | E2E-01 | E2E | AC-01, AC-02, AC-03, AC-04, AC-05 | Real login/invalid/inactive/first-change/logout; old-cookie API access rejected; all role landing pages and restricted links. | e2e/lab-02/authentication.spec.ts + e2e/lab-03/system-verification.spec.ts | Implemented; see integrated execution/scope |
 | E2E-02 | E2E | AC-08, AC-09, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16, AC-17 | Requester creates with attachment; Staff searches/claims/changes priority/status/posts public/private; Requester sees public only and indicates resolution; Staff resolves/closes/reopens. | e2e/lab-03/staff-ticket-flow.spec.ts | Implemented; see integrated execution/scope |
 | E2E-03 | E2E | AC-04, AC-18, AC-19, AC-20 | Admin creates/edits/resets user; user forced to change; duplicate/self/last-admin/assigned-owner guards; non-Admin denial. | e2e/lab-03/admin-users.spec.ts | Implemented; see integrated execution/scope |
-| VIS-01 | Visual/manual + capture | AC-21, AC-22, AC-23 | Capture all ui-spec scenes at three viewports and inspect hierarchy/privacy/states/focus/clipping/overlap; record per-scene result and correction. | e2e/lab-03/system-verification.spec.ts + e2e/lab-03/staff-ticket-flow.spec.ts + e2e/lab-03/admin-users.spec.ts + docs/lab-03/ui-spec.md | Planned |
+| VIS-01 | Visual/manual + capture | AC-21, AC-22, AC-23 | Capture all ui-spec scenes at three viewports and inspect hierarchy/privacy/states/focus/clipping/overlap; record per-scene result and correction. | e2e/lab-03/system-verification.spec.ts + e2e/lab-03/staff-ticket-flow.spec.ts + e2e/lab-03/admin-users.spec.ts + docs/lab-03/ui-spec.md | 109 captures; agent inspection recorded; final human approval pending |
 | REL-01 | Release/manual | AC-24 | Run full guarded suite/builds on final main; map real outputs/screenshots/PRs/commit and nine PDF parts; check links and all Issues Done only on completion. | docs/lab-03/tests.md + docs/lab-03/reviewer.md | Planned |
 
 ## 3. Feature ownership and regression policy

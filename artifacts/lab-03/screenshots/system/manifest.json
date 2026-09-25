@@ -1,0 +1,444 @@
+{
+  "capturedAt": "2026-09-25T16:31:23.371Z",
+  "baseCommit": "08d37115e4f8c3367642a8753260044fb3181975",
+  "workingTree": "?? artifacts/lab-03/screenshots/system/",
+  "note": "Integrated staging verification, not final-main or peer approval. Simulated UI errors are labelled in scene names. See system-verification.md.",
+  "files": [
+    {
+      "path": "screenshots/change-password-1440.png",
+      "sha256": "163274be357b626211525f4ff1abc588094791341beed081a04c64b738d9d201"
+    },
+    {
+      "path": "screenshots/change-password-320.png",
+      "sha256": "0365ad2b96058aaae5bcd4b0654da1372bc6504c644f8e8c8032fcc3114a08d0"
+    },
+    {
+      "path": "screenshots/change-password-390.png",
+      "sha256": "e7d783d6d000108ac0b919b44a24a07307e2849276660444f2ba400d8194ee40"
+    },
+    {
+      "path": "screenshots/change-password-834.png",
+      "sha256": "2a6d9e063f1737948f88a7ab4bd46438ea4695e823383c0aace1287aaba965a3"
+    },
+    {
+      "path": "screenshots/login-320.png",
+      "sha256": "cfd0638e5bf9bb09210022535cf3996f367eb35856bc914195301e324df5a7fd"
+    },
+    {
+      "path": "staff-workflow/1440-detail.png",
+      "sha256": "bd64ca8e17497a680d56c51529e96b73bcca5e257862f4de9a24949fe9bbb94a"
+    },
+    {
+      "path": "staff-workflow/1440-internal-notes.png",
+      "sha256": "0e54e248c9105339b8020ac3eca510854b8aa2312ff3358af70533b511a5c409"
+    },
+    {
+      "path": "staff-workflow/1440-queue.png",
+      "sha256": "e4bb6798dca48302a2fd9943b4d32facb9d5fb277506c8f56fd7720c3e849be4"
+    },
+    {
+      "path": "staff-workflow/320-detail.png",
+      "sha256": "a7320d81d78664e55581f9e2ffe8306e8e3a81243ce3861a056bd2045eb150e6"
+    },
+    {
+      "path": "staff-workflow/320-internal-notes.png",
+      "sha256": "fb53f023792daf31bf0483cfc3f36c40174cf081330bbd5707a134144e1299f1"
+    },
+    {
+      "path": "staff-workflow/320-queue.png",
+      "sha256": "1d3bf263e6704b94ef247ce8262540f484d6c83efbb772cf0013ce5cda06995e"
+    },
+    {
+      "path": "staff-workflow/390-detail.png",
+      "sha256": "41cd614746aca23860245cbe843ec00ab0b7c482d025bffcb90c9cff50961bf3"
+    },
+    {
+      "path": "staff-workflow/390-internal-notes.png",
+      "sha256": "330578940ad3833ad84f261b9936f20810613b8df12d44e835636d7e2a291eec"
+    },
+    {
+      "path": "staff-workflow/390-queue.png",
+      "sha256": "760fe7bb7cbcc4489b26d44526e8606bbe2c5fd2330febd8e0361a886a087f4a"
+    },
+    {
+      "path": "staff-workflow/834-detail.png",
+      "sha256": "a9275a9c9865694d256eafdbd58aeca309f88f8fb3bf675fab7f437195f0787e"
+    },
+    {
+      "path": "staff-workflow/834-internal-notes.png",
+      "sha256": "4d2eb342330e6739fd8c19fe21f9108ddab997ff2ea2bad27ad4c1811f4c32dd"
+    },
+    {
+      "path": "staff-workflow/834-queue.png",
+      "sha256": "d93db89552119373dbcf5d01ce1b606ff2c0bd710b85d289a18d60ee9b41cafd"
+    },
+    {
+      "path": "system-states/desktop-admin-create-validation.png",
+      "sha256": "160bd8b318839062312834faf6fdbcaa51bab66712fb6dafb2169105cd3da3dc"
+    },
+    {
+      "path": "system-states/desktop-admin-create.png",
+      "sha256": "0560fd118855d671ad1ac9e0c5e394f92773f44001e5b0e5165cc4e9f7da5632"
+    },
+    {
+      "path": "system-states/desktop-admin-restricted-detail.png",
+      "sha256": "f6b2e0be8de51e4dcfc0f69d0d3d464a343cc7c818cb202e5a2a0576d18c78f3"
+    },
+    {
+      "path": "system-states/desktop-change-password.png",
+      "sha256": "163274be357b626211525f4ff1abc588094791341beed081a04c64b738d9d201"
+    },
+    {
+      "path": "system-states/desktop-login-busy-simulated.png",
+      "sha256": "dd7a95973db44859323e856ca26b1095def43f372c4b73e1783d2becf4677c08"
+    },
+    {
+      "path": "system-states/desktop-login-failure-simulated.png",
+      "sha256": "6c3711ce058577e5b5eef4369e752cf21fd50f0956359a6d786ccfe1732f1855"
+    },
+    {
+      "path": "system-states/desktop-login-invalid.png",
+      "sha256": "98ac177365f4f255e0a6ae7028b6e5c1f8a309dd39d0587f47259673bea3b582"
+    },
+    {
+      "path": "system-states/desktop-login-ready.png",
+      "sha256": "b9ddc7f1f42e213867835d723013f959a5f2fac1f42f11a0e22d63a4918cdbe0"
+    },
+    {
+      "path": "system-states/desktop-login-validation.png",
+      "sha256": "01cd854c9f4ac9749ac60b35fca5467dc5bd38974b5073c100eb27d8b57aac1f"
+    },
+    {
+      "path": "system-states/desktop-queue-empty-simulated.png",
+      "sha256": "65d8a5eb082f07a443c53877730eec0ccecddbe0f0272e84434434e3175c9b57"
+    },
+    {
+      "path": "system-states/desktop-queue-failure-simulated.png",
+      "sha256": "6c91cda6a3d33d41d08d1f0e3e505b942eab14732078829578e9a0ff4c23e25c"
+    },
+    {
+      "path": "system-states/desktop-queue-no-results.png",
+      "sha256": "98ec9167b76c7c386c0bbb896084213a43dbe33eb8041c269e82f8a43b5bf384"
+    },
+    {
+      "path": "system-states/desktop-requester-confirmation.png",
+      "sha256": "0b43d9dc3933f71a3d304aac098840c7883ef27f25e13b454b0a17fc2bf4b650"
+    },
+    {
+      "path": "system-states/desktop-requester-indication.png",
+      "sha256": "a1cbf4ba82162bc2aaceebfd2662b99878cc733ce44cc26df7de8700341b4c03"
+    },
+    {
+      "path": "system-states/desktop-requester-public-attachment.png",
+      "sha256": "22c0f716827d4b59e6c22a8387354f3c6b69c02a5fde63bc9fdea1ab6e86721c"
+    },
+    {
+      "path": "system-states/desktop-staff-conflict.png",
+      "sha256": "639d47a7f06d053b319ee825377dcf90ba83cdd60213d80813b22044f2d6c7a3"
+    },
+    {
+      "path": "system-states/desktop-staff-not-found.png",
+      "sha256": "ee383b96715076a6fddb743d18058618dcd70d93e8496bb918f0839d911561a6"
+    },
+    {
+      "path": "system-states/desktop-staff-private.png",
+      "sha256": "0f7989dea3b179eed255fc803922c138615aa9b8ce2e0df065268685feab65ce"
+    },
+    {
+      "path": "system-states/desktop-staff-public.png",
+      "sha256": "06394ddb127adda9d9e92480e027a2e37e6ee3d9c84691ffd3be6008cd23ca28"
+    },
+    {
+      "path": "system-states/desktop-staff-terminal.png",
+      "sha256": "f298274b4513a45f8a0b8596b3f593b22e288f375ae1efdc835d9d20ed2c4926"
+    },
+    {
+      "path": "system-states/mobile-admin-create-validation.png",
+      "sha256": "bf1d48219fcc98bb948bb8aa909ccb3ebbba14289f61a472a85b5c57c3c2ade1"
+    },
+    {
+      "path": "system-states/mobile-admin-create.png",
+      "sha256": "9e362b1f3eb322416f5977a7ffd350f7b7c628bc0937e48b5e4f5b4dd0ea746e"
+    },
+    {
+      "path": "system-states/mobile-admin-restricted-detail.png",
+      "sha256": "0fb3aabb0603a52067841a21bc9427a6874c79c2e76ac7ba6f326b965c43132d"
+    },
+    {
+      "path": "system-states/mobile-change-password.png",
+      "sha256": "e7d783d6d000108ac0b919b44a24a07307e2849276660444f2ba400d8194ee40"
+    },
+    {
+      "path": "system-states/mobile-login-busy-simulated.png",
+      "sha256": "f497a7dc8d10b525453bfffab30a7c0ad175769a8394f2f49f9d181b7d165bea"
+    },
+    {
+      "path": "system-states/mobile-login-failure-simulated.png",
+      "sha256": "7f7c6dc7918536a485beb3d162f9ad80db8f0a841dbed3c54a0dd42036785359"
+    },
+    {
+      "path": "system-states/mobile-login-invalid.png",
+      "sha256": "3843c973b2f974a90c3400b6cc7127012196df403310724dd5cd180268f7f9dd"
+    },
+    {
+      "path": "system-states/mobile-login-ready.png",
+      "sha256": "28c05ca0066c9bf825c8bc85d75bb2e376d0700e36244350a6361154aeed7ef5"
+    },
+    {
+      "path": "system-states/mobile-login-validation.png",
+      "sha256": "8ab767c80bbce2268cc79c1d2cbe2c3c32624da929ba0698399f03b020be23e6"
+    },
+    {
+      "path": "system-states/mobile-queue-empty-simulated.png",
+      "sha256": "f916317eeaa9e0373665a0721136e15d38e7717dd522eeea2ac9d6d93b6835b3"
+    },
+    {
+      "path": "system-states/mobile-queue-failure-simulated.png",
+      "sha256": "7ab28f222dde2065433b1ef544e38fff339e5932aff1038e41caac81af2bd177"
+    },
+    {
+      "path": "system-states/mobile-queue-no-results.png",
+      "sha256": "2c6f0316aaa25093d67c0e7dd35130b7c3e7b40b58c1b9deae4e05fb3f5d0a3e"
+    },
+    {
+      "path": "system-states/mobile-requester-confirmation.png",
+      "sha256": "d39a424e91603f482d55e0b152ca677c67d25b660818b7dd10c62e706d2da101"
+    },
+    {
+      "path": "system-states/mobile-requester-indication.png",
+      "sha256": "f10349eb65c75aeeb7a5c62bb71b19a2784e461a774a7375aa49203a5daed031"
+    },
+    {
+      "path": "system-states/mobile-requester-public-attachment.png",
+      "sha256": "6d202bab625cdd6fec169c70c9af36b34f201cbc65acb5a6871ebccf33dc235e"
+    },
+    {
+      "path": "system-states/mobile-staff-conflict.png",
+      "sha256": "3e6a8f9c34d9dc06d15bda674072f5393835694168dca6ffa1c170fdee434cd5"
+    },
+    {
+      "path": "system-states/mobile-staff-not-found.png",
+      "sha256": "324f981f67f0a18d9819cb96448b3084a240c6d183d47bf9ec896243802ab093"
+    },
+    {
+      "path": "system-states/mobile-staff-private.png",
+      "sha256": "7b76e77d058eddcb31d106e24193153bf257cf6cf37b05cff9e8c46c6c84c9f3"
+    },
+    {
+      "path": "system-states/mobile-staff-public.png",
+      "sha256": "390aae41b02c000ea1ef9e7c985d300444a53f106835c1c6543bfe6b9da76f63"
+    },
+    {
+      "path": "system-states/mobile-staff-terminal.png",
+      "sha256": "e8254d24cbb4ba5eebb0358d37e4f91d838a3774c4b2433c9d7346b10c92cecb"
+    },
+    {
+      "path": "system-states/narrow-admin-create-validation.png",
+      "sha256": "68955cc21f684acbdf00bc3222dc0bbc597aba8f49f238d12f001fc051041c3f"
+    },
+    {
+      "path": "system-states/narrow-admin-create.png",
+      "sha256": "56165240152eb0ab235f71c8b176792d08d452c3f918be796b6546db42fa2bb6"
+    },
+    {
+      "path": "system-states/narrow-admin-restricted-detail.png",
+      "sha256": "15cbbf437c8ce5a7f0268fd8fd75aaf7350bf3fa042657c85513038c6a2beda4"
+    },
+    {
+      "path": "system-states/narrow-change-password.png",
+      "sha256": "0365ad2b96058aaae5bcd4b0654da1372bc6504c644f8e8c8032fcc3114a08d0"
+    },
+    {
+      "path": "system-states/narrow-login-busy-simulated.png",
+      "sha256": "a97db2abe283038b69ec64db91f69af1146988dd0e1b54453af1d6a5614db101"
+    },
+    {
+      "path": "system-states/narrow-login-failure-simulated.png",
+      "sha256": "9fac818870d312724579384c1aa06d26f638db849b5ede415f2127e8796aa6a4"
+    },
+    {
+      "path": "system-states/narrow-login-invalid.png",
+      "sha256": "493e226fd330e57c5cdbec511304b6ab4d4df1df934a8f863baa861e729e7020"
+    },
+    {
+      "path": "system-states/narrow-login-ready.png",
+      "sha256": "cfd0638e5bf9bb09210022535cf3996f367eb35856bc914195301e324df5a7fd"
+    },
+    {
+      "path": "system-states/narrow-login-validation.png",
+      "sha256": "3f4c7b3b213acd874424a43dc66d49e68013b1faf0233910b720ea984f65e469"
+    },
+    {
+      "path": "system-states/narrow-queue-empty-simulated.png",
+      "sha256": "538dfd9496cc793fa6de0c0d7e0f4bf1d30cecc587415891540de0995fa0a196"
+    },
+    {
+      "path": "system-states/narrow-queue-failure-simulated.png",
+      "sha256": "0d2c8065b781787511a0d2eac6045c0f13d31e050e50d23b8ec7c468ba9f0772"
+    },
+    {
+      "path": "system-states/narrow-queue-no-results.png",
+      "sha256": "568b54e6fed7c2ff3efab4394e9b2a3be636d25a5da8abdff1b59ef39880edb9"
+    },
+    {
+      "path": "system-states/narrow-requester-confirmation.png",
+      "sha256": "ed2c3d89460cc146ecf174b84972699735f8c54bbfea03ad9dc633483334f45d"
+    },
+    {
+      "path": "system-states/narrow-requester-indication.png",
+      "sha256": "82b980cc9aebabda83b2f43541bc6f3b5c479b6b87ddc0448f31aae9bb99396a"
+    },
+    {
+      "path": "system-states/narrow-requester-public-attachment.png",
+      "sha256": "60a423b3677e44ce539dd4a32f5ab7e5b3eeb0e63543b14cf72bcbf1788d9d28"
+    },
+    {
+      "path": "system-states/narrow-staff-conflict.png",
+      "sha256": "48edf6e153b3b8b4b4e73961a110ad9125d545bf6f72094ac155ce05522515ef"
+    },
+    {
+      "path": "system-states/narrow-staff-not-found.png",
+      "sha256": "95a5dc4760280fe1be1ff298057dd88e2dd32d15c4cb43a4146e96919102985b"
+    },
+    {
+      "path": "system-states/narrow-staff-private.png",
+      "sha256": "520e8420df3f509879376bdbf1f3bf87888b6df8e7be3dd78fc4210c49c8a82d"
+    },
+    {
+      "path": "system-states/narrow-staff-public.png",
+      "sha256": "5a7828d291c571756dbb3b7f0e886257a72423302783ddfa792d42a9ae635cde"
+    },
+    {
+      "path": "system-states/narrow-staff-terminal.png",
+      "sha256": "062c5acdf5cae41952971526f425c7bc80027762801aa2fb304d3640916960c0"
+    },
+    {
+      "path": "system-states/tablet-admin-create-validation.png",
+      "sha256": "8206ba72798759aca69b9915e4da5c082a9ba25be40eef55d149dba2be7995d1"
+    },
+    {
+      "path": "system-states/tablet-admin-create.png",
+      "sha256": "85da032bcd4e6264462c8068e6295dc57edd44acce59a07c3ebb9cb503d2cc81"
+    },
+    {
+      "path": "system-states/tablet-admin-restricted-detail.png",
+      "sha256": "78e7f5d9bf99bba0afab8a39094d7f045958a5098f45362661c206511eaecc76"
+    },
+    {
+      "path": "system-states/tablet-change-password.png",
+      "sha256": "ddb8a27eb55e7c892d9552337b94c43f1420ed433a6d6ed33f068d1160af0c21"
+    },
+    {
+      "path": "system-states/tablet-login-busy-simulated.png",
+      "sha256": "87d15613df9f4c690dbabe2c11acdffbf8036e786bf0eb55c223ace259745017"
+    },
+    {
+      "path": "system-states/tablet-login-failure-simulated.png",
+      "sha256": "196511a648a1614f52a6482cb565a697c626932d5c96d571429f19af764ccae7"
+    },
+    {
+      "path": "system-states/tablet-login-invalid.png",
+      "sha256": "dc2ef935f87024e358ab72366046e89d84349f6ab865b1d25a68eed12e136ad8"
+    },
+    {
+      "path": "system-states/tablet-login-ready.png",
+      "sha256": "dda2ff33d530a7a1944b5fa15f883e0256129bfb2ef120b1fe5505992732ebb3"
+    },
+    {
+      "path": "system-states/tablet-login-validation.png",
+      "sha256": "e29146b42f0b07440a9607d67d6ee0fcff04d0e102fb10a5c7fb2944ce438467"
+    },
+    {
+      "path": "system-states/tablet-queue-empty-simulated.png",
+      "sha256": "81d700246a22970417f86ad31ed9987ed926bde5df8cff2facdb153ffa59deb1"
+    },
+    {
+      "path": "system-states/tablet-queue-failure-simulated.png",
+      "sha256": "0106d59a5fb2e284a98b5b7ff24349574976e6ec7e26d29285dfafd2691f7464"
+    },
+    {
+      "path": "system-states/tablet-queue-no-results.png",
+      "sha256": "6b1dd75efee8d7d34e05ba94da5196c02961753937e43ae62253301a6b6d7cfc"
+    },
+    {
+      "path": "system-states/tablet-requester-confirmation.png",
+      "sha256": "810d7e451713c9ec7f25c0a3e2e1bd0bb0fd80f980f2bb6a8532ed1dd8545046"
+    },
+    {
+      "path": "system-states/tablet-requester-indication.png",
+      "sha256": "c4e3f9985c8ec546bdce4335abcecd42402f131736af9d1220cd985b274e8ddc"
+    },
+    {
+      "path": "system-states/tablet-requester-public-attachment.png",
+      "sha256": "2dd2a7734246207bd5573322e62368b5c8c7b7f7bacf1630383cc91b5aea4c12"
+    },
+    {
+      "path": "system-states/tablet-staff-conflict.png",
+      "sha256": "152b203d718d99ff3a7aa9351daad9d51472d7df184bb40c23e40c5ffaa2232d"
+    },
+    {
+      "path": "system-states/tablet-staff-not-found.png",
+      "sha256": "1250873036de1d8803358d130e2ce92e4c7534384d584a63b4aedc2a57d9a348"
+    },
+    {
+      "path": "system-states/tablet-staff-private.png",
+      "sha256": "b5b1560b6f6399a1f1f4e4bf54d587659185ffce47b60c82bff8a0ec4367482d"
+    },
+    {
+      "path": "system-states/tablet-staff-public.png",
+      "sha256": "50c7bd1e70eb8117ac88620ce5c9fc2bec992a233cab21515b50f7426d5c0c28"
+    },
+    {
+      "path": "system-states/tablet-staff-terminal.png",
+      "sha256": "64d64a8f3210923eb34c0d91314eaaa5fe34fb0f3b55a18ba426612bc891df25"
+    },
+    {
+      "path": "user-management/editor-1440.png",
+      "sha256": "835b4de77f97888430d56b5f511f0f1260b0d05e2549335bc34bdb8a9a24ffc4"
+    },
+    {
+      "path": "user-management/editor-320.png",
+      "sha256": "408eb3889404eb93eb911c3dae8dae8a61747d3753ed1b245bae74af8b10f391"
+    },
+    {
+      "path": "user-management/editor-390.png",
+      "sha256": "1b385eb583eb14235476c6f317ef9e293d10ddca3515d620969025ac4a2c7b5e"
+    },
+    {
+      "path": "user-management/editor-834.png",
+      "sha256": "c64e78a4db00dbc2a21ece067277feaab2f2d57658ac662e2eddab57120b0cd2"
+    },
+    {
+      "path": "user-management/reset-1440.png",
+      "sha256": "80620088426ddbaa4566bc7e4808e20c5bb5cb62c2e6df70df4717fc3afe9dd0"
+    },
+    {
+      "path": "user-management/reset-320.png",
+      "sha256": "f8ca0fc50058a8de1be162a7fe7d8a8536d2caf24d9f616cabef8b88e37eb560"
+    },
+    {
+      "path": "user-management/reset-390.png",
+      "sha256": "7b502fc5c0c6cae662a843ae94ee79dc248a97c034f1c33a53c1142f20f9a011"
+    },
+    {
+      "path": "user-management/reset-834.png",
+      "sha256": "0fe294406af001aebc3db17b2e9562f43804d3904531aa642df509776a73d64d"
+    },
+    {
+      "path": "user-management/users-1440.png",
+      "sha256": "58c0902333579ca50af4a148e5e4fb0903842861fbf9a8be9bb98e9e3702f1b6"
+    },
+    {
+      "path": "user-management/users-320.png",
+      "sha256": "6d90c3d636184607cfce7f6f9ccd2a4b5a75cc7bda725e83b899a5ca245100e0"
+    },
+    {
+      "path": "user-management/users-390.png",
+      "sha256": "647f2fb56d727111bcb75828904752303110e7013d2ccbc8e426436741983d9a"
+    },
+    {
+      "path": "user-management/users-834.png",
+      "sha256": "2fdbce4c791be387cdf95818b2536cbdea02137ab4a74ddddac7716346701958"
+    }
+  ]
+}

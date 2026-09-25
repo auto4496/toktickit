@@ -1,6 +1,6 @@
 # Lab 3 — Submission evidence draft
 
-Prepared for Issue #29. This is a pre-release working draft, not the final PDF. Issue #30 owns the reviewed staging-to-main integration, final-main verification, final screenshot provenance and completed submission. Student name/ID, partner identity details and the student's final reading of the reflection must be completed before submission.
+Prepared for Issue #29. This is a pre-release working draft, not the final PDF. Issue #30 owns the reviewed staging-to-main integration, final-main verification, final screenshot provenance and completed submission. Recorded author: Phanuwit Butchari (67070501070), GitHub auto4496. Recorded peer: Pitchai Chadchuangchot (67070501068), GitHub Datakung; see reviewer.md for the verified review record. The student still needs to read the Reflection draft before submission.
 
 ## Answer Part 1 — Repository and collaboration (10 points)
 
