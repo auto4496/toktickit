@@ -15,6 +15,7 @@ const page = (data: unknown[] = [], totalItems = data.length, current = 1) => ({
 beforeEach(() => {
   clearAuthState(); acceptCsrf('test-token');
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute('open', ''); };
+  HTMLDialogElement.prototype.close = function () { this.removeAttribute('open'); };
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 function mockApi(handler?: (url: string, init?: RequestInit) => Response | Promise<Response> | undefined) {
