@@ -1,6 +1,12 @@
 # Lab 3 Peer Review Record
 
-Status (2026-09-25): PRs #31–34 are approved and merged into staging. Issues #25–28 are closed. Issue #29 is undergoing integrated verification; its independent review has not happened. Earlier pending statements below are historical records superseded by the integration entries.
+Status (2026-09-26): PRs #31–35 are approved and merged into staging. Work items #25–29 are complete. Issue #30 remains Backlog; final-main verification and submission are not yet complete. Earlier pending statements below are historical.
+
+## System verification integration — 2026-09-26
+
+Datakung approved PR #35 commit `3d251ce2ecdf074bb18792f0b7aae85a0589645a` at 2026-09-25 18:07:08 UTC (2026-09-26 01:07:08 Bangkok). The reviewer independently passed all 389 tests, all 17 browser journeys and both production builds, verified all 109 screenshot checksums, and reported no blocking findings. The peer merged at 18:07:29 UTC as `e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31`.
+
+[Actual review and merge](https://github.com/auto4496/toktickit/pull/35). No correction or additional approval is needed for #29. Final-main verification, final PDF, native browser zoom/final human inspection and the student's reading of the Reflection remain #30. This post-merge documentation closeout is prepared for inclusion in that reviewed release, without directly modifying staging or main.
 
 ## Administrator integration — verified 2026-09-25
 
@@ -8,9 +14,11 @@ Datakung approved correction `c84ad03e191a9ce8f81d2829dd50c0de4b9b6cf3` on 2026-
 
 The user authorized replies confirming both fixes; actual replies are [navigation correction](https://github.com/auto4496/toktickit/pull/34#discussion_r4072766062) and [specific success assertion](https://github.com/auto4496/toktickit/pull/34#discussion_r4072767621). Issue #28 was closed and moved to Done after the verified merge. This supersedes the earlier pending/reply-not-sent notes.
 
-## System verification — Issue #29
+## System verification handoff — Issue #29 (historical, before approval)
 
 Branch `codex/lab3-5-system-verification` starts at the PR #34 merge above. Scope: integrated regression, failure rollback, responsive/state captures, evidence mapping, README and the nine-part submission draft. [System verification](system-verification.md) records actual checks and limitations. Review capture provenance, real versus simulated evidence, retained migration/data checks and accessibility assertions. Only the approving peer may merge; no independent approval or final-main run is claimed.
+
+Handoff: [PR #35](https://github.com/auto4496/toktickit/pull/35), target `lab3-staging`. Source/capture commit `08d3711`, completed jsdom fixture `5a0934e`, evidence/results commit `3d251ce`. Final author checks: 389 Vitest cases in 36 files, 17 browser journeys, both builds, 109 verified image checksums and local document links passed. Issue #29's formal Development link is verified through closingIssuesReferences. After linking, the board read Specified; it was corrected and read back as PR Review. Issue #30 remains Backlog. No separate reviewer message/request was sent, and no peer approval or merge is claimed.
 
 ## Administrator handoff — 2026-09-20
 

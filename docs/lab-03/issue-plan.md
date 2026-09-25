@@ -2,7 +2,7 @@
 
 Status: Agreed decomposition; actual GitHub links are recorded below after creation. Six work items include the release itself, reducing planned peer-review rounds without omitting tests.
 
-Current state (2026-09-25): work items 1–4 (#25–28) are approved, merged and closed. Work item 5 (#29) is in progress on `codex/lab3-5-system-verification`, based on PR #34 merge `2c6f79938ec17573e8727639c34e60eefbc190c5`. Work item 6 (#30) still waits for reviewed integration of #29. Earlier status paragraphs below are dated history, not the live board state.
+Current state (2026-09-26): work items 1–5 (#25–29) are complete following peer approval and merge. PR #35 was approved by Datakung and merged into lab3-staging as e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31. Independent verification passed 389 tests, 17 browser journeys, both builds and all 109 screenshot checksums. Only work item 6 (#30) remains Backlog; it can start from this merged staging commit. The post-merge status records are prepared for inclusion in its reviewed release. Earlier status paragraphs below are historical.
 
 | Work item | Title | Dependency | Scope / completion boundary | Branch / PR target |
 |---|---|---|---|---|
