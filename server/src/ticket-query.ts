@@ -10,7 +10,7 @@ const SORT_FIELDS = [
 ] as const;
 const SORT_DIRECTIONS = ['asc', 'desc'] as const;
 const PRIORITIES: Priority[] = ['LOW', 'MEDIUM', 'HIGH'];
-const STATUSES: TicketStatus[] = ['NEW'];
+const STATUSES: TicketStatus[] = Object.values(TicketStatus);
 const SUPPORTED_PARAMETERS = new Set([
   'search',
   'categoryId',
@@ -41,7 +41,7 @@ type QueryValidation =
   | { success: true; value: TicketListQuery }
   | { success: false; fieldErrors: Record<string, string> };
 
-const ticketSummarySelect = {
+export const ticketSummarySelect = {
   id: true,
   ticketNumber: true,
   createdAt: true,
@@ -51,6 +51,9 @@ const ticketSummarySelect = {
   requestedPriority: true,
   itPriority: true,
   currentStatus: true,
+  owner: { select: { id: true, name: true, role: true, isActive: true } },
+  version: true,
+  requesterResolvedAt: true,
   updatedAt: true,
 } satisfies Prisma.TicketSelect;
 
@@ -138,7 +141,7 @@ export const parseTicketListQuery = (
   let currentStatus: TicketStatus | undefined;
   if (rawStatus !== undefined) {
     if (!STATUSES.includes(rawStatus as TicketStatus)) {
-      fieldErrors.currentStatus = 'currentStatus must be NEW.';
+      fieldErrors.currentStatus = 'Select a supported Ticket status.';
     } else {
       currentStatus = rawStatus as TicketStatus;
     }
@@ -256,7 +259,7 @@ const buildWhere = (requesterId: string, query: TicketListQuery) => ({
   ...(query.currentStatus ? { currentStatus: query.currentStatus } : {}),
 }) satisfies Prisma.TicketWhereInput;
 
-const mapTicketSummary = (ticket: TicketSummaryRecord) => ({
+export const mapTicketSummary = (ticket: TicketSummaryRecord) => ({
   id: ticket.id,
   ticketNumber: ticket.ticketNumber,
   ticketDate: ticket.createdAt.toISOString(),
@@ -266,6 +269,9 @@ const mapTicketSummary = (ticket: TicketSummaryRecord) => ({
   requestedPriority: ticket.requestedPriority,
   itPriority: ticket.itPriority,
   currentStatus: ticket.currentStatus,
+  owner: ticket.owner,
+  version: ticket.version,
+  requesterResolvedAt: ticket.requesterResolvedAt?.toISOString() ?? null,
   updatedAt: ticket.updatedAt.toISOString(),
 });
 

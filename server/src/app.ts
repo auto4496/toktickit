@@ -1,5 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
+import { adminUsersRouter } from './admin-users.js';
+import { workflowRouter } from './staff-workflow.js';
 import cors from 'cors';
+import { authRouter, authError, clientOrigin, loadAuth, requireFullSession, AuthRequest, hasExactKeys } from './auth/http.js';
 import multer from 'multer';
 import { randomUUID } from 'node:crypto';
 import { promises as fs } from 'node:fs';
@@ -32,8 +35,8 @@ import {
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({ origin: clientOrigin, credentials: true }));
+app.use(express.json({ limit: '32kb' }));
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -80,6 +83,13 @@ app.get('/api/health', (_req: Request, res: Response) => {
     service: 'TokTickIT API',
   });
 });
+
+app.use('/api', (req, res, next) => req.path === '/health' ? next() : loadAuth(req, res, next));
+app.use('/api/auth', authRouter);
+app.all('/api/requesters', (_req, res) => res.status(404).json({ error: { code: 'RESOURCE_NOT_FOUND', message: 'The requested resource was not found.' } }));
+app.use('/api', requireFullSession);
+app.use('/api', adminUsersRouter);
+app.use('/api', workflowRouter);
 
 app.get('/api/categories', async (_req: Request, res: Response) => {
   try {
@@ -132,32 +142,6 @@ app.get('/api/related-systems', async (_req: Request, res: Response) => {
       'REFERENCE_DATA_UNAVAILABLE',
       'Related systems could not be loaded. Try again.',
       'related-systems.list',
-      error,
-    );
-  }
-});
-
-app.get('/api/requesters', async (_req: Request, res: Response) => {
-  try {
-    const requesters = await prisma.requesterUser.findMany({
-      where: {
-        isActive: true,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-      orderBy: [{ name: 'asc' }, { email: 'asc' }],
-    });
-
-    res.status(200).json(requesters);
-  } catch (error) {
-    sendUnexpectedError(
-      res,
-      'REQUESTERS_UNAVAILABLE',
-      'Requesters could not be loaded. Try again.',
-      'requesters.list',
       error,
     );
   }
@@ -276,12 +260,12 @@ app.post(
 
 app.get(
   '/api/attachments/:attachmentId',
-  requireRequesterContext,
+  (req: RequesterContextRequest, _res: Response, next: NextFunction) => { req.requester = req.auth!.user; next(); },
   async (req: RequesterContextRequest, res: Response) => {
     const attachmentId = routeId(req.params.attachmentId);
     if (!validUuid(attachmentId)) return invalidId(res, 'Attachment');
     try {
-      const attachment = await getOwnedAttachment(prisma, req.requester!.id, attachmentId);
+      const attachment = await getOwnedAttachment(prisma, req.auth!.user.role === 'REQUESTER' ? req.requester!.id : undefined, attachmentId);
       res.status(200).json({ id: attachment.id, ticketId: attachment.ticketId, originalName: attachment.originalName, mimeType: attachment.mimeType, sizeBytes: attachment.sizeBytes, uploadedAt: attachment.uploadedAt.toISOString(), removedAt: attachment.removedAt?.toISOString() ?? null, removalReason: attachment.removalReason, canDownload: attachment.removedAt === null });
     } catch (error) {
       if (isAttachmentOperationError(error) && error.kind === 'not-found') return resourceNotFound(res);
@@ -292,12 +276,12 @@ app.get(
 
 app.get(
   '/api/attachments/:attachmentId/download',
-  requireRequesterContext,
+  (req: RequesterContextRequest, _res: Response, next: NextFunction) => { req.requester = req.auth!.user; next(); },
   async (req: RequesterContextRequest, res: Response) => {
     const attachmentId = routeId(req.params.attachmentId);
     if (!validUuid(attachmentId)) return invalidId(res, 'Attachment');
     try {
-      const attachment = await getOwnedAttachment(prisma, req.requester!.id, attachmentId);
+      const attachment = await getOwnedAttachment(prisma, req.auth!.user.role === 'REQUESTER' ? req.requester!.id : undefined, attachmentId);
       if (attachment.removedAt) return resourceNotFound(res);
       try {
         const bytes = await fs.readFile(attachmentFilePath(attachment));
@@ -323,6 +307,11 @@ app.delete(
     const attachmentId = routeId(req.params.attachmentId);
     if (!validUuid(attachmentId)) return invalidId(res, 'Attachment');
     try {
+      await getOwnedAttachment(prisma, req.requester!.id, attachmentId);
+      if (!hasExactKeys(req.body, ['reason'])) {
+        res.status(400).json({ error: { code: 'VALIDATION_FAILED', message: 'Provide a removal reason only.', fieldErrors: { reason: 'Provide a removal reason only.' } } });
+        return;
+      }
       const result = await removeOwnedAttachment(prisma, req.requester!.id, attachmentId, req.body?.reason);
       if (result.kind === 'invalid') {
         res.status(400).json({ error: { code: 'VALIDATION_FAILED', message: 'Please correct the highlighted fields.', fieldErrors: { reason: result.validation.message } } });
@@ -354,6 +343,10 @@ app.post(
       return;
     }
 
+    if (!hasExactKeys(req.body, ['categoryId', 'relatedSystemId', 'summary', 'requestedPriority', 'description'])) {
+      res.status(400).json({ error: { code: 'VALIDATION_FAILED', message: 'Provide only the editable Ticket fields.', fieldErrors: { form: 'Provide category, related system, summary, requested priority and description only.' } } });
+      return;
+    }
     const validation = validateTicketInput(req.body);
     if (!validation.success) {
       res.status(400).json({
@@ -420,6 +413,7 @@ const isJsonParseError = (error: unknown): error is JsonParseError =>
   error instanceof SyntaxError &&
   (error as JsonParseError).type === 'entity.parse.failed';
 
+app.use(authError);
 app.use(
   (error: unknown, _req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) {
@@ -427,6 +421,10 @@ app.use(
       return;
     }
 
+    if ((error as { type?: string })?.type === 'entity.too.large') {
+      sendExpectedError(res, 413, 'REQUEST_TOO_LARGE', 'The request body is too large.');
+      return;
+    }
     if (isJsonParseError(error)) {
       sendExpectedError(
         res,

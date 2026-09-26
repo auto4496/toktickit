@@ -1,0 +1,167 @@
+# Lab 3 Test Plan and Traceability
+
+Current integrated record: [system-verification.md](system-verification.md). It maps consolidated files, records failed attempts and corrections, and distinguishes staging checks from final-main acceptance. The matrix's original scenario descriptions are acceptance intent; use the actual named test cases and scope notes when stating what a run proves.
+
+## Integrated verification — Issue #29, 2026-09-25
+
+- `npm test`: **389 passed, 36 files, zero skipped**, exit 0, 194.97 seconds, started 23:35:56 Bangkok. Commit `5a0934e8e4c89c75f03b5817bfc48fdf1cd30479`; fresh guarded database `lab3_verification_unit_test`.
+- `npm run test:e2e:capture:lab3`: **17 browser journeys passed**, zero skipped, exit 0, 3.8 minutes; isolated `lab3_verification_test`, ports 3400/5400. Captured **109 PNGs** with verified SHA-256 values from application/browser source `08d37115e4f8c3367642a8753260044fb3181975`; the later commit only completes a jsdom test stub.
+- Both production builds passed after the dialog correction. Local Markdown links: 157 valid. Diff whitespace check passed.
+- Initial failed/interrupted runs, actual coverage mapping, synthetic versus real evidence and agent visual observations are retained in the integrated record. This is staging author verification, not peer approval or final-main acceptance.
+
+Status: The matrix began as a plan; its filenames now point to the implemented suites. See system-verification.md for current consolidated coverage, actual results, simulated evidence and remaining final-main/human acceptance. Historical dated results remain below.
+
+## Administrator verification — Issue #28, 2026-09-20
+
+### Peer correction verification — 2026-09-21
+
+Reviewed head: `88922cb`. Datakung's independent run passed 378 tests and both builds but had one ambiguous status-locator failure in the full browser suite; its passing targeted rerun did not establish a clean full browser run. The two findings and links are recorded in reviewer.md.
+
+- Before the navigation fix, all five new App-level regression cases in AdminNavigation.test.tsx failed because navigation unmounted the dirty form without the required prompt.
+- After the fix, `npx vitest run client/tests` passed **85 cases across 13 files**, zero skipped, 74.36 seconds (started 15:07:31 Bangkok). Tests use mocked requests with a guarded synthetic URL, not a database.
+- `npx playwright test --config playwright.staff.config.ts` passed **all 13 browser journeys**, zero skipped, in 2.6 minutes. This is one complete run, including the new native Back/Forward case and both corrected success-notice assertions. No fixed waits, arbitrary first matches or retries were added.
+- Both production builds passed. The final staged diff check passed.
+- Browser execution used isolated lab3_admin_test with ports 3300/5300. Existing development data was not migrated or reset. Docker's repeated stale socket startup failure was recovered by backing up its verified socket-only runtime directories.
+
+The corrected router asks before header/password-page navigation and restores blocked history traversal before prompting. Cancel retains the draft; Confirm replays the intended Back/Forward entry. Tests also verify that logout, session expiry and mandatory password change bypass a pending prompt. This is a frontend/test correction; the full 378-case API/unit result below remains historical and was not claimed as rerun for this patch.
+
+Based on the approved PR #33 merge f13469c; branch codex/lab3-4-user-administration targets lab3-staging. See [implementation and contract mapping](user-management.md).
+
+| Check | Actual result |
+|---|---|
+| Full Vitest regression suite | **378 passed in 34 files**, zero skipped; started 16:15:29 Bangkok, 263.22 seconds |
+| Focused administrator API suite | **25 passed**, real PostgreSQL and HTTP middleware; includes concurrent duplicates, stale versions, last-admin protection and account changes racing claim/assignment/start/resolve |
+| Client suite | **80 passed in 12 files**; includes six new administrator UI cases; the full regression run above includes them again after the final focus correction |
+| Full browser suite using playwright.staff.config.ts | **12 passed**, zero skipped, about two minutes; ten inherited journeys plus account lifecycle and four-width administrator visual checks |
+| Server and client production builds | Passed; client rebuilt after modal-focus and layout corrections |
+| Responsive checks | Directory, editor and reset dialog at 1440, 834, 390 and 320 widths; no horizontal overflow |
+
+Vitest used guarded lab3_test; browser journeys used newly created lab3_admin_test on loopback port 55433, with client/API ports 3300/5300. No development database migration/reset. Both use the local test-only PostgreSQL container. Docker initially failed on inaccessible stale runtime sockets; only the socket directories were backed up so Docker could recreate them. No factory reset, container removal or volume removal occurred.
+
+The first focused browser run passed responsive checks but failed the assertion that Escape restores focus to the reset opener. React Strict Mode exposed the modal cleanup timing. The fix preserves the original opener and closes the native dialog before restoring focus after unmount; the same assertion passed in the final full run. Screenshot inspection also found cramped desktop Edit labels while the side form was open; the page width and button wrapping were corrected before the final capture. No failing assertions were removed.
+
+Evidence: [12 administrator screenshots](../../artifacts/lab-03/screenshots/user-management/). Agent visual inspection covered the desktop side form, tablet directory cards, mobile editor and 320px reset dialog. These observations are not a student visual approval or independent peer review. #29/#30 still own full-system/final-main acceptance.
+
+Contract: [specification.md](./specification.md), [api-spec.md](./api-spec.md), [ui-spec.md](./ui-spec.md).
+
+## 1. Test-first workflow and environment
+
+Each feature Issue selects mapped FR/BR/AC/Test IDs, writes tests that fail for the intended missing behavior, records a concise red result, implements, then refactors with green tests. Plan tests before or alongside implementation, not after reading generated tests. Changes to requirements and planned assertions are reviewed together; no weakening authorization or migration tests to manufacture green results.
+
+Use existing Vitest, Supertest, React Testing Library and Playwright. Database tests use the existing TEST_DATABASE_URL guard and a dedicated test database distinct from development. Migration fixtures use a separate temporary guarded database/schema with Lab 2 data and isolated upload storage; never reset development. Test setup/teardown must reject unsafe URLs/paths before destructive operations. Hash tests use real configured costs in focused cases; unrelated UI tests may mock HTTP. API/security tests must not bypass authentication/authorization middleware.
+
+## 2. Planned tests
+
+Every row initially has Final = Planned. Multiple test cases within a row cover its full expected-result statement, not just one happy path.
+
+| Test ID | Type | AC | What it tests / expected result | Actual automated file(s) | Current evidence |
+|---|---|---|---|---|---|
+| UNIT-01 | Unit | AC-03 | Email/name normalization, 15/128 code-point and 512-byte password boundaries, no truncation, confirmation, whitespace and real salted scrypt verification; wrong passwords fail. | server/tests/lab-03/auth.unit.test.ts | Implemented; see integrated execution/scope |
+| UNIT-02 | Unit | AC-03, AC-04 | Fixed-window limits and expiry with controlled clock, safe dummy-hash path, random session/digest generation and restricted/full expiry. | server/tests/lab-03/auth.unit.test.ts | Implemented; see integrated execution/scope |
+| UNIT-03 | Unit/API | AC-10 | Strict queue keys/types/duplicates, rank ordering, pagination and deterministic tie-break parsing. | server/tests/lab-03/staff-workflow.api.test.ts + server/tests/lab-02/ticket-query.unit.test.ts | Implemented; see integrated execution/scope |
+| UNIT-04 | API | AC-12, AC-14, AC-15 | Enumerate all eight-by-eight status pairs, owner/terminal/confirmation preconditions and requester indication states. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| UNIT-05 | API | AC-16, AC-17, AC-18 | Comment normalization/length and admin fields/one-role validation including Unicode and unknown properties. | server/tests/lab-03/staff-workflow.api.test.ts + server/tests/lab-03/admin-users.api.test.ts | Implemented; see integrated execution/scope |
+| API-01 | API | AC-01, AC-03 | Active valid login; unknown/wrong/inactive same safe 401; normalized email; invalid body and failed-attempt 429/Retry-After. | server/tests/lab-03/auth.api.test.ts | Implemented; see integrated execution/scope |
+| API-02 | API | AC-02, AC-03 | Initial-password gate on every protected endpoint; correct change, wrong current password, mismatch, same-password and exact boundaries; token rotation. | server/tests/lab-03/auth.api.test.ts | Implemented; see integrated execution/scope |
+| API-03 | API | AC-04 | me/logout/idempotent logout/expiration and old-cookie rejection after change/reset/role/activity changes; cookie flags, no-store, no secrets. | server/tests/lab-03/auth.api.test.ts | Implemented; see integrated execution/scope |
+| API-04 | Security/API | AC-04, AC-05 | Pre-auth and session CSRF, missing/wrong token/Origin, credentialed CORS allowlist, hostile Origin and legacy header-only attempts. | server/tests/lab-03/authorization.api.test.ts | Implemented; see integrated execution/scope |
+| API-05 | Security/API | AC-05, AC-09, AC-17 | Table-driven full role/operation matrix incl. Admin's limited detail/priority rights; owned/non-owned/missing ticket/file; response/private-count leakage; requester header/body spoof. | server/tests/lab-03/authorization.api.test.ts | Implemented; see integrated execution/scope |
+| API-06 | API | AC-10 | Search each field, AND filters, each owner mode, priority ranks both ways, each sort/ties, pages/totals/out-of-range, invalid/unknown/repeated params. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| API-07 | API | AC-11, AC-12 | Safe detail/eligible owners, claim and reassign/clear; reject inactive/wrong-role targets and terminal/clear-state violations; preserve requester identity. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| API-08 | Concurrency/API | AC-12, AC-13, AC-14 | Two independent requests claim/update same version: one succeeds, loser 409, no overwrite/500; owner deactivate versus assign/start/resolve uses shared lock. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| API-09 | API | AC-13, AC-14 | Priority changes by Staff/Admin only; requested priority unchanged; every status edge, confirmation and active-owner prerequisite enforced by real API. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| API-10 | API | AC-15 | Owned indication, permitted/disallowed states, no status change, repeat/current versus stale version, reopen clearing and non-owner denial. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| API-11 | API | AC-16, AC-17 | Append/list public and internal entries, author/time from server, Unicode/blank/length/HTML-as-text, deterministic pages, terminal writes, absent edit/delete and no Requester note leakage. | server/tests/lab-03/staff-workflow.api.test.ts | Implemented; see integrated execution/scope |
+| API-12 | API | AC-18 | Admin list name/email search, role filter/no-results, create and complete edit, email normalization, duplicate/invalid email/role/types and concurrent duplicate creation. | server/tests/lab-03/admin-users.api.test.ts | Implemented; see integrated execution/scope |
+| API-13 | API | AC-19 | Initial-password issuance/reset including self-reset, force change, immediate old-session invalidation and no password/hash in response/log. | server/tests/lab-03/admin-users.api.test.ts | Implemented; see integrated execution/scope |
+| API-14 | Concurrency/API | AC-20 | Self-deactivation/last-admin/stale-edit protection; simultaneous demotions/deactivations still leave one active Admin; assigned-user deactivation/demotion conflicts; actor rechecked after lock. | server/tests/lab-03/admin-users.api.test.ts | Implemented; see integrated execution/scope |
+| API-15 | Failure/API | AC-21 | Inject auth/queue/detail/conversation/admin database failures; safe 500/correlation and no sensitive output; transactional updates roll back. | server/tests/lab-03/safe-errors.api.test.ts | Implemented; see integrated execution/scope |
+| MIG-01 | Migration/integration | AC-06 | Apply staged migration to populated Lab 2 fixture; compare IDs/counts/FKs/create-request hashes/attachment metadata and byte checksums; backfill priority and mandatory-change credentials. | server/tests/lab-03/migration.integration.test.ts | Implemented; see integrated execution/scope |
+| MIG-02 | Migration/integration | AC-06 | Normalized email collisions/missing credential map fail without data loss; interrupted initializer resumes; final non-null constraints hold. | server/tests/lab-03/migration.integration.test.ts | Implemented; see integrated execution/scope |
+| MIG-03 | Seed/integration | AC-07 | Seed twice, edit password/account/ticket between runs; preserve edits and relationships, satisfy active/inactive role counts and meaningful queue/conversation distribution. | server/tests/lab-03/migration.integration.test.ts | Implemented; see integrated execution/scope |
+| REG-01 | Regression/API | AC-05, AC-08 | Rework Lab 2 create/list/detail tests to authenticated agents: ownership, validation, concurrent idempotency, filters and historical references preserved. | server/tests/lab-02/create-ticket.api.test.ts + server/tests/lab-02/my-tickets.api.test.ts + server/tests/lab-02/ticket-detail.api.test.ts | Implemented; see integrated execution/scope |
+| REG-02 | Regression/API | AC-09 | Authenticated attachment MIME/signature/filename/size/count/concurrent-upload/compensation/removal/unavailable lifecycle; exact file hashes, Staff/Admin read-only access, authorization before storage. | server/tests/lab-02/attachments.api.test.ts | Implemented; see integrated execution/scope |
+| UI-01 | UI | AC-01, AC-03, AC-21, AC-23 | Login fields/show password/validation/busy/generic invalid and inactive feedback/rate limit/failure; submit focus and labels. | client/tests/lab-03/Login.test.tsx | Implemented; see integrated execution/scope |
+| UI-02 | UI | AC-02, AC-03, AC-21, AC-23 | Mandatory-change guard, rules/confirmation/current-password error, busy/success/failure, no bypass and permitted ordinary back navigation. | client/tests/lab-03/ChangePassword.test.tsx | Implemented; see integrated execution/scope |
+| UI-03 | UI | AC-04, AC-05, AC-08 | Session bootstrap/expiry/logout failure/success, role links, validated return path and cache clearing; remove legacy selector/storage and never replay mutation after login. | client/tests/lab-03/ApplicationShell.test.tsx | Implemented; see integrated execution/scope |
+| UI-04 | UI | AC-10, AC-21, AC-23 | Queue controls, pagination/reset, loading/empty/no-results/failure, matching-query retained data, explicit detail link and keyboard usability. | client/tests/lab-03/StaffWorkflow.test.tsx | Implemented; see integrated execution/scope |
+| UI-05 | UI | AC-11, AC-12, AC-13, AC-14, AC-21 | Detail fields, owner/priority/status controls, confirmations, Admin restriction, active/removed/unavailable files, read-only/forbidden/not-found/failure/conflict. | client/tests/lab-03/StaffWorkflow.test.tsx + client/tests/lab-03/ConversationRecovery.test.tsx | Implemented; see integrated execution/scope |
+| UI-06 | UI | AC-16, AC-17, AC-21, AC-23 | Separate drafts/private notice, escaping malicious content, post busy/failure/uncertain retry, history pagination and keyboard tabs; no Admin composer. | client/tests/lab-03/StaffWorkflow.test.tsx + client/tests/lab-03/ConversationRecovery.test.tsx | Implemented; see integrated execution/scope |
+| UI-07 | UI | AC-08, AC-09, AC-15, AC-17 | Requester detail/public comments/indication state and unchanged actual status, attachment continuity; no internal-note controls/data. | client/tests/lab-02/RequesterTicketDetail.test.tsx + client/tests/lab-03/StaffWorkflow.test.tsx | Implemented; see integrated execution/scope |
+| UI-08 | UI | AC-18, AC-19, AC-20, AC-21, AC-23 | Admin list/search/filter/create/edit/reset, password clearing, inline safety/duplicate/conflict errors, own session invalidation, dialog focus/discard behavior. | client/tests/lab-03/UserManagement.test.tsx | Implemented; see integrated execution/scope |
+| STYLE-01 | UI style | AC-22, AC-23 | Shared Zen Green tokens, primary/readonly/badge/error/focus conventions, private composer separation and absence of excluded controls. | client/tests/lab-02/ZenGreenStyles.test.tsx + e2e/lab-03/system-verification.spec.ts | Implemented; see integrated execution/scope |
+| RESP-01 | Responsive | AC-22, AC-23 | Table/card/panel stacking and long labels/filenames/descriptions at 1440/834/390 and 320 widths; no page overflow and usable actions. | e2e/lab-03/system-verification.spec.ts + e2e/lab-03/staff-ticket-flow.spec.ts + e2e/lab-03/admin-users.spec.ts | Implemented; see integrated execution/scope |
+| E2E-01 | E2E | AC-01, AC-02, AC-03, AC-04, AC-05 | Real login/invalid/inactive/first-change/logout; old-cookie API access rejected; all role landing pages and restricted links. | e2e/lab-02/authentication.spec.ts + e2e/lab-03/system-verification.spec.ts | Implemented; see integrated execution/scope |
+| E2E-02 | E2E | AC-08, AC-09, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16, AC-17 | Requester creates with attachment; Staff searches/claims/changes priority/status/posts public/private; Requester sees public only and indicates resolution; Staff resolves/closes/reopens. | e2e/lab-03/staff-ticket-flow.spec.ts | Implemented; see integrated execution/scope |
+| E2E-03 | E2E | AC-04, AC-18, AC-19, AC-20 | Admin creates/edits/resets user; user forced to change; duplicate/self/last-admin/assigned-owner guards; non-Admin denial. | e2e/lab-03/admin-users.spec.ts | Implemented; see integrated execution/scope |
+| VIS-01 | Visual/manual + capture | AC-21, AC-22, AC-23 | Capture all ui-spec scenes at three viewports and inspect hierarchy/privacy/states/focus/clipping/overlap; record per-scene result and correction. | e2e/lab-03/system-verification.spec.ts + e2e/lab-03/staff-ticket-flow.spec.ts + e2e/lab-03/admin-users.spec.ts + docs/lab-03/ui-spec.md | 109 captures; agent inspection recorded; final human approval pending |
+| REL-01 | Release/manual | AC-24 | Run full guarded suite/builds on final main; map real outputs/screenshots/PRs/commit and nine PDF parts; check links and all Issues Done only on completion. | docs/lab-03/tests.md + docs/lab-03/reviewer.md | Planned |
+
+## 3. Feature ownership and regression policy
+
+Work item 2 owns UNIT-01/02, API-01..05 for its implemented endpoints, MIG-01..03, REG-01/02 and UI-01..03. Work item 3 owns UNIT-03..05 (conversation portion), API-06..11, UI-04..07. Work item 4 owns admin UNIT-05, API-12..14 and UI-08. Each feature extends API-02/04/05 with its newly introduced protected endpoints and implements its API-15 failure cases, style and responsive checks. AC-05's complete role/operation matrix is only marked Pass once all endpoint increments are integrated; the foundation PR records its narrower implemented coverage explicitly. Work item 5 completes cross-feature E2E/visual checks, not a delayed first pass at feature tests. Work item 6 owns REL-01.
+
+Old Lab 2 selector/header-specific assertions become obsolete and are replaced explicitly. Preserve all still-relevant tests and update their login setup/expected initial IT Priority deliberately; document replacements so deleted selector tests cannot hide lost requester/attachment protection. Existing Lab 1 category/system UI assumptions may need authenticated setup; health remains public. Unchanged tests must keep running.
+
+## 4. Verification commands and evidence
+
+Planned commands use existing root scripts: `npm test`, `npm run test:e2e`, `npm run build:server`, `npm run build:client`, `git diff --check`. Feature-specific filters may be used during red/green cycles. Add a separate explicit Lab 3 screenshot capture script in work item 5 without changing routine test runs to overwrite curated evidence.
+
+For each result record date, full commit SHA, branch, test-only database identifier (no credentials), command, test file/case counts, exit status and artifact path. A failed/skipped/environment-blocked check is recorded as such. Hashing/rate-limit time may be controlled in tests through clocks/adapters, but one real crypto path and actual middleware/transaction coverage remain mandatory.
+
+### Contract-only validation (work item 1)
+
+Required checks: numbered IDs unique; every AC referenced by at least one planned test; internal Markdown links resolve; six Issue scopes cover all FR and tests; endpoint roles/status rules align across documents; no claimed feature/test/peer approval before it exists. No runtime tests are required for these documentation-only edits; this does not establish application readiness.
+
+Author validation on 2026-09-08 for the initial contract: 18 FR, 30 BR and 24 AC IDs were unique; all 24 ACs were referenced by planned tests; all internal Markdown file links resolved across seven documents; staged git diff --check passed. The inherited attachment request/response and Requester sort metadata were cross-checked against baseline code. This is document validation only and leaves every runtime row Planned.
+
+### Final execution record
+
+Final-main verification remains pending for work item 6. The table above is the original full-Lab-3 plan; the narrower foundation results below supersede its Planned status only for the scenarios explicitly exercised. Workflow/admin historical results are below; the current integrated evidence supersedes those narrower runs.
+
+### Foundation verification — Issue #26
+
+Branch `codex/lab3-2-auth-requester`, based on approved contract merge `ec5deceea1e00fa2ddb60572fa741f284eb89796`. Test database: `lab3_test` on loopback port 55433; no development database reset/migration. Source was an uncommitted working tree during execution; final source commit is recorded in the PR.
+
+- Full `node node_modules/vitest/vitest.mjs run`: 27 files, 187 cases passed, zero skips (132.05s, run starting 2026-09-14 23:59 Bangkok time).
+- After final server guard/error additions: focused `auth.api.test.ts`, `authorization.api.test.ts` and Lab 2 `attachments.api.test.ts` verification passed 24 cases across three files, zero skips (2026-09-15 00:06, 12.84s). This includes ten newly added cases; it is not presented as a second full-suite run.
+- Client and server production builds passed; server was rebuilt successfully after the final guard/error additions.
+- `node node_modules/@playwright/test/cli.js test`: eight cases passed, zero skips, about one minute. Real Login/initial-password change/role landing/logout, Requester create/search/detail, cross-account Ticket/Attachment protection, Attachment lifecycle and desktop/tablet/mobile layout. Initial-password screen additionally checked at 320px.
+- Earlier red results came from obsolete null IT Priority/invalid CLOSED assertions and incomplete test fixtures; these were corrected explicitly. An earlier browser run had six passes and one interrupted login during a concurrent dev-server reload. The subsequent frozen-source run passed all eight.
+
+Actual paths: crypto in `server/tests/lab-03/auth.unit.test.ts`; session/password/CSRF in `auth.api.test.ts`; implemented role matrix in `authorization.api.test.ts`; MIG-01..03 in `migration.integration.test.ts` (seed cases live in this file). REG-01/02 stay in existing `server/tests/lab-02/*` suites using the real session middleware. Login/change/shell tests live in `client/tests/lab-03/`; Requester UI regressions stay in `client/tests/lab-02/`. Browser files stay in `e2e/lab-02/` for continuity, with the new `authentication.spec.ts` covering the foundation gate.
+
+Selected screenshots: `artifacts/lab-03/screenshots/`. Agent visual inspection covered desktop Login, 320px Login/Change Password and the mobile Ticket list: readable hierarchy, visible labels/actions, no overlap or horizontal clipping. This is an agent visual check, not fabricated student/peer review. Full queue/admin scenes and the final human checklist remain work items 3–5. Migration tests preserve historical metadata and relationships but do not claim a checksum audit of the user's development upload directory.
+
+### Peer-review correction verification — 2026-09-15
+
+Reviewed baseline: `7f2a5dd3bc57296d4c53fa4d942a767dfed791ee`. New `client/tests/lab-03/ReviewRegressions.test.tsx` covers stale CSRF on deliberate login/logout retry without automatic replay, signed-out Ticket deep links, login/password-gate remounts, role-disallowed destinations, malformed IDs, and external/encoded redirect inputs.
+
+- Before source fix: nine new tests ran; four failed and five passed, reproducing both findings.
+- After source fix: `node node_modules/vitest/vitest.mjs run client/tests` passed all 60 tests in nine files, no skips (13.24s; 09:44 Bangkok).
+- `npm run build:client` and `npm run build:server`: passed.
+- The test-only URL satisfies the runner guard; these client tests mock network calls and do not use PostgreSQL. Earlier database/E2E results remain historical and were not rerun for this correction.
+
+### Staff workflow verification — Issue #27, 2026-09-16
+
+**Subsequent peer correction:** Datakung's review of `4196fc9` reproduced pagination recovery after a lost append response. `client/tests/lab-03/ConversationRecovery.test.tsx` adds three regression cases: saved 21st public comment, saved 21st internal note, and failed latest-page recovery across a tab switch. All three failed before the fix. After the correction, `node node_modules/vitest/vitest.mjs run client/tests` passed **74 cases across 11 files**, zero skipped, in 20.62s (2026-09-16 13:50:45 Bangkok). Both production builds passed. Tests use mocked fetch with a synthetic guarded test URL and do not access a database. Full API/E2E results below belong to the earlier implementation; they were not rerun for this frontend-only correction.
+
+Branch `codex/lab3-3-staff-workflow`, based on `1bf45888cdf4691f198d2c3d9ca38b164b6516f0`. Commands ran on the implementation working tree, committed with its evidence as `f8c1f4971211ad2f385cfd956990d021515d4a0e` in [PR #33](https://github.com/auto4496/toktickit/pull/33). The subsequent handoff update changes documentation only. No development database migration/reset. Unit/API fixtures used the guarded `lab3_test` database; browser journeys used the newly created `lab3_staff_test`, both on loopback port 55433. The existing foundation preview was left running separately.
+
+| Check | Actual result |
+|---|---|
+| `node node_modules/vitest/vitest.mjs run` | 31 files, **344 tests passed**, zero skipped; 127.71s, started 2026-09-16 01:15:51 Bangkok |
+| `npm run build:server` | Passed after final code changes |
+| `npm run build:client` | Passed after final code changes |
+| `node node_modules/@playwright/test/cli.js test --config playwright.staff.config.ts` | **10 passed**, zero skipped; about 1 minute, 2026-09-16. Eight retained login/Requester/attachment/responsive journeys plus two staff workflow/visual journeys |
+| `git diff --check` | Passed |
+
+Browser invocation set `E2E_CLIENT_PORT=3200` and `E2E_API_PORT=5200` to avoid the existing preview, plus a guarded `TEST_DATABASE_URL`. The staff config includes both `e2e/lab-02` and `e2e/lab-03`, with additional synthetic staff/admin users. Default `playwright.config.ts` still runs the eight inherited journeys.
+
+The new API suite contains 127 cases: the complete 64-edge status matrix, confirmation/owner/terminal rules, actual competing claim/priority requests, ownership and note privacy, queue validation/ranking/totals, indication repeats/reopening, and append-only Unicode/plain-text validation. Three account-lock tests observe a real waiting advisory lock in PostgreSQL before releasing a competing account change, then check assignment/start/resolve eligibility again. These test the shared lock contract; actual Administrator mutation endpoints arrive in #28. Queue/conversation failures return a safe correlation ID and avoid logging submitted content.
+
+The new UI suite has 11 cases for deliberate filters/page reset, error/empty states, assignment confirmation, retained selections after conflict, restricted Admin controls, terminal history, separated drafts/keyboard tabs, uncertain-post refresh without automatic retry, and Requester indication. It maps UI-04..07. Existing attachment/shell test cases are retained, with their new workflow/queue child isolated; feature behavior is tested in the new suite and integrated browser journeys. Actual filenames and mappings are detailed in [staff-workflow.md](staff-workflow.md).
+
+Failures retained honestly: the first new API run found PostgreSQL's void advisory-lock return was incompatible with `$queryRaw`; the lock now uses `$executeRaw`. The first staff browser run passed responsive checks but failed its exact nested-label selector; it now targets the verified `IT Priority` combobox. The first inherited browser rerun passed seven cases and found an ambiguous user-name selector because the new owner list also contains that name; the assertion now targets the banner. The final ten-case run passed all cases. Earlier counts (136 focused, 342 full) precede the two additional lock-contention cases and are not added to the final totals.
+
+Selected evidence: [staff-workflow screenshots](../../artifacts/lab-03/screenshots/staff-workflow/). Twelve PNGs show queue, detail/public conversation and internal-note views at 1440, 834, 390 and 320 widths. Automated overflow checks passed at all four widths. Agent visual inspection covered the desktop queue/private detail, tablet cards and mobile/narrow detail: readable groups/actions, distinct amber private notice, wrapped long content and no horizontal clipping. These checks do not claim a student/peer visual approval or the full-system/final-main acceptance reserved for #29/#30.

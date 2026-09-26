@@ -21,8 +21,8 @@ const testDatabaseUrl = requireTestDatabaseUrl({
 
 process.env.TEST_DATABASE_URL = testDatabaseUrl;
 
-const apiPort = '5100';
-const clientPort = '3100';
+const apiPort = process.env.E2E_API_PORT ?? '5100';
+const clientPort = process.env.E2E_CLIENT_PORT ?? '3100';
 const apiUrl = `http://127.0.0.1:${apiPort}`;
 const clientUrl = `http://127.0.0.1:${clientPort}`;
 
@@ -53,6 +53,7 @@ export default defineConfig({
         DATABASE_URL: testDatabaseUrl,
         TEST_DATABASE_URL: testDatabaseUrl,
         PORT: apiPort,
+        CLIENT_ORIGIN: clientUrl,
         ATTACHMENT_STORAGE_DIR: path.resolve('tmp', 'attachments', 'e2e'),
       },
     },

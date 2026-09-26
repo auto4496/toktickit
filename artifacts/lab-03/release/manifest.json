@@ -1,0 +1,12 @@
+{
+  "kind": "review-draft-not-final-submission",
+  "sourceCommit": "aab88a11a144ad966127c9dd1ffe505935b4ac5d",
+  "applicationBaseline": "e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31",
+  "file": "lab-3-review-draft.pdf",
+  "sha256": "35243b571ed379f2d6d28a406037ac7fc27cc14ed18387be7c9605d32846da0f",
+  "pages": 50,
+  "screenshotChecksumsVerified": 109,
+  "uniquePdfLinksChecked": 66,
+  "finalMainVerification": "pending",
+  "studentReflectionAndHumanVisualChecks": "pending"
+}

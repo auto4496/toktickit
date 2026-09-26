@@ -1,3 +1,4 @@
+import { sessionHeaders, fixtureCredential } from '../session-fixture.js';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
@@ -6,7 +7,7 @@ import app from '../../src/app.js';
 import prisma from '../../src/prisma.js';
 
 const requesterId = '66666666-6666-4666-8666-666666666666';
-const requesterHeader = { 'X-Requester-Id': requesterId };
+let requesterHeader: Awaited<ReturnType<typeof sessionHeaders>>;
 const inactiveCategory = 'Issue 14 Inactive Category';
 const inactiveRelatedSystem = 'Issue 14 Inactive System';
 
@@ -32,17 +33,18 @@ const postTicket = (idempotencyKey: string, body = validBody()) =>
 
 beforeAll(async () => {
   await seedDatabase(prisma);
-  await prisma.requesterUser.upsert({
+  await prisma.user.upsert({
     where: { email: 'issue14.api@example.test' },
-    update: { id: requesterId, name: 'Issue 14 API Requester', isActive: true },
+    update: { id: requesterId, name: 'Issue 14 API Requester', isActive: true, ...fixtureCredential },
     create: {
       id: requesterId,
       name: 'Issue 14 API Requester',
       email: 'issue14.api@example.test',
-      isActive: true,
+      isActive: true, ...fixtureCredential,
     },
   });
 
+  requesterHeader = await sessionHeaders(requesterId);
   const category = await prisma.category.findFirstOrThrow({
     where: { isActive: true },
     orderBy: { id: 'asc' },
@@ -75,7 +77,8 @@ afterAll(async () => {
   await prisma.ticket.deleteMany({ where: { requesterId } });
   await prisma.category.deleteMany({ where: { name: inactiveCategory } });
   await prisma.relatedSystem.deleteMany({ where: { name: inactiveRelatedSystem } });
-  await prisma.requesterUser.deleteMany({ where: { id: requesterId } });
+  await prisma.authSession.deleteMany({ where: { userId: requesterId } });
+  await prisma.user.deleteMany({ where: { id: requesterId } });
 });
 
 describe('POST /api/tickets', () => {
@@ -83,9 +86,6 @@ describe('POST /api/tickets', () => {
     const response = await postTicket(randomUUID(), {
       ...validBody('  Issue 14 normalized Ticket  '),
       description: '  A normalized description for the valid Ticket.  ',
-      ticketNumber: 'CLIENT-CANNOT-CONTROL',
-      currentStatus: 'CLOSED',
-      itPriority: 'HIGH',
     });
 
     expect(response.status).toBe(201);
@@ -102,7 +102,7 @@ describe('POST /api/tickets', () => {
       relatedSystem: { id: relatedSystemId, name: expect.any(String) },
       summary: 'Issue 14 normalized Ticket',
       requestedPriority: 'MEDIUM',
-      itPriority: null,
+      itPriority: 'MEDIUM',
       description: 'A normalized description for the valid Ticket.',
       currentStatus: 'NEW',
       attachments: [],
@@ -114,7 +114,7 @@ describe('POST /api/tickets', () => {
     });
     expect(saved.requesterId).toBe(requesterId);
     expect(saved.currentStatus).toBe('NEW');
-    expect(saved.itPriority).toBeNull();
+    expect(saved.itPriority).toBe('MEDIUM');
   });
 
   it.each([

@@ -60,11 +60,12 @@ export const safeUnlink = async (filePath: string | undefined) => {
   }
 };
 
-export const getOwnedTicketDetail = async (client: PrismaClient, requesterId: string, ticketId: string) => {
+export const getOwnedTicketDetail = async (client: PrismaClient | Prisma.TransactionClient, requesterId: string | undefined, ticketId: string) => {
   const ticket = await client.ticket.findFirst({
     where: { id: ticketId, requesterId },
     include: {
       requester: { select: { id: true, name: true, email: true } },
+      owner: { select: { id: true, name: true, role: true, isActive: true } },
       category: { select: { id: true, name: true } },
       relatedSystem: { select: { id: true, name: true } },
       attachments: { select: metadataSelect, orderBy: [{ uploadedAt: 'desc' }, { id: 'desc' }] },
@@ -83,6 +84,9 @@ export const getOwnedTicketDetail = async (client: PrismaClient, requesterId: st
     itPriority: ticket.itPriority,
     description: ticket.description,
     currentStatus: ticket.currentStatus,
+    owner: ticket.owner,
+    version: ticket.version,
+    requesterResolvedAt: ticket.requesterResolvedAt?.toISOString() ?? null,
     attachments: ticket.attachments.map(formatAttachmentMetadata),
     updatedAt: ticket.updatedAt.toISOString(),
   };
@@ -142,9 +146,9 @@ export const createAttachmentForTicket = async (
   }
 };
 
-export const getOwnedAttachment = async (client: PrismaClient, requesterId: string, attachmentId: string) => {
+export const getOwnedAttachment = async (client: PrismaClient, requesterId: string | undefined, attachmentId: string) => {
   const attachment = await client.attachment.findFirst({
-    where: { id: attachmentId, ticket: { requesterId } },
+    where: { id: attachmentId, ...(requesterId ? { ticket: { requesterId } } : {}) },
     select: { ...metadataSelect, storedName: true, storageKey: true },
   });
   if (!attachment) throw notFound();
@@ -152,6 +156,7 @@ export const getOwnedAttachment = async (client: PrismaClient, requesterId: stri
 };
 
 export const removeOwnedAttachment = async (client: PrismaClient, requesterId: string, attachmentId: string, rawReason: unknown) => {
+  await getOwnedAttachment(client, requesterId, attachmentId);
   const validation = validateRemovalReason(rawReason);
   if (!validation.success) return { kind: 'invalid' as const, validation };
   const attachment = await client.$transaction(async (transaction) => {

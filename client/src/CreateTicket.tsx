@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-api';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import type { Requester } from './App';
 
@@ -120,7 +121,7 @@ const isReferenceItemArray = (value: unknown): value is ReferenceItem[] =>
   );
 
 const loadReferenceItems = async (path: string) => {
-  const response = await fetch(`${apiUrl()}${path}`);
+  const response = await apiFetch(`${apiUrl()}${path}`);
   if (!response.ok) throw new Error('Reference request failed.');
   const body = (await response.json()) as unknown;
   if (!isReferenceItemArray(body)) throw new Error('Invalid reference response.');
@@ -238,7 +239,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
     const form = new FormData();
     form.append('file', selected.file);
     try {
-      const response = await fetch(`${apiUrl()}/api/tickets/${ticket.id}/attachments`, { method: 'POST', headers: { 'X-Requester-Id': requester.id }, body: form });
+      const response = await apiFetch(`${apiUrl()}/api/tickets/${ticket.id}/attachments`, { method: 'POST', body: form });
       if (!response.ok) {
         const message = attachmentFailureMessage(await readAttachmentErrorCode(response));
         setAttachmentUploads((current) => ({ ...current, [selected.id]: { status: 'failed', message } }));
@@ -323,11 +324,10 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
 
     setSubmitting(true);
     try {
-      const response = await fetch(`${apiUrl()}/api/tickets`, {
+      const response = await apiFetch(`${apiUrl()}/api/tickets`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Requester-Id': requester.id,
           'Idempotency-Key': pending.idempotencyKey,
         },
         body: JSON.stringify(normalizeValues(values)),
@@ -367,7 +367,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
             <div><dt>Category</dt><dd>{createdTicket.category.name}</dd></div>
             <div><dt>Related System</dt><dd>{createdTicket.relatedSystem.name}</dd></div>
             <div><dt>Requested Priority</dt><dd>{createdTicket.requestedPriority}</dd></div>
-            <div><dt>IT Priority</dt><dd>Not assigned</dd></div>
+            <div><dt>IT Priority</dt><dd>{createdTicket.itPriority}</dd></div>
           </dl>
           <h2>{createdTicket.summary}</h2>
           <p>{createdTicket.description}</p>
@@ -401,7 +401,7 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
             <div><dt>Ticket Number</dt><dd>Generated after submission</dd></div>
             <div><dt>Ticket Date</dt><dd>Set on submission</dd></div>
             <div><dt>Requester</dt><dd>{requester.name}</dd></div>
-            <div><dt>IT Priority</dt><dd>Not assigned</dd></div>
+            <div><dt>IT Priority</dt><dd>Starts with your requested priority</dd></div>
           </dl>
         </section>
 

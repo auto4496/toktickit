@@ -3,7 +3,8 @@
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import App, { REQUESTER_STORAGE_KEY } from '../../src/App';
+import CreateTicket from '../../src/CreateTicket';
+import { acceptCsrf, clearAuthState } from '../../src/auth-api';
 import { CREATE_TICKET_PENDING_KEY } from '../../src/CreateTicket';
 
 const requester = {
@@ -52,9 +53,9 @@ const referenceResponse = (input: RequestInfo | URL) => {
 };
 
 const renderCreateTicket = () => {
-  window.localStorage.setItem(REQUESTER_STORAGE_KEY, JSON.stringify(requester));
+  clearAuthState(); acceptCsrf('test-csrf-token');
   window.history.replaceState({}, '', '/tickets/new');
-  return render(<App />);
+  return render(<CreateTicket requester={requester} />);
 };
 
 const fillValidForm = async () => {
@@ -216,9 +217,9 @@ describe('Create Ticket', () => {
     fireEvent.click(submit);
 
     expect(screen.getByRole('button', { name: 'Submitting...' })).toBeDisabled();
-    expect(
+    await waitFor(() => expect(
       fetchMock.mock.calls.filter(([, init]) => init?.method === 'POST'),
-    ).toHaveLength(1);
+    ).toHaveLength(1));
     expect(window.sessionStorage.getItem(CREATE_TICKET_PENDING_KEY)).toContain(
       'idempotencyKey',
     );

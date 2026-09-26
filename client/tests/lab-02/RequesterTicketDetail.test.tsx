@@ -2,7 +2,8 @@
 import '@testing-library/jest-dom/vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import App, { REQUESTER_STORAGE_KEY } from '../../src/App';
+import RequesterTicketDetail from '../../src/RequesterTicketDetail';
+import { acceptCsrf, clearAuthState } from '../../src/auth-api';
 
 const requester = { id: '44444444-4444-4444-8444-444444444444', name: 'Jennifer Anderson', email: 'jennifer.anderson@example.test' };
 const ticketId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
@@ -10,13 +11,16 @@ const attachment = { id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', ticketId, origi
 const detail = { id: ticketId, ticketNumber: 'TKT-20260901-A1B2C3D4', ticketDate: '2026-09-01T10:00:00.000Z', requester, category: { id: 4, name: 'Network' }, relatedSystem: { id: 2, name: 'VPN' }, summary: 'VPN disconnects after sign-in', requestedPriority: 'HIGH', itPriority: null, description: 'The VPN disconnects shortly after sign-in.', currentStatus: 'NEW', attachments: [attachment], updatedAt: '2026-09-01T10:05:00.000Z' };
 const response = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
-beforeEach(() => { window.localStorage.clear(); window.history.replaceState({}, '', `/tickets/${ticketId}`); window.localStorage.setItem(REQUESTER_STORAGE_KEY, JSON.stringify(requester)); });
+beforeEach(() => { window.localStorage.clear(); window.history.replaceState({}, '', `/tickets/${ticketId}`); clearAuthState(); acceptCsrf('test-csrf-token'); });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
+// This suite isolates the inherited attachment lifecycle. Conversation and
+// resolution behavior have their own Issue #27 integration/UI coverage.
+vi.mock('../../src/RequesterWorkflow', () => ({ default: () => null }));
 describe('Requester Ticket Detail', () => {
   it('renders owned read-only detail and Attachment actions without a Preview control', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ data: detail }))));
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     expect(await screen.findByRole('heading', { name: detail.summary })).toBeInTheDocument();
     expect(screen.getByText('Not assigned')).toBeInTheDocument();
     expect(screen.getByText('vpn-error.png')).toBeInTheDocument();
@@ -29,14 +33,14 @@ describe('Requester Ticket Detail', () => {
 
   it('shows the same safe not-found UI for a non-owned detail', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ error: { code: 'RESOURCE_NOT_FOUND' } }, 404))));
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     expect(await screen.findByRole('heading', { name: 'Ticket not found' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Back to My Tickets' })).toBeInTheDocument();
   });
 
   it('keeps server detail out of a safe retry failure message', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ error: { message: 'SQL at C:\\private' } }, 500))));
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     expect(await screen.findByRole('heading', { name: 'Ticket details unavailable' })).toBeInTheDocument();
     expect(screen.getByText('Ticket details could not be loaded. Try again.')).toBeInTheDocument();
     expect(screen.queryByText(/SQL at/i)).not.toBeInTheDocument();
@@ -44,7 +48,7 @@ describe('Requester Ticket Detail', () => {
 
   it('opens a named removal dialog and closes it with Escape', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ data: detail }))));
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     fireEvent.click(await screen.findByRole('button', { name: 'Remove' }));
     expect(screen.getByRole('dialog', { name: 'Remove vpn-error.png?' })).toBeInTheDocument();
     fireEvent.keyDown(window, { key: 'Escape' });
@@ -53,7 +57,7 @@ describe('Requester Ticket Detail', () => {
 
   it('traps Tab in the removal dialog and restores focus after Cancel', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve(response({ data: detail }))));
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     const remove = await screen.findByRole('button', { name: 'Remove' });
     fireEvent.click(remove);
     const dialog = screen.getByRole('dialog');
@@ -73,7 +77,7 @@ describe('Requester Ticket Detail', () => {
     const uploaded = { ...attachment, id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', originalName: 'new-evidence.png' };
     const fetchMock = vi.fn((_input: RequestInfo | URL, init?: RequestInit) => init?.method === 'POST' ? uploadPromise : Promise.resolve(response({ data: detail })));
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     const input = await screen.findByLabelText('Add Attachment');
     fireEvent.change(input, { target: { files: [new File(['png'], 'new-evidence.png', { type: 'image/png' })] } });
     expect(await screen.findByText('Uploading…')).toBeInTheDocument();
@@ -87,7 +91,7 @@ describe('Requester Ticket Detail', () => {
   it('shows a specific invalid selection without sending it', async () => {
     const fetchMock = vi.fn(() => Promise.resolve(response({ data: detail })));
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     fireEvent.change(await screen.findByLabelText('Add Attachment'), { target: { files: [new File(['bad'], 'malware.exe', { type: 'application/octet-stream' })] } });
     expect(screen.getByText('malware.exe')).toBeInTheDocument();
     expect(screen.getByText(/Choose a JPG, PNG, WEBP, or PDF/)).toBeInTheDocument();
@@ -106,7 +110,7 @@ describe('Requester Ticket Detail', () => {
         : response({ data: uploaded }, 201));
     });
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     fireEvent.change(await screen.findByLabelText('Add Attachment'), { target: { files: [new File(['png'], 'retry.png', { type: 'image/png' })] } });
     expect(await screen.findByText('The Attachment could not be uploaded. Try again.')).toBeInTheDocument();
     expect(screen.queryByText(/private|storage SQL|password/i)).not.toBeInTheDocument();
@@ -133,7 +137,7 @@ describe('Requester Ticket Detail', () => {
     Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: vi.fn(() => 'blob:test') });
     Object.defineProperty(URL, 'revokeObjectURL', { configurable: true, value: vi.fn() });
     vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     fireEvent.click(await screen.findByRole('button', { name: 'Download' }));
     expect(await screen.findByText('Unavailable')).toBeInTheDocument();
     expect(screen.getByText('This file cannot be downloaded right now.')).toBeInTheDocument();
@@ -147,7 +151,7 @@ describe('Requester Ticket Detail', () => {
     const removed = { ...attachment, removedAt: '2026-09-01T11:00:00.000Z', removalReason: 'Uploaded the wrong screenshot.', canDownload: false };
     const fetchMock = vi.fn((_input: RequestInfo | URL, init?: RequestInit) => init?.method === 'DELETE' ? Promise.resolve(response({ data: removed })) : Promise.resolve(response({ data: detail })));
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     fireEvent.click(await screen.findByRole('button', { name: 'Remove' }));
     fireEvent.change(screen.getByLabelText('Removal reason'), { target: { value: 'Uploaded the wrong screenshot.' } });
     fireEvent.click(screen.getByRole('button', { name: 'Remove Attachment' }));
@@ -161,7 +165,7 @@ describe('Requester Ticket Detail', () => {
       ? Promise.resolve(response({ error: { code: 'RESOURCE_NOT_FOUND', message: 'Requester A private metadata' } }, 404))
       : Promise.resolve(response({ data: detail })));
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<RequesterTicketDetail requester={requester} ticketId={ticketId} onBack={() => {}} />);
     fireEvent.change(await screen.findByLabelText('Add Attachment'), { target: { files: [new File(['png'], 'owned.png', { type: 'image/png' })] } });
     expect(await screen.findByText('The requested Ticket is unavailable.')).toBeInTheDocument();
     expect(screen.queryByText(/Requester A private metadata/i)).not.toBeInTheDocument();
