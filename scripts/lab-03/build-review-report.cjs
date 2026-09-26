@@ -14,7 +14,11 @@ const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8'
 const head = git('rev-parse', 'HEAD');
 const read = name => fs.readFileSync(path.join(root, name), 'utf8');
 const esc = value => String(value).replace(/[\u2010-\u2015\u2212]/g, '-').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const link = name => `${repository}/blob/lab3-staging/${name.split('/').map(encodeURIComponent).join('/')}`;
+const link = name => {
+  const local = path.join(root, name);
+  const kind = fs.existsSync(local) && fs.statSync(local).isDirectory() ? 'tree' : 'blob';
+  return `${repository}/${kind}/lab3-staging/${name.split('/').map(encodeURIComponent).join('/')}`;
+};
 const manifest = JSON.parse(read(`${images}/manifest.json`));
 for (const entry of manifest.files) {
   const file = path.resolve(root, images, entry.path);
@@ -152,7 +156,8 @@ th, td { border: 0.3mm solid #d8e1da; padding: 1.6mm 2mm; text-align: left; vert
 th { background: #e6f0e9; font-weight: bold; } td code { font-size: 7.4pt; }
 th:first-child, td:first-child { min-width: 11mm; }
 .wide-table, .wide-page { page: wide; break-before: page; break-after: page; }
-.wide-table th:first-child, .wide-table td:first-child { min-width: 18mm; }
+.wide-table th:first-child, .wide-table td:first-child, .wide-page th:first-child, .wide-page td:first-child { min-width: 18mm; }
+.wide-page th, .wide-page td { padding: 1.25mm 2mm; }
 ul { padding-left: 5mm; } li { margin-bottom: 1.5mm; }
 .part { break-before: page; } .part:first-child { break-before: auto; }
 .eyebrow { color: #64746c; font-size: 8pt; letter-spacing: 1pt; }
