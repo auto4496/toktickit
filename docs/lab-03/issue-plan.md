@@ -2,7 +2,7 @@
 
 Status: Agreed decomposition; actual GitHub links are recorded below after creation. Six work items include the release itself, reducing planned peer-review rounds without omitting tests.
 
-Current state (2026-09-26): work items 1–5 (#25–29) are complete following peer approval and merge. PR #35 was approved by Datakung and merged into lab3-staging as e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31. Independent verification passed 389 tests, 17 browser journeys, both builds and all 109 screenshot checksums. Work item 6 (#30) is Started from that merged staging commit. The [release checklist](release.md) separates the review draft from final-main acceptance and final submission. Earlier status paragraphs below are historical.
+Current state (2026-09-26): work items 1–5 (#25–29) are complete following peer approval and merge. PR #35 was approved by Datakung and merged into lab3-staging as e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31. Independent verification passed 389 tests, 17 browser journeys, both builds and all 109 screenshot checksums. Work item 6 (#30) is in PR Review through formally linked [PR #36](https://github.com/auto4496/toktickit/pull/36), lab3-staging to main. The [release checklist](release.md) separates the inspected review draft from pending peer release approval, final-main acceptance and final submission. Earlier status paragraphs below are historical.
 
 | Work item | Title | Dependency | Scope / completion boundary | Branch / PR target |
 |---|---|---|---|---|

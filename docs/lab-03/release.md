@@ -1,6 +1,10 @@
 # Release integration and submission - Issue #30
 
-Status: Started on 2026-09-26. This is the sixth planned work item, using `lab3-staging -> main`. Feature Issues #25-29 are complete. The application baseline is the peer-merged PR #35 commit `e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31`. Release preparation changes documentation and the report builder only.
+Status: PR Review on 2026-09-26. [Release PR #36](https://github.com/auto4496/toktickit/pull/36) is open from `lab3-staging` to `main`, formally linked to Issue #30 through Development. The Project status was read back as PR Review after linking. This is the sixth planned work item. Feature Issues #25-29 are complete. The application baseline is the peer-merged PR #35 commit `e685eec892d2b09fdeeeafcb8dc0c253ae6c4f31`. Release preparation changes documentation and the report builder/evidence only.
+
+The [review PDF and provenance](../../artifacts/lab-03/release/README.md) are committed for inspection. This snapshot was generated at `aab88a11a144ad966127c9dd1ffe505935b4ac5d` before opening PR #36; its preparation-time status is deliberately retained. No release approval, merge or final-main run is claimed. No separate peer comment or review request was sent.
+
+Release checks: all 109 screenshot hashes matched; all 50 PDF pages were rendered and inspected; Answer Part 1-9 order and draft footers passed; 66 distinct HTTPS links have valid structure, and referenced repository targets exist with correct file/directory link types. Script syntax and Git whitespace checks passed. Application/test/config files match the approved PR #35 merge, so this documentation-only increment did not rerun the runtime suites under a new main label.
 
 ## What is already verified
 
@@ -12,7 +16,7 @@ These checks found no remaining blocker. They are not a promise that every possi
 
 - [x] Features #25-29 independently reviewed and merged into staging.
 - [x] Release work begins from the actual PR #35 merge, preserving the contract and earlier evidence.
-- [ ] Release PR formally linked to #30, Project moved to PR Review, and live relationship/status verified.
+- [x] Release PR formally linked to #30, Project moved to PR Review, and live relationship/status verified.
 - [ ] Peer reviews the release head and performs the staging-to-main merge.
 - [ ] Record the actual main merge SHA and rerun all suites and both builds on that checkout.
 - [ ] Capture final-main screenshots with truthful provenance; retain complete command outputs, including any failures and corrections.

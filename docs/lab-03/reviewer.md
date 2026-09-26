@@ -1,6 +1,12 @@
 # Lab 3 Peer Review Record
 
-Status (2026-09-26): PRs #31–35 are approved and merged into staging. Work items #25–29 are complete. Issue #30 is Started; the staging-to-main release and review PDF are being prepared. Final-main verification and submission are not yet complete. See [release checklist](release.md). Earlier pending statements below are historical.
+Status (2026-09-26): PRs #31–35 are approved and merged into staging. Work items #25–29 are complete. Issue #30 is in PR Review through [release PR #36](https://github.com/auto4496/toktickit/pull/36), targeting main. Final-main verification and submission are not yet complete. See [release checklist](release.md). Earlier pending statements below are historical.
+
+## Release handoff - 2026-09-26
+
+[PR #36](https://github.com/auto4496/toktickit/pull/36) integrates lab3-staging into main as the sixth planned PR. Formal Development linkage to #30 and the Project's PR Review status were both read back after mutation. The approving peer must perform the merge; no independent release approval is claimed and no separate peer comment or review request was sent.
+
+Release source/report commits: `747e0a6` and `aab88a1`; inspected PDF/provenance snapshot: `58e1efb`. The [review PDF](../../artifacts/lab-03/release/lab-3-review-draft.pdf) contains nine ordered parts and explicitly marks every page as a draft. All 50 pages were rendered/inspected, all 109 screenshot hashes matched, and PDF link structure/local repository targets, report syntax and whitespace checks passed. Read [release.md](release.md) for the post-merge checklist. The application and tests are unchanged from the approved PR #35 merge; the historical 389-test/17-browser/build results remain staging evidence.
 
 ## System verification integration — 2026-09-26
 
