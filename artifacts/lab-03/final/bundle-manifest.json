@@ -24,8 +24,8 @@
     },
     {
       "path": "build-submission.cjs",
-      "sha256": "7ed6645f2e491d1f495bc55b4ab146ae06571f43c52a20b05f658dab0150a0f7",
-      "bytes": 18214
+      "sha256": "9d73b58131b5c855586213e160c3b60b6f1736ada9826d935a6f1224cef3b551",
+      "bytes": 18175
     },
     {
       "path": "capture-provenance.json",
@@ -49,8 +49,8 @@
     },
     {
       "path": "lab-3-submission.pdf",
-      "sha256": "49a7726ae23c8a967c803a751c52e232d9b2b422ccb479d11f8513549d363add",
-      "bytes": 1477105
+      "sha256": "37b8cfd67cb352581751f86117a0b96863cbc3fc4b4e8d720c6d634197743b8f",
+      "bytes": 1464693
     },
     {
       "path": "migration.log",

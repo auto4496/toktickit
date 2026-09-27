@@ -32,7 +32,7 @@ let prefix = original.slice(0, original.indexOf('const graph ='))
   .replace('return `${repository}/${kind}/lab3-staging/${name.split(\'/\').map(encodeURIComponent).join(\'/\')}`;',
     'return name.startsWith("output/lab-03-final/") ? `${repository}/${kind}/codex/lab3-final-evidence/artifacts/lab-03/final/${name.slice("output/lab-03-final/".length).split("/").map(encodeURIComponent).join("/")}` : `${repository}/${kind}/' + source + '/${name.split("/").map(encodeURIComponent).join("/")}`;')
   .replaceAll('Staging capture', 'Final-main capture')
-  .replaceAll('TOKTICKIT / LAB 03 / REVIEW COPY', 'TOKTICKIT / LAB 03 / FINAL-MAIN EVIDENCE');
+  .replaceAll('<div class="eyebrow">TOKTICKIT / LAB 03 / REVIEW COPY</div>', '');
 const { markdown, part, esc, link } = new Function('require', '__dirname', 'overrides', prefix + '\nreturn {markdown,part,esc,link};')(require, __dirname, overrides);
 function figures(title, scenes, description = '') {
  return `<div class="figure-page"><h3>${esc(title)}</h3><p>${esc(description)}</p><div class="figures">${scenes.map(([file,label])=>{
@@ -123,8 +123,7 @@ pre.log {font-size:7pt; line-height:1.25; white-space:pre-wrap;}
  try {
   const page=await browser.newPage();await page.route(/^https?:\/\//,r=>r.abort());await page.goto(pathToFileURL(html).href);await page.evaluate(()=>document.fonts.ready);
   if(await page.locator('img').evaluateAll(imgs=>imgs.some(i=>!i.complete||!i.naturalWidth)))throw new Error('Broken image');
-  const label=reviewed?'FINAL-MAIN SUBMISSION EVIDENCE':'FINAL-MAIN EVIDENCE - STUDENT ACCEPTANCE PENDING';
-  await page.pdf({path:output,printBackground:true,preferCSSPageSize:true,displayHeaderFooter:true,headerTemplate:'<div></div>',footerTemplate:`<div style="font-size:8px;color:#65766c;width:100%;padding:0 16mm;display:flex;justify-content:space-between"><span>TOKTICKIT / LAB 03 / ${label}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`});
+  await page.pdf({path:output,printBackground:true,preferCSSPageSize:true,displayHeaderFooter:true,headerTemplate:'<div></div>',footerTemplate:`<div style="font-size:8px;color:#65766c;width:100%;padding:0 16mm;display:flex;justify-content:flex-end"><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`});
   console.log(output);
  } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});
