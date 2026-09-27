@@ -1,0 +1,666 @@
+{
+  "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+  "humanAcceptancePending": true,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "481c050358e7f10a0aef473f75ba95d8077273b30bb310a9d072fc671332cc0f",
+      "bytes": 107
+    },
+    {
+      "path": "acceptance.md",
+      "sha256": "fafeec7a7409a79211e50f4e5ba672f983166d3f85e52578b6c36cbce905683a",
+      "bytes": 2827
+    },
+    {
+      "path": "browser-result.json",
+      "sha256": "08b6cae750b8f3a9a5c00896afe37b683ddc791a155a5f71cc968246382e6beb",
+      "bytes": 351
+    },
+    {
+      "path": "browser.log",
+      "sha256": "7ea7c1176d20bc4dd53ece3b8f02d7abf78918a849692b74c972a863097e8300",
+      "bytes": 3344
+    },
+    {
+      "path": "build-submission.cjs",
+      "sha256": "7ed6645f2e491d1f495bc55b4ab146ae06571f43c52a20b05f658dab0150a0f7",
+      "bytes": 18214
+    },
+    {
+      "path": "capture-provenance.json",
+      "sha256": "4cc2ea12acc7cfb24cb0fc839f82c06caab5f12ae2cfcce0891fa5c82fb7ef4f",
+      "bytes": 620
+    },
+    {
+      "path": "client-build-result.json",
+      "sha256": "6d591c0f6a8d6e005c83a42b847980167f7aa9f9462a7ebbbc7a9a14d4502908",
+      "bytes": 221
+    },
+    {
+      "path": "client-build.log",
+      "sha256": "41aafeccf4a5f9fa544b159f3b24f3a12ceaf26087ead76a91017698323d7ad7",
+      "bytes": 618
+    },
+    {
+      "path": "github-review-snapshot.json",
+      "sha256": "bcf801945634d9a3eeecc617213310feb56ea636541dd4d082a7e516bb906d9f",
+      "bytes": 9501
+    },
+    {
+      "path": "lab-3-submission.pdf",
+      "sha256": "49a7726ae23c8a967c803a751c52e232d9b2b422ccb479d11f8513549d363add",
+      "bytes": 1477105
+    },
+    {
+      "path": "migration.log",
+      "sha256": "89b0eed54a3425261d18e4ce0a099416abc5401aa90ab8a851c89710cee490c4",
+      "bytes": 1567
+    },
+    {
+      "path": "pdf-link-audit.json",
+      "sha256": "865ac131d16f0d206600d3322e7d18665c0ccc373e8c73c51cf75be2d8ab3f38",
+      "bytes": 12539
+    },
+    {
+      "path": "README.md",
+      "sha256": "855028106177a3b38f504841626e5ff6e3bf9562d85c72232d6cc76f9d831e9d",
+      "bytes": 2301
+    },
+    {
+      "path": "reflection-for-student.md",
+      "sha256": "a71040d02bb7ab86888084670fe2fec0dabe5055320430ce13084bcf522fd3bb",
+      "bytes": 5150
+    },
+    {
+      "path": "results.json",
+      "sha256": "9142fb359b16cca792bd5fe7f44187f0c97b23b0783565c9f81d11fd0b5e7f71",
+      "bytes": 1620
+    },
+    {
+      "path": "screenshots/manifest.json",
+      "sha256": "41119023e291be82a3b0ee19c79de5e3beb758e4a12a192c70fefa2a78f2e4d2",
+      "bytes": 21796
+    },
+    {
+      "path": "screenshots/README.md",
+      "sha256": "527a86b8cb2efb36c8cc7b4eddb7741eff0c18e5d1e40923699ea42bd5ff55b8",
+      "bytes": 9884
+    },
+    {
+      "path": "screenshots/screenshots/change-password-1440.png",
+      "sha256": "163274be357b626211525f4ff1abc588094791341beed081a04c64b738d9d201",
+      "bytes": 40453
+    },
+    {
+      "path": "screenshots/screenshots/change-password-320.png",
+      "sha256": "0365ad2b96058aaae5bcd4b0654da1372bc6504c644f8e8c8032fcc3114a08d0",
+      "bytes": 33215
+    },
+    {
+      "path": "screenshots/screenshots/change-password-390.png",
+      "sha256": "e7d783d6d000108ac0b919b44a24a07307e2849276660444f2ba400d8194ee40",
+      "bytes": 33616
+    },
+    {
+      "path": "screenshots/screenshots/change-password-834.png",
+      "sha256": "2a6d9e063f1737948f88a7ab4bd46438ea4695e823383c0aace1287aaba965a3",
+      "bytes": 37598
+    },
+    {
+      "path": "screenshots/screenshots/login-320.png",
+      "sha256": "cfd0638e5bf9bb09210022535cf3996f367eb35856bc914195301e324df5a7fd",
+      "bytes": 22978
+    },
+    {
+      "path": "screenshots/staff-workflow/1440-detail.png",
+      "sha256": "b60e6683f64f76980a460642a47bd3566d361c77a4d90beb8e8ad2bd07506d33",
+      "bytes": 172894
+    },
+    {
+      "path": "screenshots/staff-workflow/1440-internal-notes.png",
+      "sha256": "1a20a809894af20c669678432b5dfff4d5d049c5c5425c2599a102c7cb2cae65",
+      "bytes": 175995
+    },
+    {
+      "path": "screenshots/staff-workflow/1440-queue.png",
+      "sha256": "ddfa626b3bb672a7d4f2bb08559f675c73603d9f74e645e7c723653016096ac7",
+      "bytes": 218286
+    },
+    {
+      "path": "screenshots/staff-workflow/320-detail.png",
+      "sha256": "fe9716b0ff19bd46186bb285cc169dbb7c338a3a55103003b17594dd35928467",
+      "bytes": 111956
+    },
+    {
+      "path": "screenshots/staff-workflow/320-internal-notes.png",
+      "sha256": "027356392cf4f6e283ceb4159cad1599f564001ae79105f9c6d1323cc4acdb84",
+      "bytes": 117914
+    },
+    {
+      "path": "screenshots/staff-workflow/320-queue.png",
+      "sha256": "1ec6dea64cfa031c180d16d87b24db389d176e81b740f62ad3f1e685e6afb010",
+      "bytes": 229415
+    },
+    {
+      "path": "screenshots/staff-workflow/390-detail.png",
+      "sha256": "8a08068c6f50eb51dc5660c5ea6e131141f3fa19e0a75106acfb68b616b6f6ee",
+      "bytes": 124954
+    },
+    {
+      "path": "screenshots/staff-workflow/390-internal-notes.png",
+      "sha256": "ac451576be4f256411b753d39553bd8b725b201356ae7527838877ea587bc8e0",
+      "bytes": 127925
+    },
+    {
+      "path": "screenshots/staff-workflow/390-queue.png",
+      "sha256": "79bc05c2be34b55bc02205fa9d9c069b52a63b38fce865e46e7b4fa2cf838e59",
+      "bytes": 236828
+    },
+    {
+      "path": "screenshots/staff-workflow/834-detail.png",
+      "sha256": "e6bb95370ef945618ed94bc2d3784d65e404bfd9d3f6590a957c70d0417e6ec0",
+      "bytes": 148274
+    },
+    {
+      "path": "screenshots/staff-workflow/834-internal-notes.png",
+      "sha256": "d857703e9a975fd19f66fc6d5feb2bcf6c76a14cceeb77125688341d4ba29301",
+      "bytes": 152454
+    },
+    {
+      "path": "screenshots/staff-workflow/834-queue.png",
+      "sha256": "1864773df67fb7c9980ff477f04cc98fc3dbc5cace006ec8d82b98079a6ec02b",
+      "bytes": 248322
+    },
+    {
+      "path": "screenshots/system-states/desktop-admin-create-validation.png",
+      "sha256": "9d0b3eced8581fb298226ec91627cd51f7096db579c1017657ef2e35a7492190",
+      "bytes": 258385
+    },
+    {
+      "path": "screenshots/system-states/desktop-admin-create.png",
+      "sha256": "979417b6e2d27ff163b30f3e77d48820d4e155822793364de4c16da5b2aa076d",
+      "bytes": 251717
+    },
+    {
+      "path": "screenshots/system-states/desktop-admin-restricted-detail.png",
+      "sha256": "1484d72b02458a115197b3eb9f9353103dc32221fc74056eca358c5e9f293a5b",
+      "bytes": 174426
+    },
+    {
+      "path": "screenshots/system-states/desktop-change-password.png",
+      "sha256": "163274be357b626211525f4ff1abc588094791341beed081a04c64b738d9d201",
+      "bytes": 40453
+    },
+    {
+      "path": "screenshots/system-states/desktop-login-busy-simulated.png",
+      "sha256": "dd7a95973db44859323e856ca26b1095def43f372c4b73e1783d2becf4677c08",
+      "bytes": 30985
+    },
+    {
+      "path": "screenshots/system-states/desktop-login-failure-simulated.png",
+      "sha256": "6c3711ce058577e5b5eef4369e752cf21fd50f0956359a6d786ccfe1732f1855",
+      "bytes": 33732
+    },
+    {
+      "path": "screenshots/system-states/desktop-login-invalid.png",
+      "sha256": "98ac177365f4f255e0a6ae7028b6e5c1f8a309dd39d0587f47259673bea3b582",
+      "bytes": 35152
+    },
+    {
+      "path": "screenshots/system-states/desktop-login-ready.png",
+      "sha256": "b9ddc7f1f42e213867835d723013f959a5f2fac1f42f11a0e22d63a4918cdbe0",
+      "bytes": 28351
+    },
+    {
+      "path": "screenshots/system-states/desktop-login-validation.png",
+      "sha256": "01cd854c9f4ac9749ac60b35fca5467dc5bd38974b5073c100eb27d8b57aac1f",
+      "bytes": 31742
+    },
+    {
+      "path": "screenshots/system-states/desktop-queue-empty-simulated.png",
+      "sha256": "65d8a5eb082f07a443c53877730eec0ccecddbe0f0272e84434434e3175c9b57",
+      "bytes": 108094
+    },
+    {
+      "path": "screenshots/system-states/desktop-queue-failure-simulated.png",
+      "sha256": "6c91cda6a3d33d41d08d1f0e3e505b942eab14732078829578e9a0ff4c23e25c",
+      "bytes": 105633
+    },
+    {
+      "path": "screenshots/system-states/desktop-queue-no-results.png",
+      "sha256": "98ec9167b76c7c386c0bbb896084213a43dbe33eb8041c269e82f8a43b5bf384",
+      "bytes": 110275
+    },
+    {
+      "path": "screenshots/system-states/desktop-requester-confirmation.png",
+      "sha256": "98448d76c873bc6996ca91f204a228a2133cc9e8fdded497e7c637d6b7f50c21",
+      "bytes": 211864
+    },
+    {
+      "path": "screenshots/system-states/desktop-requester-indication.png",
+      "sha256": "6acbde8b2cfc02239b1ff18f2941454f311f0c64cf119b2c9bc4924117b004d4",
+      "bytes": 193745
+    },
+    {
+      "path": "screenshots/system-states/desktop-requester-public-attachment.png",
+      "sha256": "3cb74c2e439344058727873d00ff3671e12b1d7eebf6de5f7181a98ec70831f4",
+      "bytes": 199020
+    },
+    {
+      "path": "screenshots/system-states/desktop-staff-conflict.png",
+      "sha256": "c447d3aa5a72464f6323c61204fbc672396a5f9af99a2b2775a765b3be80ef29",
+      "bytes": 197707
+    },
+    {
+      "path": "screenshots/system-states/desktop-staff-not-found.png",
+      "sha256": "ee383b96715076a6fddb743d18058618dcd70d93e8496bb918f0839d911561a6",
+      "bytes": 69543
+    },
+    {
+      "path": "screenshots/system-states/desktop-staff-private.png",
+      "sha256": "0a27804e318a0feeaa6b6daad415cac8a318552b459ac41b541209f58dd0d427",
+      "bytes": 183521
+    },
+    {
+      "path": "screenshots/system-states/desktop-staff-public.png",
+      "sha256": "71d987bb67a9e3556b06febcc62b6b34cbafe45c841f9b3463e8294e5f5e1057",
+      "bytes": 179947
+    },
+    {
+      "path": "screenshots/system-states/desktop-staff-terminal.png",
+      "sha256": "185d31b75f58eff1c091ee43a776308cf167716358096026f8ab3833d352dd6c",
+      "bytes": 177825
+    },
+    {
+      "path": "screenshots/system-states/mobile-admin-create-validation.png",
+      "sha256": "bf1d48219fcc98bb948bb8aa909ccb3ebbba14289f61a472a85b5c57c3c2ade1",
+      "bytes": 56179
+    },
+    {
+      "path": "screenshots/system-states/mobile-admin-create.png",
+      "sha256": "9e362b1f3eb322416f5977a7ffd350f7b7c628bc0937e48b5e4f5b4dd0ea746e",
+      "bytes": 49707
+    },
+    {
+      "path": "screenshots/system-states/mobile-admin-restricted-detail.png",
+      "sha256": "057756fb6a84f79d23fda1c6abf24ada207ba42819d5774b4be43762062abb92",
+      "bytes": 134506
+    },
+    {
+      "path": "screenshots/system-states/mobile-change-password.png",
+      "sha256": "e7d783d6d000108ac0b919b44a24a07307e2849276660444f2ba400d8194ee40",
+      "bytes": 33616
+    },
+    {
+      "path": "screenshots/system-states/mobile-login-busy-simulated.png",
+      "sha256": "f497a7dc8d10b525453bfffab30a7c0ad175769a8394f2f49f9d181b7d165bea",
+      "bytes": 25436
+    },
+    {
+      "path": "screenshots/system-states/mobile-login-failure-simulated.png",
+      "sha256": "7f7c6dc7918536a485beb3d162f9ad80db8f0a841dbed3c54a0dd42036785359",
+      "bytes": 27906
+    },
+    {
+      "path": "screenshots/system-states/mobile-login-invalid.png",
+      "sha256": "3843c973b2f974a90c3400b6cc7127012196df403310724dd5cd180268f7f9dd",
+      "bytes": 28842
+    },
+    {
+      "path": "screenshots/system-states/mobile-login-ready.png",
+      "sha256": "28c05ca0066c9bf825c8bc85d75bb2e376d0700e36244350a6361154aeed7ef5",
+      "bytes": 23061
+    },
+    {
+      "path": "screenshots/system-states/mobile-login-validation.png",
+      "sha256": "8ab767c80bbce2268cc79c1d2cbe2c3c32624da929ba0698399f03b020be23e6",
+      "bytes": 26082
+    },
+    {
+      "path": "screenshots/system-states/mobile-queue-empty-simulated.png",
+      "sha256": "09b6ae51618038ee675f309f2ea5be4d00063bb12002000ad7e9ab46d2ff6e06",
+      "bytes": 57707
+    },
+    {
+      "path": "screenshots/system-states/mobile-queue-failure-simulated.png",
+      "sha256": "7fbfd5a424add168dda734ce79490cab4e6ac260ae544564513d42d43eeef212",
+      "bytes": 53048
+    },
+    {
+      "path": "screenshots/system-states/mobile-queue-no-results.png",
+      "sha256": "2c6f0316aaa25093d67c0e7dd35130b7c3e7b40b58c1b9deae4e05fb3f5d0a3e",
+      "bytes": 59758
+    },
+    {
+      "path": "screenshots/system-states/mobile-requester-confirmation.png",
+      "sha256": "f9cebc58f075a16e2018d8fd27e81b9a75becad9fc2d702c54345fb81bd2579a",
+      "bytes": 157424
+    },
+    {
+      "path": "screenshots/system-states/mobile-requester-indication.png",
+      "sha256": "b41eb5b540adba455f6c4a424656cf2fff952b8a2d87a244717c4c88f08c068b",
+      "bytes": 151480
+    },
+    {
+      "path": "screenshots/system-states/mobile-requester-public-attachment.png",
+      "sha256": "52f232acdeb4e6d21873d94056bb408dc05c838ab0189a15eb8b1b026eab9681",
+      "bytes": 155930
+    },
+    {
+      "path": "screenshots/system-states/mobile-staff-conflict.png",
+      "sha256": "336fe15612bfc2a3ae87cb5515869277c3ac8e2a062055805f5d0f478101d88e",
+      "bytes": 157127
+    },
+    {
+      "path": "screenshots/system-states/mobile-staff-not-found.png",
+      "sha256": "324f981f67f0a18d9819cb96448b3084a240c6d183d47bf9ec896243802ab093",
+      "bytes": 38798
+    },
+    {
+      "path": "screenshots/system-states/mobile-staff-private.png",
+      "sha256": "489168a5370c65a548dc780a8ae86170204a094531fd215b4db2492f0f5498ea",
+      "bytes": 145335
+    },
+    {
+      "path": "screenshots/system-states/mobile-staff-public.png",
+      "sha256": "b1f8b86cce602235833d6f27ae16f3662acbd1a879cd81cf5968a5da908d6288",
+      "bytes": 142715
+    },
+    {
+      "path": "screenshots/system-states/mobile-staff-terminal.png",
+      "sha256": "bf356795744f749d06dd2b8d420426f608a8045b0e7923bf5348701f351ec9e1",
+      "bytes": 138089
+    },
+    {
+      "path": "screenshots/system-states/narrow-admin-create-validation.png",
+      "sha256": "68955cc21f684acbdf00bc3222dc0bbc597aba8f49f238d12f001fc051041c3f",
+      "bytes": 54221
+    },
+    {
+      "path": "screenshots/system-states/narrow-admin-create.png",
+      "sha256": "56165240152eb0ab235f71c8b176792d08d452c3f918be796b6546db42fa2bb6",
+      "bytes": 47581
+    },
+    {
+      "path": "screenshots/system-states/narrow-admin-restricted-detail.png",
+      "sha256": "6c7d4a98c30276f1d1941fa201454fcb0f0b3660502e60949137b39572f4191f",
+      "bytes": 124961
+    },
+    {
+      "path": "screenshots/system-states/narrow-change-password.png",
+      "sha256": "0365ad2b96058aaae5bcd4b0654da1372bc6504c644f8e8c8032fcc3114a08d0",
+      "bytes": 33215
+    },
+    {
+      "path": "screenshots/system-states/narrow-login-busy-simulated.png",
+      "sha256": "a97db2abe283038b69ec64db91f69af1146988dd0e1b54453af1d6a5614db101",
+      "bytes": 25062
+    },
+    {
+      "path": "screenshots/system-states/narrow-login-failure-simulated.png",
+      "sha256": "9fac818870d312724579384c1aa06d26f638db849b5ede415f2127e8796aa6a4",
+      "bytes": 27510
+    },
+    {
+      "path": "screenshots/system-states/narrow-login-invalid.png",
+      "sha256": "493e226fd330e57c5cdbec511304b6ab4d4df1df934a8f863baa861e729e7020",
+      "bytes": 28535
+    },
+    {
+      "path": "screenshots/system-states/narrow-login-ready.png",
+      "sha256": "cfd0638e5bf9bb09210022535cf3996f367eb35856bc914195301e324df5a7fd",
+      "bytes": 22978
+    },
+    {
+      "path": "screenshots/system-states/narrow-login-validation.png",
+      "sha256": "3f4c7b3b213acd874424a43dc66d49e68013b1faf0233910b720ea984f65e469",
+      "bytes": 26003
+    },
+    {
+      "path": "screenshots/system-states/narrow-queue-empty-simulated.png",
+      "sha256": "538dfd9496cc793fa6de0c0d7e0f4bf1d30cecc587415891540de0995fa0a196",
+      "bytes": 51353
+    },
+    {
+      "path": "screenshots/system-states/narrow-queue-failure-simulated.png",
+      "sha256": "8022963542c419bf71958d26f60a6cb7c784f6feaae272cae7e6b79e39d3f015",
+      "bytes": 48593
+    },
+    {
+      "path": "screenshots/system-states/narrow-queue-no-results.png",
+      "sha256": "71d645bc1fd91ca4d2e970aec4738501fc807f108c0f355b8e0d8b2a31e4e9ee",
+      "bytes": 53217
+    },
+    {
+      "path": "screenshots/system-states/narrow-requester-confirmation.png",
+      "sha256": "c6d4a9dff591f8ae04ea0af055dcc280117d33cc498320564134434a40ac1d98",
+      "bytes": 138940
+    },
+    {
+      "path": "screenshots/system-states/narrow-requester-indication.png",
+      "sha256": "d1b9c410ce17d0b0eccccdb268aa2874cd939ea69eec0bb90fe2a6280dcdfc88",
+      "bytes": 134436
+    },
+    {
+      "path": "screenshots/system-states/narrow-requester-public-attachment.png",
+      "sha256": "93ad6043e6e29ae1a4bb72ecab5edf0f98525163674359fcbe9861d011d18fdd",
+      "bytes": 138774
+    },
+    {
+      "path": "screenshots/system-states/narrow-staff-conflict.png",
+      "sha256": "1f4bdd25543c449e20278c8a3e7827ea0cc84734ed7dc2b6b003570f13dac249",
+      "bytes": 147036
+    },
+    {
+      "path": "screenshots/system-states/narrow-staff-not-found.png",
+      "sha256": "95a5dc4760280fe1be1ff298057dd88e2dd32d15c4cb43a4146e96919102985b",
+      "bytes": 34288
+    },
+    {
+      "path": "screenshots/system-states/narrow-staff-private.png",
+      "sha256": "f9b2fb16b18c7adafcfd94a8dceed30374a0a09bb443906edb793eca7c2df407",
+      "bytes": 134768
+    },
+    {
+      "path": "screenshots/system-states/narrow-staff-public.png",
+      "sha256": "cd121f0a8961523c124e6d2c38c3674a92903e332c5eb01617a58038f274d2ed",
+      "bytes": 130679
+    },
+    {
+      "path": "screenshots/system-states/narrow-staff-terminal.png",
+      "sha256": "156718fdd030b414cdd89fb306b9ad83656f2c9ab00ce35ccd47e12315187246",
+      "bytes": 128102
+    },
+    {
+      "path": "screenshots/system-states/tablet-admin-create-validation.png",
+      "sha256": "8206ba72798759aca69b9915e4da5c082a9ba25be40eef55d149dba2be7995d1",
+      "bytes": 67485
+    },
+    {
+      "path": "screenshots/system-states/tablet-admin-create.png",
+      "sha256": "85da032bcd4e6264462c8068e6295dc57edd44acce59a07c3ebb9cb503d2cc81",
+      "bytes": 60548
+    },
+    {
+      "path": "screenshots/system-states/tablet-admin-restricted-detail.png",
+      "sha256": "1cd374d36488eb02e47b10743ac4109444e1ec770281046cde31c8ad23885e9d",
+      "bytes": 152330
+    },
+    {
+      "path": "screenshots/system-states/tablet-change-password.png",
+      "sha256": "ddb8a27eb55e7c892d9552337b94c43f1420ed433a6d6ed33f068d1160af0c21",
+      "bytes": 38467
+    },
+    {
+      "path": "screenshots/system-states/tablet-login-busy-simulated.png",
+      "sha256": "87d15613df9f4c690dbabe2c11acdffbf8036e786bf0eb55c223ace259745017",
+      "bytes": 30008
+    },
+    {
+      "path": "screenshots/system-states/tablet-login-failure-simulated.png",
+      "sha256": "196511a648a1614f52a6482cb565a697c626932d5c96d571429f19af764ccae7",
+      "bytes": 32536
+    },
+    {
+      "path": "screenshots/system-states/tablet-login-invalid.png",
+      "sha256": "dc2ef935f87024e358ab72366046e89d84349f6ab865b1d25a68eed12e136ad8",
+      "bytes": 33903
+    },
+    {
+      "path": "screenshots/system-states/tablet-login-ready.png",
+      "sha256": "dda2ff33d530a7a1944b5fa15f883e0256129bfb2ef120b1fe5505992732ebb3",
+      "bytes": 27476
+    },
+    {
+      "path": "screenshots/system-states/tablet-login-validation.png",
+      "sha256": "e29146b42f0b07440a9607d67d6ee0fcff04d0e102fb10a5c7fb2944ce438467",
+      "bytes": 30728
+    },
+    {
+      "path": "screenshots/system-states/tablet-queue-empty-simulated.png",
+      "sha256": "81d700246a22970417f86ad31ed9987ed926bde5df8cff2facdb153ffa59deb1",
+      "bytes": 88431
+    },
+    {
+      "path": "screenshots/system-states/tablet-queue-failure-simulated.png",
+      "sha256": "8453181a525423759f2baee5f5f855b8bd04027680283fa132ed558d8b4566f4",
+      "bytes": 86437
+    },
+    {
+      "path": "screenshots/system-states/tablet-queue-no-results.png",
+      "sha256": "6b1dd75efee8d7d34e05ba94da5196c02961753937e43ae62253301a6b6d7cfc",
+      "bytes": 90240
+    },
+    {
+      "path": "screenshots/system-states/tablet-requester-confirmation.png",
+      "sha256": "3943223c1be2485d191ec31d6994684d063c17a5e7145b83e0a9ce6a187c4caf",
+      "bytes": 193732
+    },
+    {
+      "path": "screenshots/system-states/tablet-requester-indication.png",
+      "sha256": "578c1e7e1b083468a3580b34b6fb444e7a48425d0a53202876327bb883c0996d",
+      "bytes": 179174
+    },
+    {
+      "path": "screenshots/system-states/tablet-requester-public-attachment.png",
+      "sha256": "de1562d249aeaf0ffa229d836e22a2b20e6f9ef231559db5a718737ffee811be",
+      "bytes": 184019
+    },
+    {
+      "path": "screenshots/system-states/tablet-staff-conflict.png",
+      "sha256": "5786792cede3ee4e292a4992e6727a90c7ca4ba82ed0abf767819ac83a893bd7",
+      "bytes": 172701
+    },
+    {
+      "path": "screenshots/system-states/tablet-staff-not-found.png",
+      "sha256": "1250873036de1d8803358d130e2ce92e4c7534384d584a63b4aedc2a57d9a348",
+      "bytes": 46954
+    },
+    {
+      "path": "screenshots/system-states/tablet-staff-private.png",
+      "sha256": "e30c315129bf25af8be63c12766ab09376a11c48ccbfe05e9f657eb50a1884b6",
+      "bytes": 160519
+    },
+    {
+      "path": "screenshots/system-states/tablet-staff-public.png",
+      "sha256": "bac6616ffa08fba7089dd3c33c1445ed54596537f98b5950b25426996b325a37",
+      "bytes": 158097
+    },
+    {
+      "path": "screenshots/system-states/tablet-staff-terminal.png",
+      "sha256": "74e2a72f4368a2991b667b3694aa744dd91bed130f46f8361d7614f79d3fd7f9",
+      "bytes": 155770
+    },
+    {
+      "path": "screenshots/user-management/editor-1440.png",
+      "sha256": "a6a2d92e6c557e47c0bc5f1eba3a7f7b552b49d4c584304c4d7988d0314902b7",
+      "bytes": 248189
+    },
+    {
+      "path": "screenshots/user-management/editor-320.png",
+      "sha256": "408eb3889404eb93eb911c3dae8dae8a61747d3753ed1b245bae74af8b10f391",
+      "bytes": 44207
+    },
+    {
+      "path": "screenshots/user-management/editor-390.png",
+      "sha256": "1b385eb583eb14235476c6f317ef9e293d10ddca3515d620969025ac4a2c7b5e",
+      "bytes": 46013
+    },
+    {
+      "path": "screenshots/user-management/editor-834.png",
+      "sha256": "c64e78a4db00dbc2a21ece067277feaab2f2d57658ac662e2eddab57120b0cd2",
+      "bytes": 57854
+    },
+    {
+      "path": "screenshots/user-management/reset-1440.png",
+      "sha256": "75c548b83cbd4342581d5d24a1a4fce2d054d412bcfb7703ed42483405145182",
+      "bytes": 259858
+    },
+    {
+      "path": "screenshots/user-management/reset-320.png",
+      "sha256": "bf4abad3b924de23f94feda44fd3b251abe6c89c014ce86a243bc69a61e6a7e0",
+      "bytes": 48548
+    },
+    {
+      "path": "screenshots/user-management/reset-390.png",
+      "sha256": "0e66c7a32ecebf2311f2c8026bc44f7d5a7c0c60523db9fe2b23f961e0c62cb9",
+      "bytes": 52573
+    },
+    {
+      "path": "screenshots/user-management/reset-834.png",
+      "sha256": "0fe294406af001aebc3db17b2e9562f43804d3904531aa642df509776a73d64d",
+      "bytes": 72365
+    },
+    {
+      "path": "screenshots/user-management/users-1440.png",
+      "sha256": "a5d67a4c7d9487257fe9ee6f9a65a4762209feeedcb99b43e95ebf882e2319d9",
+      "bytes": 214562
+    },
+    {
+      "path": "screenshots/user-management/users-320.png",
+      "sha256": "3b62ec0197da1bba572ae416ca0c5557651c0965a98838908ca23a7dc84c47b8",
+      "bytes": 190621
+    },
+    {
+      "path": "screenshots/user-management/users-390.png",
+      "sha256": "38729bb8bead537c7f17a11c6703225f78c2b0b697835480fa5b3c08c6129a2c",
+      "bytes": 199509
+    },
+    {
+      "path": "screenshots/user-management/users-834.png",
+      "sha256": "a3795143d90b7191cb0cb5f445192219a9d145364fdb46fca2514344637759c4",
+      "bytes": 181675
+    },
+    {
+      "path": "server-build-result.json",
+      "sha256": "ad053268714086d0c6ca5983c414c004b537485d50703c1abeff1cc6bfffa6b1",
+      "bytes": 221
+    },
+    {
+      "path": "server-build.log",
+      "sha256": "da88519fadf78ea41cb5105ff94d1439ec5f24648fce2cb32a915f96499dcb1e",
+      "bytes": 121
+    },
+    {
+      "path": "test-database-runbook.md",
+      "sha256": "a67c140bd1e89ec33dc72f1482ea8f7e62e801821d8d14850ce181f76ddcea76",
+      "bytes": 2920
+    },
+    {
+      "path": "unit-result.json",
+      "sha256": "b837d3b47e26a5488e5ae70db27e0d4e3281bc239cf8fdf598d815ed5f050341",
+      "bytes": 284
+    },
+    {
+      "path": "unit.log",
+      "sha256": "6d18416cec144d1437d2da8d793ac7e8dd158a70fa4af58365a21dd5554e8576",
+      "bytes": 4331
+    },
+    {
+      "path": "visual-inspection.md",
+      "sha256": "d622abcd2e2afd8d88818c832ed6a8e4abafa06f92b7826904116b14f7beefd6",
+      "bytes": 1836
+    }
+  ]
+}

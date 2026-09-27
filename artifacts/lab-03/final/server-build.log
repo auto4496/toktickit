@@ -1,0 +1,8 @@
+
+> toktickit-monorepo@1.0.0 build:server
+> npm --prefix server run build
+
+
+> toktickit-server@1.0.0 build
+> tsc
+

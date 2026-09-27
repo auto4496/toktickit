@@ -1,0 +1,61 @@
+
+> toktickit-monorepo@1.0.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/User/toktickit/tmp/lab3-final-main
+
+ ✓ server/tests/lab-02/attachments.api.test.ts (9 tests) 3803ms
+   ✓ Attachment lifecycle > uploads verified bytes, returns safe metadata, downloads, and retains soft-removal metadata  499ms
+ ✓ server/tests/lab-03/staff-workflow.api.test.ts (127 tests) 3823ms
+ ✓ server/tests/lab-03/admin-users.api.test.ts (25 tests) 3092ms
+   ✓ API-12–14 administrator accounts > normalizes new users, stores a real hash and handles simultaneous duplicate emails  542ms
+   ✓ API-12–14 administrator accounts > resets a password, invalidates every session, requires a different password and enforces the initial gate  1378ms
+ ✓ server/tests/lab-02/my-tickets.api.test.ts (19 tests) 573ms
+ ✓ server/tests/lab-02/create-ticket.api.test.ts (14 tests) 550ms
+ ✓ server/tests/lab-03/migration.integration.test.ts (3 tests) 12327ms
+   ✓ Lab 2 to Lab 3 data migration > preserves historical identities and attachment/idempotency relations and initializes passwords resumably  3703ms
+   ✓ Lab 2 to Lab 3 data migration > stops on normalized-email collisions without renaming or merging accounts  2746ms
+   ✓ Lab 2 to Lab 3 data migration > seeds all roles and varied tickets, preserving edits, inactive accounts and changed passwords on repeat  5876ms
+ ✓ server/tests/lab-03/auth.api.test.ts (7 tests) 3669ms
+   ✓ Authentication API (API-01..04) > gates initial-password sessions, changes password, rotates session and logs out  796ms
+   ✓ Authentication API (API-01..04) > does not disclose unknown, inactive or wrong-password accounts  514ms
+   ✓ Authentication API (API-01..04) > invalidates expired sessions and sessions whose user version or activity changes  758ms
+   ✓ Authentication API (API-01..04) > limits failed login attempts and supplies a retry interval  1282ms
+ ✓ server/tests/lab-03/auth.unit.test.ts (8 tests) 1565ms
+   ✓ Lab 3 password rules (UNIT-01 / AC-03) > uses independent salts and real scrypt, without trimming passwords or accepting damaged hashes  1102ms
+   ✓ Lab 3 password rules (UNIT-01 / AC-03) > does not normalize distinct Unicode passwords into the same password  458ms
+ ✓ server/tests/lab-03/safe-errors.api.test.ts (6 tests) 213ms
+ ✓ server/tests/lab-03/authorization.api.test.ts (8 tests) 312ms
+ ✓ server/tests/lab-02/ticket-detail.api.test.ts (2 tests) 265ms
+ ✓ server/tests/lab-02/reference-data.api.test.ts (5 tests) 39ms
+ ✓ server/tests/lab-02/attachment-validation.unit.test.ts (17 tests) 6ms
+ ✓ server/tests/lab-02/reference-data.integration.test.ts (3 tests) 220ms
+ ✓ server/tests/lab-02/ticket-query.unit.test.ts (16 tests) 11ms
+ ✓ server/tests/lab-02/ticket-validation.unit.test.ts (14 tests) 4ms
+ ✓ client/tests/lab-02/ResponsiveStyles.test.tsx (6 tests) 3ms
+ ✓ server/tests/lab-02/test-database-guard.test.ts (6 tests) 4ms
+ ✓ server/tests/lab-02/ticket-idempotency.unit.test.ts (3 tests) 3ms
+ ✓ server/tests/lab-02/requester-context.api.test.ts (6 tests) 34ms
+ ✓ server/tests/lab-02/ticket-number.unit.test.ts (3 tests) 4ms
+ ✓ client/tests/lab-02/ZenGreenStyles.test.tsx (5 tests) 3ms
+ ✓ server/tests/lab-01/categories.test.ts (1 test) 141ms
+ ✓ server/tests/lab-01/server.test.ts (1 test) 16ms
+ ✓ server/tests/lab-01/health.test.ts (1 test) 15ms
+ ✓ client/tests/lab-02/CreateTicket.test.tsx (8 tests) 729ms
+ ✓ client/tests/lab-02/RequesterTicketDetail.test.tsx (11 tests) 532ms
+ ✓ client/tests/lab-02/MyTickets.test.tsx (6 tests) 434ms
+ ✓ client/tests/lab-03/StaffWorkflow.test.tsx (11 tests) 561ms
+ ✓ client/tests/lab-03/UserManagement.test.tsx (6 tests) 562ms
+ ✓ client/tests/lab-03/ReviewRegressions.test.tsx (9 tests) 357ms
+ ✓ client/tests/lab-03/ApplicationShell.test.tsx (11 tests) 327ms
+ ✓ client/tests/lab-03/ConversationRecovery.test.tsx (3 tests) 422ms
+ ✓ client/tests/lab-03/AdminNavigation.test.tsx (5 tests) 725ms
+ ✓ client/tests/lab-03/Login.test.tsx (3 tests) 255ms
+ ✓ client/tests/lab-03/ChangePassword.test.tsx (1 test) 129ms
+
+ Test Files  36 passed (36)
+      Tests  389 passed (389)
+   Start at  19:14:40
+   Duration  94.38s (transform 690ms, setup 0ms, collect 18.75s, tests 35.73s, environment 31.47s, prepare 3.44s)
+

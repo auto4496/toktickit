@@ -1,0 +1,9 @@
+{
+  "database": "lab3_final_20260927_unit_test",
+  "startingStatus": null,
+  "finishedAt": "2026-09-27T12:16:15.1084114Z",
+  "startedAt": "2026-09-27T12:14:35.9214711Z",
+  "command": "npm test",
+  "exitCode": 0,
+  "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0"
+}

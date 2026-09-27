@@ -1,0 +1,227 @@
+{
+  "pdfPages": 30,
+  "distinctLinks": 55,
+  "noLocalFileUrls": true,
+  "links": [
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/.gitignore",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/README.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-02/ui-spec.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/ai-use.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/api-spec.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/foundation.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/issue-plan.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/release.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/reviewer.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/specification.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/system-verification.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/tests.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/b3a65949f3fad3c84ffabbe01707db0d929686f0/docs/lab-03/ui-spec.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/browser.log",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/capture-provenance.json",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/client-build.log",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/github-review-snapshot.json",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/migration.log",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/results.json",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/README.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/staff-workflow/1440-queue.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/staff-workflow/390-queue.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/staff-workflow/834-queue.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/desktop-admin-create-validation.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/desktop-login-invalid.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/desktop-staff-public.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/mobile-change-password.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/mobile-requester-indication.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/mobile-staff-private.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/system-states/tablet-login-failure-simulated.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/user-management/editor-834.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/screenshots/user-management/reset-390.png",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/server-build.log",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/test-database-runbook.md",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/blob/codex/lab3-final-evidence/artifacts/lab-03/final/unit.log",
+      "check": "local repository/evidence file exists; remote tree checked after publication"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/commit/b006797c3fb185a36f84992bb99cfd453bc90e60",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/issues/30",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/31",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/32",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/33",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/33#discussion_r4023073618",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/34",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/34#discussion_r4060222962",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/34#discussion_r4060222970",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/34#discussion_r4072766062",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/34#discussion_r4072767621",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/35",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/36",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/auto4496/toktickit/pull/36#discussion_r4111152609",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://github.com/users/auto4496/projects/1",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    },
+    {
+      "url": "https://nodejs.org/api/crypto.html",
+      "check": "external reference or GitHub identity; not an automated HTTP availability claim"
+    }
+  ]
+}

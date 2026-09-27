@@ -1,0 +1,48 @@
+{
+  "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+  "humanAcceptance": {
+    "reflection": false,
+    "visual": false
+  },
+  "unit": {
+    "database": "lab3_final_20260927_unit_test",
+    "startingStatus": null,
+    "finishedAt": "2026-09-27T12:16:15.1084114Z",
+    "startedAt": "2026-09-27T12:14:35.9214711Z",
+    "command": "npm test",
+    "exitCode": 0,
+    "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+    "summary": "389 passed in 36 files; zero skipped; 94.38 seconds"
+  },
+  "browser": {
+    "apiPort": 5500,
+    "database": "lab3_final_20260927_browser_test",
+    "finishedAt": "2026-09-27T12:21:40.4078732Z",
+    "startedAt": "2026-09-27T12:20:07.2518365Z",
+    "startingStatus": null,
+    "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+    "clientPort": 3500,
+    "command": "npm run test:e2e:capture:lab3",
+    "exitCode": 0,
+    "summary": "17 passed; zero skipped; 1.5 minutes"
+  },
+  "serverBuild": {
+    "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+    "exitCode": 0,
+    "startedAt": "2026-09-27T12:22:11.9139425Z",
+    "finishedAt": "2026-09-27T12:22:15.1569718Z",
+    "command": "npm run build:server"
+  },
+  "clientBuild": {
+    "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+    "exitCode": 0,
+    "startedAt": "2026-09-27T12:22:15.2194469Z",
+    "finishedAt": "2026-09-27T12:22:20.5071558Z",
+    "command": "npm run build:client"
+  },
+  "capture": {
+    "capturedAt": "2026-09-27T12:21:40.282Z",
+    "files": 109,
+    "baseCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0"
+  }
+}

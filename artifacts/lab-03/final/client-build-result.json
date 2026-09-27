@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+  "exitCode": 0,
+  "startedAt": "2026-09-27T12:22:15.2194469Z",
+  "finishedAt": "2026-09-27T12:22:20.5071558Z",
+  "command": "npm run build:client"
+}

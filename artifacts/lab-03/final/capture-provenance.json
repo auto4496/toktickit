@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+  "capturedAt": "2026-09-27T12:21:40.282Z",
+  "classification": "actual final-main run",
+  "verifiedFiles": 109,
+  "rawManifest": "screenshots/manifest.json",
+  "rawManifestSha256": "41119023e291be82a3b0ee19c79de5e3beb758e4a12a192c70fefa2a78f2e4d2",
+  "clarification": "The unchanged capture script retains its historical staging note. This separate record identifies the actual successful final-main run; the raw note, SHA, timestamp and dirty-path record are preserved unchanged.",
+  "startingTrackedStatus": null,
+  "browserCommandExit": 0
+}

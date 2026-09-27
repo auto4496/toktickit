@@ -1,0 +1,19 @@
+
+> toktickit-monorepo@1.0.0 build:client
+> npm --prefix client run build
+
+
+> toktickit-client@1.0.0 build
+> tsc && vite build
+
+vite v6.4.3 building for production...
+transforming...
+✓ 45 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               0.48 kB │ gzip:  0.32 kB
+dist/assets/bootstrap-icons-mSm7cUeB.woff2  134.04 kB
+dist/assets/bootstrap-icons-BeopsB42.woff   180.29 kB
+dist/assets/index-CthLjcBJ.css              339.55 kB │ gzip: 51.69 kB
+dist/assets/index-Cmi7y-q6.js               231.77 kB │ gzip: 69.49 kB
+✓ built in 1.02s

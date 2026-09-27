@@ -1,0 +1,11 @@
+{
+  "apiPort": 5500,
+  "database": "lab3_final_20260927_browser_test",
+  "finishedAt": "2026-09-27T12:21:40.4078732Z",
+  "startedAt": "2026-09-27T12:20:07.2518365Z",
+  "startingStatus": null,
+  "sourceCommit": "b3a65949f3fad3c84ffabbe01707db0d929686f0",
+  "clientPort": 3500,
+  "command": "npm run test:e2e:capture:lab3",
+  "exitCode": 0
+}
