@@ -390,8 +390,8 @@ export default function CreateTicket({ requester }: { requester: Requester }) {
       <p className="eyebrow">Requester workspace</p>
       <h1>Create Ticket</h1>
       <p className="text-secondary">
-        Submit a new IT request as <strong>{requester.name}</strong>. This remains a
-        testing context, not authentication.
+        Submit a new IT request as <strong>{requester.name}</strong> using your
+        signed-in account.
       </p>
 
       <form className="ticket-form" onSubmit={submit} noValidate>
