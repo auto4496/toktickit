@@ -1,6 +1,6 @@
 # Lab 4 Work Items
 
-Six work items are planned for GitHub Issues and staged integration. [Issue #38](https://github.com/auto4496/toktickit/issues/38) tracks the first work item. Issues for work items 2–6 have not been created. Review and merge are pending.
+Six work items are planned for GitHub Issues and staged integration. [Issue #38](https://github.com/auto4496/toktickit/issues/38) tracks the first work item and [PR #39](https://github.com/auto4496/toktickit/pull/39) proposes its contract documents. Issues for work items 2–6 have not been created. Review and merge are pending.
 
 1. Contract: specification, UI/API contract, tests and review of unresolved choices.
 2. Data foundation: additive migration, guarded seed, Action model and tests.

@@ -10,7 +10,7 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 
 | Area | Reviewer | PR | Comment/response | Approval |
 |---|---|---|---|---|
-| Engineering contract | Pending | Pending | Pending | Pending |
+| Engineering contract | Pending | [#39](https://github.com/auto4496/toktickit/pull/39) | Author checks above; independent comments pending | Pending |
 | Migration and Actions | Pending | Pending | Pending | Pending |
 | Ticket workflow | Pending | Pending | Pending | Pending |
 | Dashboards and UI | Pending | Pending | Pending | Pending |
