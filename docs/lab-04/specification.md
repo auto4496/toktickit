@@ -1,6 +1,6 @@
 # Lab 4 Engineering Contract
 
-Status: draft for review, before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`.
+Status: proposed contract awaiting review for [Issue #38](https://github.com/auto4496/toktickit/issues/38). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`.
 
 ## 1. Sprint goal
 
@@ -50,7 +50,7 @@ Excluded: SLA/escalation, notifications, inventory, billing, approvals, BI/expor
 | BR-14 | CLOSED requires RESOLVED; reopening retains Actions. CANCELLED is terminal. |
 | BR-15 | Dashboard open excludes RESOLVED/CLOSED/CANCELLED. Recent means `updatedAt >= now − 7 days` using a UTC instant from one server clock snapshot. |
 | BR-16 | Recent lists contain at most five rows sorted `updatedAt DESC, id DESC`; empty counts are zero and lists are `[]`. |
-| BR-17 | Dashboard links use existing Ticket list filters; responses expose no Internal Notes or whole Ticket collections. |
+| BR-17 | Dashboard links use Ticket list filters, including the documented open-status and Action-assignee scopes; responses expose no Internal Notes or whole Ticket collections. |
 | BR-18 | Existing Tickets need no backfill: zero Actions is valid history, but they cannot newly enter RESOLVED. Existing RESOLVED/CLOSED Tickets remain as recorded. |
 
 ### Final Ticket transition matrix
@@ -102,4 +102,4 @@ Every AC maps to passing tests in [tests.md](tests.md); backend role, ownership 
 
 ## 11. Assumptions and decisions
 
-The handout does not specify Action statuses, assignee representation, dashboard window or precise resolution gate. This contract chooses explicit statuses, one current assignee, seven days UTC and one completed Action with Result before resolution. Ticket status authority remains Lab 3's. These choices need review before implementation.
+The handout does not specify Action statuses, assignee representation, dashboard window or precise resolution gate. This contract chooses explicit statuses, one current assignee, seven days UTC and one completed Action with Result before resolution. Ticket status authority remains Lab 3's. These choices remain open for peer review before integration into staging.

@@ -2,6 +2,8 @@
 
 Status: planned before implementation. `Pending` means no passing result has been observed. Use only isolated `TEST_DATABASE_URL` and the Lab 3 guard; never run destructive test setup against the development database.
 
+This documentation-only branch defines planned checks. The test filenames below are proposed implementation locations, not files included in this PR. Execution evidence belongs in the implementation and final-verification work items.
+
 | ID | Type | AC | Check | Expected | Automated file | Final |
 |---|---|---|---|---|---|---|
 | UNIT-01 | Unit | AC-03 | Normalize Action text, follow-up and completion fields | Invalid/over-limit rejected | `server/tests/lab-04/actions-validation.unit.test.ts` | Pending |
