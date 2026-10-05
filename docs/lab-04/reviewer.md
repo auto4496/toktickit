@@ -20,7 +20,7 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 | Area | Reviewer | PR | Comment/response | Approval |
 |---|---|---|---|---|
 | Engineering contract | Datakung | [#39](https://github.com/auto4496/toktickit/pull/39) | Changes requested, four corrections, author reply and re-review; no remaining blocking findings | Approved `4886585`; merged by Datakung |
-| Data foundation / recovery | Pending | Pending | INT-01/INT-02 author execution recorded in [data-foundation.md](data-foundation.md) | Pending |
+| Data foundation / recovery | Datakung (review requested) | [#41](https://github.com/auto4496/toktickit/pull/41) | INT-01/INT-02 author execution recorded in [data-foundation.md](data-foundation.md) | Pending |
 | Actions API/UI | Pending | Pending | Pending | Pending |
 | Ticket workflow | Pending | Pending | Pending | Pending |
 | Dashboards and UI | Pending | Pending | Pending | Pending |

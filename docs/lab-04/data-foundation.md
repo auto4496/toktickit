@@ -1,6 +1,6 @@
 # Lab 4 Data Foundation and Recovery
 
-Work item: [Issue #40](https://github.com/auto4496/toktickit/issues/40). Contract: [approved/merged PR #39](https://github.com/auto4496/toktickit/pull/39). Branch: `codex/lab4-2-data-foundation`, based on staging merge `b5bee16`.
+Work item: [Issue #40](https://github.com/auto4496/toktickit/issues/40), proposed in [PR #41](https://github.com/auto4496/toktickit/pull/41). Contract: [approved/merged PR #39](https://github.com/auto4496/toktickit/pull/39). Branch: `codex/lab4-2-data-foundation`, based on staging merge `b5bee16`.
 
 ## Changes
 
