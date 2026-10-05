@@ -1,0 +1,67 @@
+{
+  "check": "INT-02",
+  "result": "PASS",
+  "observedAt": "2026-10-05T14:59:11.776Z",
+  "targets": [
+    {
+      "host": "127.0.0.1",
+      "port": "55433",
+      "database": "lab4_recovery_test_source_53294e1e8de9412eb8817c40f4678790",
+      "schema": "recovery_fixture"
+    },
+    {
+      "host": "127.0.0.1",
+      "port": "55433",
+      "database": "lab4_recovery_test_target_53294e1e8de9412eb8817c40f4678790",
+      "schema": "recovery_fixture"
+    }
+  ],
+  "tools": [
+    "pg_dump (PostgreSQL) 17.9",
+    "pg_restore (PostgreSQL) 17.9"
+  ],
+  "commands": {
+    "backup": "docker exec toktickit-lab3-test pg_dump --username lab3_test --dbname lab4_recovery_test_source_53294e1e8de9412eb8817c40f4678790 --format=custom --schema recovery_fixture --no-owner --no-acl",
+    "restore": "docker exec -i toktickit-lab3-test pg_restore --username lab3_test --dbname lab4_recovery_test_target_53294e1e8de9412eb8817c40f4678790 --exit-on-error --single-transaction --no-owner --no-acl < pre-lab4.dump"
+  },
+  "backupSha256": "953c1c13b1ab034c926d1a09f53a5e68c876655ddb9bee223eeeaa11056ba202",
+  "backupBytes": 32036,
+  "controlledFailure": "Controlled post-migration validation failure; source writes stopped",
+  "tableCounts": {
+    "Attachment": 2,
+    "AuthSession": 1,
+    "Category": 1,
+    "InternalNote": 1,
+    "PublicComment": 1,
+    "RelatedSystem": 1,
+    "Ticket": 3,
+    "TicketCreateRequest": 1,
+    "User": 3
+  },
+  "migrations": [
+    "20260810155801_init",
+    "20260831003000_lab2_data_requester_context",
+    "20260913060000_lab3_accounts",
+    "20261004000000_lab4_actions"
+  ],
+  "migratedBaselineComparison": "PASS",
+  "fullRecordAndConstraintComparison": "PASS",
+  "ticketOrphans": 0,
+  "recoveredActionTables": 0,
+  "recoveredActionTypes": 0,
+  "prismaSchemaComparison": "PASS (migrate diff --exit-code)",
+  "attachments": [
+    {
+      "path": "retained.pdf",
+      "bytes": 36,
+      "sha256": "48abd31580dcad2f099174d691e7f030c65cf318dcf20a4f4563b016a87b6ede"
+    },
+    {
+      "path": "historical.png",
+      "bytes": 9,
+      "sha256": "843ac23b1736b4487ec81cf7c07ddd9bb46ae5b7818c2c3843d99d62fa75f3c9"
+    }
+  ],
+  "authenticatedDownload": "PASS",
+  "removedDownloadStatus": 404
+}

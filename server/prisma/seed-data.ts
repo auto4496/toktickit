@@ -118,4 +118,36 @@ export async function seedDatabase(client: PrismaClient) {
       } : {}),
     } });
   }
+
+  // Deterministic training Actions: zero, one and multiple lines across the
+  // existing Ticket examples. Only insert when the Ticket still has its seed
+  // status; reruns never rewrite human edits or historical revisions.
+  const actionExamples = [
+    { index: 2, suffix: '1', status: 'COMPLETED' as const, description: 'Reviewed the shared folder connection', result: 'Identified an outdated VPN client', followUpRequired: false, followUpNote: '' },
+    { index: 2, suffix: '2', status: 'PLANNED' as const, description: 'Install the current VPN client', result: '', followUpRequired: true, followUpNote: 'Confirm access after installation' },
+    { index: 3, suffix: '3', status: 'IN_PROGRESS' as const, description: 'Collect certificate details', result: '', followUpRequired: true, followUpNote: 'Requester should send the warning screenshot' },
+    { index: 4, suffix: '4', status: 'COMPLETED' as const, description: 'Updated the VPN client', result: 'The VPN connection and shared files work', followUpRequired: false, followUpNote: '' },
+    { index: 5, suffix: '5', status: 'COMPLETED' as const, description: 'Configured remote access', result: 'Requester confirmed successful sign-in', followUpRequired: false, followUpNote: '' },
+  ];
+  for (const item of actionExamples) {
+    const ticket = await client.ticket.findUnique({ where: { ticketNumber: `TKT-20260913-D300000${item.index + 1}` } });
+    if (!ticket || ticket.currentStatus !== examples[item.index][0]) continue;
+    const actor = await client.user.findUnique({ where: { id: staffUsers[item.index % 3].id } });
+    if (!actor?.isActive || actor.role !== 'IT_STAFF') continue;
+    const id = `77777777-7777-4777-8777-77777777777${item.suffix}`;
+    if (await client.actionTaken.findUnique({ where: { id } })) continue;
+    const actionAt = new Date(`2026-09-13T0${item.index}:30:00.000Z`);
+    await client.actionTaken.create({ data: {
+      id, ticketId: ticket.id, assignedToId: actor.id, createdById: actor.id,
+      performedById: actor.id, actionAt, description: item.description,
+      result: item.result, followUpRequired: item.followUpRequired,
+      followUpNote: item.followUpNote, attachmentNotes: 'See Ticket attachments when available', status: item.status,
+      revisions: { create: { actorId: actor.id, operation: 'CREATED', snapshot: {
+        actionAt: actionAt.toISOString(), description: item.description, result: item.result,
+        assignedToId: actor.id, performedById: actor.id, followUpRequired: item.followUpRequired,
+        followUpNote: item.followUpNote, attachmentNotes: 'See Ticket attachments when available',
+        status: item.status, version: 1,
+      } } },
+    } });
+  }
 }

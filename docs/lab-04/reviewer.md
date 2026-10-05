@@ -1,12 +1,12 @@
 # Lab 4 Review Record
 
-Status: Datakung requested changes on PR #39 on 2026-10-05 at 13:42:52 Asia/Bangkok (reviewed commit `1c7a0d8`). The corrections below are prepared for re-review. Independent approval remains pending.
+Status: Datakung approved PR #39 commit `4886585` on 2026-10-05 at 21:34:32 Asia/Bangkok and merged it into `codex/lab4-staging` at 21:36:01. The contract review is complete. Independent review of Issue #40 data foundation remains pending.
 
 Engineering contract issue: [#38](https://github.com/auto4496/toktickit/issues/38). Local document checks and author review do not count as independent peer approval.
 
 ## Author document check — 2026-10-04
 
-Verified relative links across seven documents, AC-01 through AC-11 test-plan coverage and whitespace. Clarified canonical nonterminal dashboard filters and follow-up Action-assignee drill-down, including why Action count may exceed matching Ticket count. Planned test filenames are labelled explicitly. Independent review was subsequently submitted by Datakung as recorded below; approval remains pending.
+Verified relative links across seven documents, AC-01 through AC-11 test-plan coverage and whitespace. Clarified canonical nonterminal dashboard filters and follow-up Action-assignee drill-down, including why Action count may exceed matching Ticket count. Planned test filenames are labelled explicitly. Datakung subsequently requested changes and approved the corrected contract as recorded below.
 
 ## Peer findings and corrections — 2026-10-05
 
@@ -19,8 +19,9 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 
 | Area | Reviewer | PR | Comment/response | Approval |
 |---|---|---|---|---|
-| Engineering contract | Datakung | [#39](https://github.com/auto4496/toktickit/pull/39) | Changes requested; findings and corrections above | Re-review/approval pending |
-| Migration and Actions | Pending | Pending | Pending | Pending |
+| Engineering contract | Datakung | [#39](https://github.com/auto4496/toktickit/pull/39) | Changes requested, four corrections, author reply and re-review; no remaining blocking findings | Approved `4886585`; merged by Datakung |
+| Data foundation / recovery | Pending | Pending | INT-01/INT-02 author execution recorded in [data-foundation.md](data-foundation.md) | Pending |
+| Actions API/UI | Pending | Pending | Pending | Pending |
 | Ticket workflow | Pending | Pending | Pending | Pending |
 | Dashboards and UI | Pending | Pending | Pending | Pending |
 | Final regression | Pending | Pending | Pending | Pending |
