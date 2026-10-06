@@ -27,6 +27,7 @@ The matrix retains planned checks for later work items. INT-01/INT-02 and the Ac
 | E2E-02 | E2E | AC-06 | Requester indication, staff resolution, close/reopen/cancel | Gate enforced | `e2e/lab-04/ticket-resolution.spec.ts` | Pending |
 | E2E-03 | E2E | AC-07–08, AC-10 | Both dashboard roles, drill-down, three widths | Correct responsive views | `e2e/lab-04/dashboards.spec.ts` | Pending |
 | E2E-04 | E2E | AC-04, AC-10 | Staff and Admin use Start; verify IN_PROGRESS, performer and STARTED revision; Requester reads without Start; terminal denial and competing-version conflict | Correct lifecycle and recoverable UI feedback | `e2e/lab-04/action-start.spec.ts` | Pass |
+| E2E-05 | E2E | AC-04–05, AC-10 | Commit create, lose response, edit draft, recover with original body/key, then save edits to recovered ID | One Action and CREATED/EDITED revisions; retained draft | `e2e/lab-04/action-create-recovery.spec.ts` | Pass: real-browser corrected flow |
 | REG-01 | Regression | AC-11 | All Lab 1–3 Vitest, Playwright, build | Pass with isolated DB | Existing suites and `npm run build:*` | Partial: 39 files / 424 Vitest tests, both builds and five Actions browser checks passed; full legacy browser/release run pending |
 | PERF-01 | Smoke | AC-08 | Seed-scale dashboard and indexed query plan | No unbounded Ticket payload/query | `server/tests/lab-04/dashboard-smoke.integration.test.ts` | Pending |
 

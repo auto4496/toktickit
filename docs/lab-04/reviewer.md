@@ -1,6 +1,6 @@
 # Lab 4 Review Record
 
-Status: contract #39 and data foundation #41 are independently approved and merged into `codex/lab4-staging`. Datakung approved #41 at `301c902` on 2026-10-06 at 14:14:47 Asia/Bangkok and merged it at 14:15:03 (`c039a7d`). Independent Actions review for Issue #42 remains pending.
+Status: contract #39 and data foundation #41 are independently approved and merged into `codex/lab4-staging`. Datakung approved #41 at `301c902` on 2026-10-06 at 14:14:47 Asia/Bangkok and merged it at 14:15:03 (`c039a7d`). Datakung requested two corrections to Actions #43 at `29480eb` on 2026-10-06 at 19:18:24 Asia/Bangkok; approval of the corrected increment remains pending.
 
 Engineering contract issue: [#38](https://github.com/auto4496/toktickit/issues/38). Local document checks and author review do not count as independent peer approval.
 
@@ -21,7 +21,7 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 |---|---|---|---|---|
 | Engineering contract | Datakung | [#39](https://github.com/auto4496/toktickit/pull/39) | Changes requested, four corrections, author reply and re-review; no remaining blocking findings | Approved `4886585`; merged by Datakung |
 | Data foundation / recovery | Datakung | [#41](https://github.com/auto4496/toktickit/pull/41) | Reported independently passing 391 tests and both builds; no blocking findings | Approved `301c902`; merged |
-| Actions API/UI | Datakung (review requested) | [#43](https://github.com/auto4496/toktickit/pull/43) | Author execution and visual/focus checks in [actions.md](actions.md) | Pending |
+| Actions API/UI | Datakung | [#43](https://github.com/auto4496/toktickit/pull/43) | Independently passed 424 tests, five browser journeys and both builds at `29480eb`; requested lost-create-response recovery and isolation of routine screenshots. Corrections and observed reruns in [actions.md](actions.md) | Re-review pending |
 | Ticket workflow | Pending | Pending | Pending | Pending |
 | Dashboards and UI | Pending | Pending | Pending | Pending |
 | Final regression | Pending | Pending | Pending | Pending |

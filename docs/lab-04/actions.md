@@ -9,6 +9,7 @@ Work item: [Issue #42](https://github.com/auto4496/toktickit/issues/42), propose
 - A Ticket-scoped eligible-assignee endpoint includes active Staff **and** Admin accounts. Existing Ticket Owner eligibility and Staff-only Ticket-status permissions retain their Lab 3 rules.
 - Ticket detail presents stable ordered/paginated Actions, forms, result/follow-up/attachment notes and read-only history. Start shows Starting…, disables competing controls, announces success, refreshes detail/list/history, and moves focus to the Action heading.
 - Stale Start disables retry until Reload latest. Edit reload retains unsaved fields and retries with the latest version. Ambiguous Start failure uses safe feedback and also requires reload; successful writes with failed history refresh retain the known new state and block further mutation until reload. Form errors have labelled controls, linked messages and focused feedback.
+- Ambiguous creation retains the original submitted payload and Idempotency-Key independently of later draft edits. Recover saved Action replays that exact request, then retains the current draft in edit mode against the recovered Action/version. Save applies edits via PATCH; no second Action is created. Failed recovery retains the draft and can be retried; definitive creation errors allow correction with a new key.
 - E2E cleanup removes Action revisions/create requests before Actions/Tickets, confined to fixture Ticket IDs. Linked dependency asset serving permits installed icon fonts in this worktree without broadening access beyond the workspace and installed dependency directory.
 
 ## Observed checks — 2026-10-06
@@ -28,6 +29,7 @@ Configure guarded `.env.test.local` and the dedicated PostgreSQL test container.
 ```text
 npm test -- --reporter=dot
 npm run test:e2e:actions
+npm run test:e2e:capture:actions
 npm run build:server
 npm run build:client
 ```
@@ -35,3 +37,13 @@ npm run build:client
 ## Remaining
 
 Independent Actions PR approval/integration is pending. Ticket resolution-gate changes, dashboards/open-filter alignment and final full browser/release verification belong to work items 4–6. This increment's passing checks do not complete all LAB4 acceptance criteria.
+
+## Corrections after Datakung's review — 2026-10-06
+
+Datakung requested changes on `29480eb`, independently reproducing an edited draft stranded after a committed creation response was lost, and all nine curated PNGs being overwritten by routine browser tests without a manifest refresh. The peer independently passed the original 424 tests, five browser journeys and both production builds on separate disposable databases.
+
+The creation recovery above addresses the first finding. A real-browser test commits POST through `route.fetch`, drops its response, edits the draft, then verifies recovery reuses the exact original body/key, receives the replay header, and saves the later edits to the same ID. Final state is one Action/version 2 with only CREATED and EDITED revisions.
+
+Routine captures now write only to ignored `test-results/lab-04/actions/screenshots`. The explicit `test:e2e:capture:actions` command first runs the complete Actions suite, validates all nine scene/width PNGs, then publishes them and refreshes timestamps, dimensions, bytes and SHA-256 together. A failed suite exits before publication.
+
+Observed correction checks: **18 Action component tests passed** (including offline recovery retry and definitive creation-error correction); client production build passed. Complete routine Actions suite: **6 browser tests passed**; all nine curated hashes still matched and `git diff --exit-code -- artifacts/lab-04/actions` remained clean afterward. The explicit publisher independently ran the complete suite again: **6 tests passed**, then published nine PNGs with a refreshed manifest; all nine hashes and byte lengths matched. Mobile Staff and tablet conflict images were visually inspected after publication, with readable text, focus and wrapping. Relative document links, AC traceability and whitespace checks passed. The original full 424-test result is retained as a historical check; no full 426-test rerun is claimed.

@@ -34,6 +34,8 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({}), [message, setMessage] = useState('');
   const [conflict, setConflict] = useState(false), [cancelConfirm, setCancelConfirm] = useState(false);
   const key = useRef(crypto.randomUUID());
+  const createAttempt = useRef<{ key: string; body: Draft } | null>(null);
+  const [recoverCreate, setRecoverCreate] = useState(false);
   const mutationLock = useRef(false), detailRequest = useRef(0), focusDetails = useRef(false);
   const headingRef = useRef<HTMLHeadingElement>(null), feedbackRef = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
     catch { if (request === detailRequest.current) { setDetailError('Action details could not be loaded. Reload latest before changing it.'); setNeedsReload(true); } }
     finally { if (request === detailRequest.current) setDetailBusy(false); }
   };
-  const startCreate = () => { key.current = crypto.randomUUID(); setSelected(null); setDraft(blank()); setFieldErrors({}); setMessage(''); setConflict(false); setNeedsReload(false); setDetailError(''); setMode('create'); };
+  const startCreate = () => { key.current = crypto.randomUUID(); createAttempt.current = null; setRecoverCreate(false); setSelected(null); setDraft(blank()); setFieldErrors({}); setMessage(''); setConflict(false); setNeedsReload(false); setDetailError(''); setMode('create'); };
   const reloadLatest = async () => {
     if (!selected || mutationLock.current || detailBusy) return;
     setDetailBusy(true); setDetailError('');
@@ -80,10 +82,23 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
     if (transitionFailure && (!(reason instanceof ApiFailure) || reason.status >= 500)) setNeedsReload(true);
     setMessage(reason instanceof ApiFailure ? reason.message : fallback);
   };
-  const refreshHistory = async (action: Action, success: string) => {
-    setSelected({ data: action }); setMode('view'); setMessage(success); focusDetails.current = true; reloadList();
+  const refreshHistory = async (action: Action, success: string, retainDraft = false) => {
+    setSelected({ data: action }); setMode(retainDraft ? 'edit' : 'view'); setMessage(success); focusDetails.current = !retainDraft; reloadList();
     try { setSelected(await workflow<Detail>(`/tickets/${ticketId}/actions/${action.id}`)); setDetailError(''); }
     catch { setDetailError('Action saved, but its latest history could not be loaded. Reload latest.'); setNeedsReload(true); }
+  };
+  const recoverCreation = async () => {
+    const attempt = createAttempt.current;
+    if (!attempt || mutationLock.current) return;
+    mutationLock.current = true; setBusy(true); setPending('recover');
+    try {
+      const response = await workflow<{ data: Action }>(`/tickets/${ticketId}/actions`, 'POST', attempt.body, { 'Idempotency-Key': attempt.key });
+      createAttempt.current = null; setRecoverCreate(false); setConflict(false); setNeedsReload(false);
+      const editable = writable && !['COMPLETED', 'CANCELLED'].includes(response.data.status);
+      await refreshHistory(response.data, editable ? 'Original Action recovered. Your draft is retained. Save Action to apply your edits to this Action.' : 'Original Action recovered. It is now read-only.', editable);
+    } catch {
+      setMessage('Creation could not be confirmed. Your draft is retained. Try Recover saved Action again.');
+    } finally { mutationLock.current = false; setBusy(false); setPending(''); }
   };
   const startEdit = () => {
     if (!selected) return;
@@ -92,7 +107,7 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
     setFieldErrors({}); setMessage(''); setMode('edit');
   };
   const save = async (event: FormEvent) => {
-    event.preventDefault(); if (mutationLock.current || conflict || needsReload || !writable) return;
+    event.preventDefault(); if (mutationLock.current || conflict || needsReload || recoverCreate || !writable) return;
     if (!draft.actionAt || !Number.isFinite(new Date(draft.actionAt).getTime())) { setFieldErrors({ actionAt: 'Choose a valid date and time.' }); return; }
     const textErrors: Record<string, string> = {};
     for (const name of ['description', 'result', 'followUpNote', 'attachmentNotes'] as const) {
@@ -101,13 +116,22 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
     if (Object.keys(textErrors).length) { setFieldErrors(textErrors); setMessage('Please correct the highlighted fields.'); return; }
     mutationLock.current = true; setBusy(true); setPending('save'); setMessage(''); setFieldErrors({});
     const body = { ...draft, actionAt: new Date(draft.actionAt).toISOString(), followUpNote: draft.followUpRequired ? draft.followUpNote : '' };
+    if (mode === 'create') createAttempt.current = { key: key.current, body };
     try {
       const response = mode === 'create'
         ? await workflow<{ data: Action }>(`/tickets/${ticketId}/actions`, 'POST', body, { 'Idempotency-Key': key.current })
         : await workflow<{ data: Action }>(`/tickets/${ticketId}/actions/${selected!.data.id}`, 'PATCH', { ...body, expectedVersion: selected!.data.version });
+      createAttempt.current = null; setRecoverCreate(false);
       await refreshHistory(response.data, 'Action saved.');
     } catch (reason) {
-      showFailure(reason, 'Action could not be saved. Try again.');
+      if (mode === 'create') {
+        if (!(reason instanceof ApiFailure) || reason.status >= 500 || reason.code === 'IDEMPOTENCY_KEY_REUSED') {
+          setRecoverCreate(true); setMessage('Creation could not be confirmed. Your draft is retained. Recover saved Action before saving changes.');
+        } else {
+          createAttempt.current = null; key.current = crypto.randomUUID();
+          setFieldErrors(reason.fieldErrors ?? {}); setMessage(reason.message);
+        }
+      } else showFailure(reason, 'Action could not be saved. Try again.');
     } finally { mutationLock.current = false; setBusy(false); setPending(''); }
   };
   const transition = async (status: 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED') => {
@@ -123,7 +147,7 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
   };
   const item = selected?.data;
   const editable = writable && item && !['COMPLETED', 'CANCELLED'].includes(item.status);
-  const blocked = busy || detailBusy || conflict || needsReload;
+  const blocked = busy || detailBusy || conflict || needsReload || recoverCreate;
   const control = (name: keyof Draft, caption: string, element: React.ReactElement) => <label key={name}>{caption}{cloneElement(element, {
     disabled: busy || detailBusy || !writable, 'aria-invalid': !!fieldErrors[name],
     'aria-describedby': fieldErrors[name] ? `${ticketId}-${name}-error` : undefined,
@@ -133,6 +157,7 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
     {message && <p ref={feedbackRef} tabIndex={-1} className={conflict ? 'wf-conflict' : 'wf-notice'} role={conflict ? 'alert' : 'status'}>{message}</p>}
     {Object.keys(fieldErrors).length > 0 && !message && <p ref={feedbackRef} tabIndex={-1} role="alert">Please correct the highlighted fields.</p>}
     {(conflict || needsReload) && selected && <button type="button" disabled={busy || detailBusy} onClick={() => void reloadLatest()}>{detailBusy ? 'Loading latest…' : 'Reload latest'}</button>}
+    {recoverCreate && <button type="button" disabled={busy} onClick={() => void recoverCreation()}>{pending === 'recover' ? 'Recovering…' : 'Recover saved Action'}</button>}
     {mode === 'list' && (error ? <div role="alert"><p>{error}</p><button onClick={reloadList}>Retry</button></div> : !list ? <p role="status">Loading Actions Taken…</p> : list.data.length === 0 ? <p>No Actions Taken have been recorded for this Ticket.</p> : <><ol className="lab4-action-list">{list.data.map(action => <li key={action.id}><div><time dateTime={action.actionAt}>{dateLabel(action.actionAt)}</time><h3>{action.description}</h3><p><Badge value={action.status} /> Assigned to {action.assignedTo.name} · Performed by {action.performedBy.name}</p>{action.result && <p>Result: {action.result}</p>}{action.followUpRequired && <p>Follow-up required: {action.followUpNote}</p>}{action.attachmentNotes && <p>Attachment Notes: {action.attachmentNotes}</p>}</div><button type="button" onClick={() => void open(action)}>View Action</button></li>)}</ol><div className="lab4-page-controls"><span>Page {page} of {Math.max(1, list.meta.totalPages)}</span><button disabled={page <= 1} onClick={() => setPage(value => value - 1)}>Previous</button><button disabled={page >= list.meta.totalPages} onClick={() => setPage(value => value + 1)}>Next</button></div></>)}
     {(mode === 'create' || mode === 'edit') && <form className="lab4-action-form" onSubmit={event => void save(event)}><h3>{mode === 'create' ? 'Create Action' : 'Edit Action'}</h3>
       {control('actionAt', 'Action date and time', <input type="datetime-local" required value={draft.actionAt} onChange={event => setDraft({ ...draft, actionAt: event.target.value })} />)}
@@ -143,7 +168,7 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
       <label className="lab4-checkbox"><input type="checkbox" disabled={busy || detailBusy || !writable} checked={draft.followUpRequired} onChange={event => setDraft({ ...draft, followUpRequired: event.target.checked, followUpNote: event.target.checked ? draft.followUpNote : '' })} /> Follow-Up Required?</label>
       {draft.followUpRequired && control('followUpNote', 'Follow-up Note', <textarea required maxLength={4000} rows={3} value={draft.followUpNote} onChange={event => setDraft({ ...draft, followUpNote: event.target.value })} />)}
       {control('attachmentNotes', 'Attachment Notes', <textarea maxLength={4000} rows={2} value={draft.attachmentNotes} onChange={event => setDraft({ ...draft, attachmentNotes: event.target.value })} />)}
-      <div className="wf-actions"><button className="wf-primary" type="submit" disabled={blocked || !!ownerError || !writable}>{busy ? 'Saving…' : 'Save Action'}</button><button type="button" disabled={busy} onClick={() => { setMode(item ? 'view' : 'list'); setFieldErrors({}); }}>Cancel</button></div>
+      <div className="wf-actions"><button className="wf-primary" type="submit" disabled={blocked || !!ownerError || !writable}>{busy ? 'Saving…' : 'Save Action'}</button><button type="button" disabled={busy || recoverCreate} onClick={() => { setMode(item ? 'view' : 'list'); setFieldErrors({}); }}>Cancel</button></div>
     </form>}
     {mode === 'view' && item && <div className="lab4-action-view"><div className="wf-actions"><button type="button" disabled={busy || detailBusy} onClick={() => { setMode('list'); setMessage(''); setConflict(false); setNeedsReload(false); }}>← All Actions</button>{editable && <><button type="button" disabled={blocked} onClick={startEdit}>Edit</button>{item.status === 'PLANNED' && <button type="button" disabled={blocked} onClick={() => void transition('IN_PROGRESS')}>{pending === 'IN_PROGRESS' ? 'Starting…' : 'Start'}</button>}<button className="wf-primary" type="button" disabled={blocked} onClick={() => void transition('COMPLETED')}>Complete</button><button type="button" disabled={blocked} onClick={() => setCancelConfirm(true)}>Cancel Action</button></>}</div>
       {detailBusy && <p role="status">Loading Action details…</p>}

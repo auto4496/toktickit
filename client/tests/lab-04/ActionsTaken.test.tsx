@@ -49,6 +49,65 @@ const openAction = async () => {
 const readMock = (path: string, value = action) => path.endsWith('/eligible-assignees') ? { data: [staff] } : path.includes('?page=') ? { ...list, data: [value] } : detail(value);
 
 describe('UI-05 Start control and recovery', () => {
+  it('recovers a lost creation response with its original payload/key and saves later edits to the same Action', async () => {
+    let current = action, posts = 0, recoverFailures = 0;
+    vi.mocked(workflow).mockImplementation(async (path, method, body) => {
+      if (method === 'POST') {
+        posts++;
+        if (posts === 1) { current = { ...action, description: 'Original description' }; throw new TypeError('Response lost after commit'); }
+        if (recoverFailures++ === 0) throw new TypeError('Still offline');
+        return { data: current };
+      }
+      if (method === 'PATCH') {
+        expect(path).toBe(`/tickets/${ticketId}/actions/${action.id}`);
+        expect(body).toMatchObject({ description: 'Later edited draft', expectedVersion: 1 });
+        current = { ...current, description: 'Later edited draft', version: 2 }; return { data: current };
+      }
+      return readMock(path, current);
+    });
+    render(<ActionsTaken ticketId={ticketId} role="IT_STAFF" terminal={false} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Add Action' }));
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Original description' } });
+    fireEvent.change(screen.getByLabelText('Assigned to'), { target: { value: staff.id } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    await screen.findByRole('button', { name: 'Recover saved Action' });
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Later edited draft' } });
+    expect(screen.getByRole('button', { name: 'Save Action' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Recover saved Action' }));
+    await screen.findByText(/Try Recover saved Action again/);
+    expect(screen.getByLabelText('Action Description')).toHaveValue('Later edited draft');
+    fireEvent.click(screen.getByRole('button', { name: 'Recover saved Action' }));
+    await screen.findByText(/Original Action recovered/);
+    expect(screen.getByLabelText('Action Description')).toHaveValue('Later edited draft');
+    const attempts = vi.mocked(workflow).mock.calls.filter(([, method]) => method === 'POST');
+    expect(attempts).toHaveLength(3);
+    for (const attempt of attempts.slice(1)) { expect(attempt[2]).toEqual(attempts[0][2]); expect(attempt[3]).toEqual(attempts[0][3]); }
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    expect(await screen.findByRole('heading', { name: 'Later edited draft' })).toBeInTheDocument();
+  });
+
+  it('allows correction after a definitive create validation error without treating 409 as an edit conflict', async () => {
+    let posts = 0;
+    vi.mocked(workflow).mockImplementation(async (path, method) => {
+      if (method === 'POST') {
+        if (++posts === 1) throw new ApiFailure('Assignee unavailable.', 409, 'ASSIGNEE_UNAVAILABLE');
+        return { data: action };
+      }
+      return readMock(path);
+    });
+    render(<ActionsTaken ticketId={ticketId} role="IT_STAFF" terminal={false} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Add Action' }));
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Check VPN' } });
+    fireEvent.change(screen.getByLabelText('Assigned to'), { target: { value: staff.id } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    await screen.findByText('Assignee unavailable.');
+    expect(screen.getByRole('button', { name: 'Save Action' })).toBeEnabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    await screen.findByText('Action saved.');
+    const attempts = vi.mocked(workflow).mock.calls.filter(([, method]) => method === 'POST');
+    expect(attempts[1][3]?.['Idempotency-Key']).not.toBe(attempts[0][3]?.['Idempotency-Key']);
+  });
+
   it.each(['IT_STAFF', 'ADMINISTRATOR'] as const)('starts once for %s with busy protection, refreshed history/list and keyboard focus', async role => {
     let current = action;
     let finish!: (value: unknown) => void;

@@ -5,7 +5,7 @@ import { createTicket, e2ePassword, expectNoHorizontalOverflow, requesterA } fro
 import { loginAs } from './helpers';
 
 const origin = `http://127.0.0.1:${process.env.E2E_CLIENT_PORT ?? '3100'}`;
-const screenshotDir = 'artifacts/lab-04/actions/screenshots';
+const screenshotDir = 'test-results/lab-04/actions/screenshots';
 async function actorSession(context: APIRequestContext, email: string) {
   const boot = await context.get('/api/auth/csrf');
   const login = await context.post('/api/auth/login', { headers: { Origin: origin, 'X-CSRF-Token': (await boot.json()).csrfToken }, data: { email, password: e2ePassword } });
