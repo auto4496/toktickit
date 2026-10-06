@@ -19,4 +19,3 @@
 .lab4-action-details dd { margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .lab4-revisions { padding-left: 20px; }
 @media (max-width: 600px) { .lab4-actions-heading, .lab4-action-list li { flex-direction: column; } .lab4-action-details { grid-template-columns: 1fr; } }
-
