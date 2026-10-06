@@ -33,6 +33,21 @@ enum Role {
   ADMINISTRATOR
 }
 
+enum ActionStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ActionOperation {
+  CREATED
+  EDITED
+  STARTED
+  COMPLETED
+  CANCELLED
+}
+
 model User {
   id                  String                @id @default(uuid())
   name                String
@@ -52,6 +67,11 @@ model User {
   sessions            AuthSession[]
   publicComments      PublicComment[]
   internalNotes       InternalNote[]
+  assignedActions     ActionTaken[]          @relation("ActionAssignee")
+  createdActions      ActionTaken[]          @relation("ActionCreator")
+  performedActions    ActionTaken[]          @relation("ActionPerformer")
+  actionRevisions     ActionRevision[]
+  actionCreateRequests ActionCreateRequest[]
 }
 
 model AuthSession {
@@ -134,6 +154,7 @@ model Ticket {
   attachments       Attachment[]
   publicComments    PublicComment[]
   internalNotes     InternalNote[]
+  actionsTaken      ActionTaken[]
 
   @@index([currentStatus, updatedAt])
   @@index([ownerId, updatedAt])
@@ -142,6 +163,60 @@ model Ticket {
   @@index([requesterId, currentStatus, updatedAt])
   @@index([requesterId, requestedPriority, updatedAt])
   @@index([requesterId, categoryId, updatedAt])
+}
+
+model ActionTaken {
+  id               String           @id @default(uuid())
+  ticketId         String
+  assignedToId     String
+  createdById      String
+  performedById    String
+  actionAt         DateTime
+  description      String
+  result           String           @default("")
+  followUpRequired Boolean          @default(false)
+  followUpNote     String           @default("")
+  attachmentNotes  String           @default("")
+  status           ActionStatus     @default(PLANNED)
+  version          Int              @default(1)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt
+  ticket           Ticket           @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  assignedTo       User             @relation("ActionAssignee", fields: [assignedToId], references: [id], onDelete: Restrict)
+  createdBy        User             @relation("ActionCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  performedBy      User             @relation("ActionPerformer", fields: [performedById], references: [id], onDelete: Restrict)
+  revisions        ActionRevision[]
+  createRequest    ActionCreateRequest?
+
+  @@index([ticketId, actionAt, id])
+  @@index([ticketId, status])
+  @@index([assignedToId, status])
+}
+
+model ActionRevision {
+  id        String          @id @default(uuid())
+  actionId  String
+  actorId   String
+  operation ActionOperation
+  snapshot  Json
+  createdAt DateTime        @default(now())
+  action    ActionTaken     @relation(fields: [actionId], references: [id], onDelete: Restrict)
+  actor     User            @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([actionId, createdAt, id])
+}
+
+model ActionCreateRequest {
+  id             String      @id @default(uuid())
+  actorId        String
+  idempotencyKey String
+  requestHash    String
+  actionId       String      @unique
+  createdAt      DateTime    @default(now())
+  actor          User        @relation(fields: [actorId], references: [id], onDelete: Restrict)
+  action         ActionTaken @relation(fields: [actionId], references: [id], onDelete: Restrict)
+
+  @@unique([actorId, idempotencyKey])
 }
 
 model TicketCreateRequest {
