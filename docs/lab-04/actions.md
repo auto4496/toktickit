@@ -1,6 +1,6 @@
 # Lab 4 Actions Taken API and UI
 
-Work item: [Issue #42](https://github.com/auto4496/toktickit/issues/42). Branch `codex/lab4-3-actions` starts from the independently reviewed data merge `c039a7d`.
+Work item: [Issue #42](https://github.com/auto4496/toktickit/issues/42), proposed in [PR #43](https://github.com/auto4496/toktickit/pull/43). Branch `codex/lab4-3-actions` starts from the independently reviewed data merge `c039a7d`.
 
 ## Implemented
 

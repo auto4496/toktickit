@@ -5,6 +5,7 @@
 .lab4-action-list li { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-top: 1px solid #ccd8d2; }
 .lab4-action-list li > div { min-width: 0; overflow-wrap: anywhere; }
 .lab4-action-list h3 { margin: 8px 0; }
+.lab4-actions h3, .lab4-actions .wf-notice, .lab4-actions .wf-conflict { overflow-wrap: anywhere; }
 .lab4-action-list p { white-space: pre-wrap; margin: 8px 0; }
 .lab4-action-list time { color: #52665e; font-size: 14px; }
 .lab4-page-controls { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }

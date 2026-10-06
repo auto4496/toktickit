@@ -21,7 +21,7 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 |---|---|---|---|---|
 | Engineering contract | Datakung | [#39](https://github.com/auto4496/toktickit/pull/39) | Changes requested, four corrections, author reply and re-review; no remaining blocking findings | Approved `4886585`; merged by Datakung |
 | Data foundation / recovery | Datakung | [#41](https://github.com/auto4496/toktickit/pull/41) | Reported independently passing 391 tests and both builds; no blocking findings | Approved `301c902`; merged |
-| Actions API/UI | Pending | Pending | Author execution and visual/focus checks in [actions.md](actions.md) | Pending |
+| Actions API/UI | Datakung (review requested) | [#43](https://github.com/auto4496/toktickit/pull/43) | Author execution and visual/focus checks in [actions.md](actions.md) | Pending |
 | Ticket workflow | Pending | Pending | Pending | Pending |
 | Dashboards and UI | Pending | Pending | Pending | Pending |
 | Final regression | Pending | Pending | Pending | Pending |
