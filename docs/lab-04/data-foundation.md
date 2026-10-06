@@ -1,6 +1,6 @@
 # Lab 4 Data Foundation and Recovery
 
-Work item: [Issue #40](https://github.com/auto4496/toktickit/issues/40), proposed in [PR #41](https://github.com/auto4496/toktickit/pull/41). Contract: [approved/merged PR #39](https://github.com/auto4496/toktickit/pull/39). Branch: `codex/lab4-2-data-foundation`, based on staging merge `b5bee16`.
+Work item: [Issue #40](https://github.com/auto4496/toktickit/issues/40), approved by Datakung at `301c902` and integrated through [PR #41](https://github.com/auto4496/toktickit/pull/41) on 2026-10-06. Issue #40 is closed/Done. Contract: [approved/merged PR #39](https://github.com/auto4496/toktickit/pull/39). Branch: `codex/lab4-2-data-foundation`, based on staging merge `b5bee16`.
 
 ## Changes
 
@@ -43,4 +43,4 @@ Run database suites sequentially. If this Windows setup uses preinstalled Prisma
 
 ## Limits
 
-Independent review/integration of this data PR is pending. Actions API/UI, explicit Start-control coverage, Ticket workflow, dashboard filters, browser evidence and final release work are subsequent work items. Passing data tests do not complete LAB4.
+Independent review/integration of the data PR is complete. Actions API/UI and explicit Start-control coverage are now tracked by Issue #42; Ticket workflow, dashboard filters and final release remain subsequent work items. Passing data tests do not complete LAB4.

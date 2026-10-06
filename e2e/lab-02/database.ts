@@ -9,6 +9,10 @@ import { requireTestDatabaseUrl } from '../../server/tests/test-database.js';
 
 const root = process.cwd();
 const storageDirectory = path.join(root, 'tmp', 'attachments', 'e2e');
+const verifyStorageDirectory = () => {
+  const relative = path.relative(path.join(root, 'tmp'), storageDirectory);
+  if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) throw new Error('E2E storage path escaped the workspace tmp directory.');
+};
 const serverRequire = createRequire(path.join(root, 'server', 'package.json'));
 const { PrismaClient } = serverRequire('@prisma/client') as typeof import('@prisma/client');
 type PrismaClientInstance = InstanceType<typeof PrismaClient>;
@@ -35,6 +39,9 @@ const clearE2eData = async (prisma: PrismaClientInstance) => {
   if (ticketIds.length === 0) return;
 
   await prisma.$transaction([
+    prisma.actionRevision.deleteMany({ where: { action: { ticketId: { in: ticketIds } } } }),
+    prisma.actionCreateRequest.deleteMany({ where: { action: { ticketId: { in: ticketIds } } } }),
+    prisma.actionTaken.deleteMany({ where: { ticketId: { in: ticketIds } } }),
     prisma.publicComment.deleteMany({ where: { ticketId: { in: ticketIds } } }),
     prisma.internalNote.deleteMany({ where: { ticketId: { in: ticketIds } } }),
     prisma.attachment.deleteMany({ where: { ticketId: { in: ticketIds } } }),
@@ -69,6 +76,7 @@ export async function prepareE2eEnvironment() {
   } finally {
     await prisma.$disconnect();
   }
+  verifyStorageDirectory();
   await rm(storageDirectory, { recursive: true, force: true });
 }
 
@@ -80,5 +88,6 @@ export async function cleanE2eEnvironment() {
   } finally {
     await prisma.$disconnect();
   }
+  verifyStorageDirectory();
   await rm(storageDirectory, { recursive: true, force: true });
 }

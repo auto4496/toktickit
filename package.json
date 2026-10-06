@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:lab3": "playwright test --config playwright.staff.config.ts",
+    "test:e2e:actions": "playwright test --config playwright.actions.config.ts",
     "test:e2e:capture:lab3": "node e2e/lab-03/capture-evidence.mjs",
     "test:e2e:capture": "node e2e/lab-02/capture-evidence.mjs",
     "test:integration": "vitest run server/tests/lab-02/reference-data.integration.test.ts",

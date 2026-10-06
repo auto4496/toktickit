@@ -1,6 +1,6 @@
 # Lab 4 Review Record
 
-Status: Datakung approved PR #39 commit `4886585` on 2026-10-05 at 21:34:32 Asia/Bangkok and merged it into `codex/lab4-staging` at 21:36:01. The contract review is complete. Independent review of Issue #40 data foundation remains pending.
+Status: contract #39 and data foundation #41 are independently approved and merged into `codex/lab4-staging`. Datakung approved #41 at `301c902` on 2026-10-06 at 14:14:47 Asia/Bangkok and merged it at 14:15:03 (`c039a7d`). Independent Actions review for Issue #42 remains pending.
 
 Engineering contract issue: [#38](https://github.com/auto4496/toktickit/issues/38). Local document checks and author review do not count as independent peer approval.
 
@@ -20,8 +20,8 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 | Area | Reviewer | PR | Comment/response | Approval |
 |---|---|---|---|---|
 | Engineering contract | Datakung | [#39](https://github.com/auto4496/toktickit/pull/39) | Changes requested, four corrections, author reply and re-review; no remaining blocking findings | Approved `4886585`; merged by Datakung |
-| Data foundation / recovery | Datakung (review requested) | [#41](https://github.com/auto4496/toktickit/pull/41) | INT-01/INT-02 author execution recorded in [data-foundation.md](data-foundation.md) | Pending |
-| Actions API/UI | Pending | Pending | Pending | Pending |
+| Data foundation / recovery | Datakung | [#41](https://github.com/auto4496/toktickit/pull/41) | Reported independently passing 391 tests and both builds; no blocking findings | Approved `301c902`; merged |
+| Actions API/UI | Pending | Pending | Author execution and visual/focus checks in [actions.md](actions.md) | Pending |
 | Ticket workflow | Pending | Pending | Pending | Pending |
 | Dashboards and UI | Pending | Pending | Pending | Pending |
 | Final regression | Pending | Pending | Pending | Pending |

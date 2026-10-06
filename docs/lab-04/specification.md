@@ -1,6 +1,6 @@
 # Lab 4 Engineering Contract
 
-Status: proposed contract awaiting review for [Issue #38](https://github.com/auto4496/toktickit/issues/38). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`.
+Status: contract [Issue #38](https://github.com/auto4496/toktickit/issues/38) approved by Datakung at `4886585` and integrated through [PR #39](https://github.com/auto4496/toktickit/pull/39). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`. Data foundation #40/#41 is also approved and merged; Actions implementation is tracked by #42.
 
 ## 1. Sprint goal
 

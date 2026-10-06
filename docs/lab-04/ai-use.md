@@ -11,6 +11,7 @@ Model used: record the exact model names from the Codex UI at final submission; 
 5. User: “ส่งไปบอกยัง”. Outcome: posted the four-correction reply in PR #39 and requested Datakung's re-review.
 6. User: “เหมือนจะอนุมัติแล้วนะ”. Outcome: verified actual approval of `4886585` and merge into staging by Datakung.
 7. User: “จัดการเลย” after contract approval. Outcome: closed Issue #38/marked Done, created Issue #40 and isolated its additive data migration, seed and recovery checks from later API/UI work. Implemented INT-02 with a real database backup/restore and authenticated download. Fixed a test schema-selection mismatch found by Prisma diff; the corrected comparison and recovery passed. The first unavailable-Docker run was a failure, not evidence of acceptance.
+8. User: “ทำต่อเลย” after the status check confirmed Datakung approved/merged #41 and Issue #40 was closed/Done. Outcome: created Issue #42 from the reviewed staging state, implemented Actions API/UI and the focused Start suite, preserved existing Owner/status permissions through a separate assignee endpoint, and corrected missing Starting/history/conflict/focus behavior. Five browser checks and both builds passed; refreshed three-width screenshots after fixing linked dependency font serving. Extended the same-Ticket journey to two IT Staff plus Admin and recorded final runs in actions.md. Independent Actions approval remains pending.
 
 Add 4–8 further actual prompts and concrete results as the implementation and review proceed. Do not invent prompts or claim unobserved tests.
 

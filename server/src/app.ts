@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { adminUsersRouter } from './admin-users.js';
 import { workflowRouter } from './staff-workflow.js';
+import { actionsRouter } from './actions-taken.js';
 import cors from 'cors';
 import { authRouter, authError, clientOrigin, loadAuth, requireFullSession, AuthRequest, hasExactKeys } from './auth/http.js';
 import multer from 'multer';
@@ -90,6 +91,7 @@ app.all('/api/requesters', (_req, res) => res.status(404).json({ error: { code: 
 app.use('/api', requireFullSession);
 app.use('/api', adminUsersRouter);
 app.use('/api', workflowRouter);
+app.use('/api', actionsRouter);
 
 app.get('/api/categories', async (_req: Request, res: Response) => {
   try {
