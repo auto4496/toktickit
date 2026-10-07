@@ -1,6 +1,6 @@
 # Lab 4 Ticket Workflow and Resolution Gate
 
-Work item: [Issue #44](https://github.com/auto4496/toktickit/issues/44). Branch `codex/lab4-4-ticket-workflow` starts from approved Actions merge `68a88cc` into `codex/lab4-staging`.
+Work item: [Issue #44](https://github.com/auto4496/toktickit/issues/44), proposed in [PR #45](https://github.com/auto4496/toktickit/pull/45). Branch `codex/lab4-4-ticket-workflow` starts from approved Actions merge `68a88cc` into `codex/lab4-staging`. Feature/evidence commit: `46ac747`; independent review/integration pending.
 
 ## Implemented
 
