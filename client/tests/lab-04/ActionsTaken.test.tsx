@@ -90,7 +90,7 @@ describe('UI-05 Start control and recovery', () => {
     let posts = 0;
     vi.mocked(workflow).mockImplementation(async (path, method) => {
       if (method === 'POST') {
-        if (++posts === 1) throw new ApiFailure('Assignee unavailable.', 409, 'ASSIGNEE_UNAVAILABLE');
+        if (++posts === 1) throw new ApiFailure('This Action can no longer be changed.', 409, 'ACTION_READ_ONLY');
         return { data: action };
       }
       return readMock(path);
@@ -100,12 +100,74 @@ describe('UI-05 Start control and recovery', () => {
     fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Check VPN' } });
     fireEvent.change(screen.getByLabelText('Assigned to'), { target: { value: staff.id } });
     fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
-    await screen.findByText('Assignee unavailable.');
+    await screen.findByText('This Action can no longer be changed.');
     expect(screen.getByRole('button', { name: 'Save Action' })).toBeEnabled();
     fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
     await screen.findByText('Action saved.');
     const attempts = vi.mocked(workflow).mock.calls.filter(([, method]) => method === 'POST');
     expect(attempts[1][3]?.['Idempotency-Key']).not.toBe(attempts[0][3]?.['Idempotency-Key']);
+  });
+
+  it.each(['VALIDATION_FAILED', 'ASSIGNEE_NOT_ELIGIBLE'])('releases recovery after definitive %s, retaining the corrected draft for a fresh creation', async code => {
+    let posts = 0;
+    vi.mocked(workflow).mockImplementation(async (path, method, body) => {
+      if (method === 'POST') {
+        if (++posts === 1) throw new TypeError('Rejection response lost');
+        if (posts === 2) throw new ApiFailure('Original request rejected.', 400, code, { description: 'Original description was invalid.' });
+        expect(body).toMatchObject({ description: 'Corrected draft' });
+        return { data: { ...action, description: 'Corrected draft' } };
+      }
+      return readMock(path, { ...action, description: 'Corrected draft' });
+    });
+    render(<ActionsTaken ticketId={ticketId} role="IT_STAFF" terminal={false} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Add Action' }));
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Original invalid draft' } });
+    fireEvent.change(screen.getByLabelText('Assigned to'), { target: { value: staff.id } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    await screen.findByRole('button', { name: 'Recover saved Action' });
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Corrected draft' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Recover saved Action' }));
+    await screen.findByText(/Original request rejected.*Your draft is retained/);
+    expect(screen.queryByRole('button', { name: 'Recover saved Action' })).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/^Action Description/)).toHaveValue('Corrected draft');
+    expect(screen.getByRole('button', { name: 'Save Action' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Cancel', exact: true })).toBeEnabled();
+    expect(screen.getByLabelText(/^Action Description/)).toHaveAttribute('aria-invalid', 'true');
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    await screen.findByText('Action saved.');
+    const attempts = vi.mocked(workflow).mock.calls.filter(([, method]) => method === 'POST');
+    expect(attempts[1][2]).toEqual(attempts[0][2]);
+    expect(attempts[1][3]).toEqual(attempts[0][3]);
+    expect(attempts[2][3]?.['Idempotency-Key']).not.toBe(attempts[0][3]?.['Idempotency-Key']);
+    expect(vi.mocked(workflow).mock.calls.filter(([, method]) => method === 'PATCH')).toHaveLength(0);
+  });
+
+  it.each([[500, 'ACTIONS_UNAVAILABLE'], [409, 'IDEMPOTENCY_KEY_REUSED'], [401, 'AUTH_REQUIRED']] as const)('keeps recovery protected after %s/%s without releasing the original key', async (status, code) => {
+    let posts = 0;
+    vi.mocked(workflow).mockImplementation(async (path, method) => {
+      if (method === 'POST') {
+        if (++posts === 1) throw new TypeError('Response lost');
+        throw new ApiFailure('Cannot confirm the original outcome.', status, code);
+      }
+      return readMock(path);
+    });
+    render(<ActionsTaken ticketId={ticketId} role="IT_STAFF" terminal={false} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Add Action' }));
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Original draft' } });
+    fireEvent.change(screen.getByLabelText('Assigned to'), { target: { value: staff.id } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save Action' }));
+    await screen.findByRole('button', { name: 'Recover saved Action' });
+    fireEvent.change(screen.getByLabelText('Action Description'), { target: { value: 'Later edit' } });
+    for (let retry = 0; retry < 2; retry++) {
+      fireEvent.click(screen.getByRole('button', { name: 'Recover saved Action' }));
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Recover saved Action' })).toBeEnabled());
+      expect(screen.getByRole('button', { name: 'Save Action' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Cancel', exact: true })).toBeDisabled();
+      expect(screen.getByLabelText('Action Description')).toHaveValue('Later edit');
+    }
+    const attempts = vi.mocked(workflow).mock.calls.filter(([, method]) => method === 'POST');
+    expect(attempts).toHaveLength(3);
+    for (const attempt of attempts.slice(1)) { expect(attempt[2]).toEqual(attempts[0][2]); expect(attempt[3]).toEqual(attempts[0][3]); }
   });
 
   it.each(['IT_STAFF', 'ADMINISTRATOR'] as const)('starts once for %s with busy protection, refreshed history/list and keyboard focus', async role => {

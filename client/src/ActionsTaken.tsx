@@ -21,6 +21,13 @@ const localDateTime = (value: string) => {
   return new Date(date.getTime() - offset).toISOString().slice(0, 16);
 };
 const blank = (): Draft => ({ actionAt: localDateTime(new Date().toISOString()), description: '', result: '', assignedToId: '', followUpRequired: false, followUpNote: '', attachmentNotes: '' });
+// These creation errors establish that no request record/Action was committed.
+// Authentication, unknown responses and reused keys cannot establish that after a lost response.
+const creationRejected = (reason: unknown): reason is ApiFailure => reason instanceof ApiFailure && (
+  (reason.status === 400 && ['VALIDATION_FAILED', 'ASSIGNEE_NOT_ELIGIBLE'].includes(reason.code)) ||
+  (reason.status === 409 && reason.code === 'ACTION_READ_ONLY') ||
+  (reason.status === 404 && reason.code === 'RESOURCE_NOT_FOUND')
+);
 
 export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { ticketId: string; role: AuthUser['role']; terminal: boolean; onChanged?: () => void }) {
   const writable = role !== 'REQUESTER' && !terminal;
@@ -87,6 +94,11 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
     try { setSelected(await workflow<Detail>(`/tickets/${ticketId}/actions/${action.id}`)); setDetailError(''); }
     catch { setDetailError('Action saved, but its latest history could not be loaded. Reload latest.'); setNeedsReload(true); }
   };
+  const releaseRejectedCreation = (reason: ApiFailure, recovery = false) => {
+    createAttempt.current = null; key.current = crypto.randomUUID(); setRecoverCreate(false); setConflict(false); setNeedsReload(false);
+    setFieldErrors(reason.fieldErrors ?? {});
+    setMessage(recovery ? `${reason.message} Your draft is retained. Correct it and save again, or cancel.` : reason.message);
+  };
   const recoverCreation = async () => {
     const attempt = createAttempt.current;
     if (!attempt || mutationLock.current) return;
@@ -96,8 +108,9 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
       createAttempt.current = null; setRecoverCreate(false); setConflict(false); setNeedsReload(false);
       const editable = writable && !['COMPLETED', 'CANCELLED'].includes(response.data.status);
       await refreshHistory(response.data, editable ? 'Original Action recovered. Your draft is retained. Save Action to apply your edits to this Action.' : 'Original Action recovered. It is now read-only.', editable);
-    } catch {
-      setMessage('Creation could not be confirmed. Your draft is retained. Try Recover saved Action again.');
+    } catch (reason) {
+      if (creationRejected(reason)) releaseRejectedCreation(reason, true);
+      else setMessage('Creation could not be confirmed. Your draft is retained. Try Recover saved Action again.');
     } finally { mutationLock.current = false; setBusy(false); setPending(''); }
   };
   const startEdit = () => {
@@ -125,11 +138,9 @@ export default function ActionsTaken({ ticketId, role, terminal, onChanged }: { 
       await refreshHistory(response.data, 'Action saved.');
     } catch (reason) {
       if (mode === 'create') {
-        if (!(reason instanceof ApiFailure) || reason.status >= 500 || reason.code === 'IDEMPOTENCY_KEY_REUSED') {
+        if (creationRejected(reason)) releaseRejectedCreation(reason);
+        else {
           setRecoverCreate(true); setMessage('Creation could not be confirmed. Your draft is retained. Recover saved Action before saving changes.');
-        } else {
-          createAttempt.current = null; key.current = crypto.randomUUID();
-          setFieldErrors(reason.fieldErrors ?? {}); setMessage(reason.message);
         }
       } else showFailure(reason, 'Action could not be saved. Try again.');
     } finally { mutationLock.current = false; setBusy(false); setPending(''); }
