@@ -1,0 +1,97 @@
+{
+  "observedAt": "2026-10-07T07:40:58.712Z",
+  "browserChecks": "Complete workflow suite passed before publication; observed counts in docs/lab-04/workflow.md.",
+  "baseCommit": "68a88cc1760f18f19f38bd91f84515959ee25cde",
+  "workingTree": "M client/src/StaffTicketDetail.tsx\n M client/src/workflow-api.ts\n M docs/lab-04/actions.md\n M docs/lab-04/api-spec.md\n M docs/lab-04/issue-plan.md\n M docs/lab-04/reviewer.md\n M docs/lab-04/specification.md\n M docs/lab-04/ui-spec.md\n M e2e/lab-03/staff-ticket-flow.spec.ts\n M e2e/lab-03/system-verification.spec.ts\n M e2e/lab-04/helpers.ts\n M package.json\n M server/src/staff-workflow.ts\n M server/tests/lab-03/admin-users.api.test.ts\n M server/tests/lab-03/safe-errors.api.test.ts\n M server/tests/lab-03/staff-workflow.api.test.ts\n?? client/tests/lab-04/TicketWorkflow.test.tsx\n?? docs/lab-04/workflow.md\n?? e2e/lab-04/capture-workflow-evidence.mjs\n?? e2e/lab-04/ticket-resolution.spec.ts\n?? playwright.workflow.config.ts\n?? server/src/resolution-gate.ts\n?? server/tests/lab-04/ticket-workflow.api.test.ts\n?? server/tests/lab-04/ticket-workflow.unit.test.ts",
+  "viewports": [
+    "1440x900",
+    "834x1112",
+    "390x844"
+  ],
+  "files": [
+    {
+      "path": "screenshots/resolution-blocked-1440.png",
+      "width": 1440,
+      "height": 1993,
+      "bytes": 194562,
+      "sha256": "b748ceebbea3c3f62c5892de0f81baff566767b44d14a2ff2f24d5413de790dd"
+    },
+    {
+      "path": "screenshots/resolution-blocked-834.png",
+      "width": 834,
+      "height": 2637,
+      "bytes": 166354,
+      "sha256": "369ac60dba6c8f84dba3c03bf1a2745174b684ffb0accf8f5eb35937f9e0004c"
+    },
+    {
+      "path": "screenshots/resolution-blocked-390.png",
+      "width": 390,
+      "height": 3007,
+      "bytes": 154980,
+      "sha256": "3d1b627f020713293a0c6aadcea767f43e8dbf7fb5848932510f00659f69a52c"
+    },
+    {
+      "path": "screenshots/resolution-ready-1440.png",
+      "width": 1440,
+      "height": 2454,
+      "bytes": 221555,
+      "sha256": "06b8e6aacfc401338ae928c2a3608f7ed895c16802caac8e65e8fa1e68f06d60"
+    },
+    {
+      "path": "screenshots/resolution-ready-834.png",
+      "width": 834,
+      "height": 3120,
+      "bytes": 200624,
+      "sha256": "bd4099e26f83b4d6c2f48de276ddd361a6ef61c01d9d58e15254183f6bd5ed64"
+    },
+    {
+      "path": "screenshots/resolution-ready-390.png",
+      "width": 390,
+      "height": 3657,
+      "bytes": 179056,
+      "sha256": "abac47f98f9097b249efaa8b0c5f62a30700187ad6ed97e6130545636ab6ba04"
+    },
+    {
+      "path": "screenshots/resolution-closed-1440.png",
+      "width": 1440,
+      "height": 2141,
+      "bytes": 208272,
+      "sha256": "568a0054d8249c1e37b2d54f7fed7bab9438718caf9b600426f07020238dd625"
+    },
+    {
+      "path": "screenshots/resolution-closed-834.png",
+      "width": 834,
+      "height": 2783,
+      "bytes": 187611,
+      "sha256": "74eb02d8eedd2ac2856fcaadfaa119ba2231432ab92fe9f6f2a6435ece19b9ea"
+    },
+    {
+      "path": "screenshots/resolution-closed-390.png",
+      "width": 390,
+      "height": 3323,
+      "bytes": 167314,
+      "sha256": "1d5a54033fd7806349c75b4ca685c20cd27d225f2d21873ed175ae0d774816f1"
+    },
+    {
+      "path": "screenshots/resolution-gate-rejected-1440.png",
+      "width": 1440,
+      "height": 2542,
+      "bytes": 225874,
+      "sha256": "2fec9b0b2967b22cac6797b5881e0c9afde65ab7a8fd2b461a50791ff1c74418"
+    },
+    {
+      "path": "screenshots/resolution-gate-rejected-834.png",
+      "width": 834,
+      "height": 3136,
+      "bytes": 203476,
+      "sha256": "fcc268f5babdf940a6ef20afdbf213b07afc3fafbdd6ed26ee468aac605735f6"
+    },
+    {
+      "path": "screenshots/resolution-gate-rejected-390.png",
+      "width": 390,
+      "height": 3721,
+      "bytes": 184867,
+      "sha256": "f881fb0eb9a83fd43ca809d6e5ed9788d2f8e5c1c69fdcf620b38da1427441f9"
+    }
+  ]
+}

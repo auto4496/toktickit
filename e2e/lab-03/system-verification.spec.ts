@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { createTicket, e2ePassword, expectNoHorizontalOverflow, requesterA, uploadAttachment } from '../lab-02/helpers';
+import { completeResolutionAction } from '../lab-04/helpers';
 
 async function login(page: Page, email: string, destination: string) {
   await page.context().clearCookies();
@@ -116,6 +117,7 @@ for (const [name, width, height] of [['desktop', 1440, 900], ['tablet', 834, 111
     await capture('requester-indication');
 
     await login(page, 'e2e.staff@example.test', `/staff/tickets/${ticket.id}`);
+    await completeResolutionAction(page);
     for (const state of ['RESOLVED', 'CLOSED']) {
       await page.getByLabel('Next status').selectOption(state);
       await page.getByRole('button', { name: 'Update status' }).click();

@@ -1,6 +1,6 @@
 # Lab 4 Actions Taken API and UI
 
-Work item: [Issue #42](https://github.com/auto4496/toktickit/issues/42), proposed in [PR #43](https://github.com/auto4496/toktickit/pull/43). Branch `codex/lab4-3-actions` starts from the independently reviewed data merge `c039a7d`.
+Work item: [Issue #42](https://github.com/auto4496/toktickit/issues/42), approved and merged through [PR #43](https://github.com/auto4496/toktickit/pull/43). Datakung approved `935bcdf` and merged `68a88cc` on 2026-10-07, independently passing 431 tests, seven Actions browser tests and both builds. Issue #42 is closed/Done. Branch `codex/lab4-3-actions` started from the reviewed data merge `c039a7d`; dated sections below retain historical author checks and review progression.
 
 ## Implemented
 
@@ -37,7 +37,7 @@ npm run build:client
 
 ## Remaining
 
-Independent Actions PR approval/integration is pending. Ticket resolution-gate changes, dashboards/open-filter alignment and final full browser/release verification belong to work items 4–6. This increment's passing checks do not complete all LAB4 acceptance criteria.
+Actions approval/integration is complete. Ticket resolution-gate changes, dashboards/open-filter alignment and final full browser/release verification belong to work items 4–6. This increment's passing checks do not complete all LAB4 acceptance criteria.
 
 ## Corrections after Datakung's review — 2026-10-06
 
@@ -57,4 +57,8 @@ Creation failure classification is now shared by Save and Recover saved Action. 
 
 Observed corrected checks: **23 component tests passed**, including lost response followed by validation/ineligible-assignee rejection and a fresh corrected create, plus retained-key protection after server, reused-key and authentication errors. **Seven Actions browser tests passed**. The new browser case uses the real API to reject a whitespace-only description, drops the first 400 response, edits the draft, and confirms recovery returns the original rejection before enabling Save/Cancel. Saving uses a fresh key; the final Ticket has one Action/version 1 and only a CREATED revision. Client production build passed; the existing bundle warning remains.
 
-The initial component run had two test-selector failures because inline field-error text is part of the label; using the labelled field's caption prefix corrected the selectors, and the final 23-test run passed. No production behavior was changed to bypass assertions. The seven-test routine browser run preserved all nine curated image hashes/byte lengths and left the screenshot/manifest diff empty. No new full 431-test author run is claimed. Peer re-approval and merge remain pending.
+The initial component run had two test-selector failures because inline field-error text is part of the label; using the labelled field's caption prefix corrected the selectors, and the final 23-test run passed. No production behavior was changed to bypass assertions. The seven-test routine browser run preserved all nine curated image hashes/byte lengths and left the screenshot/manifest diff empty. No full 431-test author run was claimed at this stage; subsequent independent approval is recorded below.
+
+## Independent integration — 2026-10-07
+
+Datakung approved `935bcdf` at 14:20:46 Asia/Bangkok and merged PR #43 at 14:21:02 as `68a88cc`. The final review independently passed all 431 committed tests, seven browser checks, independent recovery cases and both production builds. All findings were corrected. Issue #42 is closed/Done; Ticket workflow now proceeds as Issue #44 from that reviewed merge.

@@ -53,8 +53,7 @@ describe('API-15 safe integrated failures and real transaction rollback', () => 
   });
   it.each(['queue', 'detail', 'conversation'])('returns a safe correlated %s failure', async kind => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    if (kind === 'detail') vi.spyOn(prisma.ticket, 'findFirst').mockRejectedValueOnce(new Error(privateDetail));
-    else vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error(privateDetail));
+    vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error(privateDetail));
     const url = kind === 'queue' ? '/api/staff/tickets' : kind === 'detail' ? `/api/staff/tickets/${ticketId}` : `/api/tickets/${ticketId}/comments`;
     safe(await request(app).get(url).set(staff));
   });

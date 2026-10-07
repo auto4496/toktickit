@@ -6,6 +6,7 @@ export type WorkflowTicket = {
   requester: { id: string; name: string; email: string }; owner: Owner | null;
   requestedPriority: string; itPriority: string; currentStatus: string; version: number;
   requesterResolvedAt: string | null; updatedAt: string;
+  resolutionGate?: { ready: boolean; unfinished: number; completedWithResult: number };
   attachments: { id: string; originalName: string; sizeBytes: number; mimeType: string; removedAt: string | null; removalReason: string | null; canDownload: boolean }[];
 };
 export type Page<T> = { data: T[]; meta: { page: number; pageSize: number; totalItems: number; totalPages: number } };
