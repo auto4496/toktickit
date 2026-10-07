@@ -1,5 +1,6 @@
 import { apiFetch } from './auth-api';
 import RequesterWorkflow from './RequesterWorkflow';
+import ActionsTaken from './ActionsTaken';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import type { Requester } from './App';
 
@@ -218,5 +219,6 @@ export default function RequesterTicketDetail({ requester, ticketId, onBack }: {
     </section>
     {removing && <div className="dialog-backdrop" role="presentation"><section ref={dialogRef} className="removal-dialog" role="dialog" aria-modal="true" aria-labelledby="remove-title"><h2 id="remove-title">Remove {removing.originalName}?</h2><p>The file can no longer be opened through TokTickIT. Its metadata will remain visible.</p><label htmlFor="removal-reason">Removal reason</label><textarea id="removal-reason" value={reason} onChange={(event) => { setReason(event.target.value); setRemovalError(null); }} minLength={5} maxLength={200} required disabled={removingBusy} aria-invalid={Boolean(removalError)} aria-describedby={removalError ? 'removal-error' : undefined} autoFocus />{removalError && <p id="removal-error" className="field-error" role="alert">{removalError}</p>}<div className="form-actions"><button className="btn btn-outline-secondary" disabled={removingBusy} onClick={closeRemoval}>Cancel</button><button className="btn btn-danger" disabled={removingBusy || reason.trim().length < 5} onClick={() => void remove()}>{removingBusy ? 'Removing…' : 'Remove Attachment'}</button></div></section></div>}
     <RequesterWorkflow key={`${detail.id}-${retry}`} ticket={detail} onUpdated={() => setRetry(value => value + 1)} />
+    <ActionsTaken ticketId={detail.id} role="REQUESTER" terminal={['CLOSED', 'CANCELLED'].includes(detail.currentStatus)} />
   </main>;
 }

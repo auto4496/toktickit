@@ -3,6 +3,7 @@ import { apiFetch, AuthUser } from './auth-api';
 import { ApiFailure, dateLabel, label, Owner, transitions, workflow, WorkflowTicket } from './workflow-api';
 import { Badge, Confirmation } from './WorkflowParts';
 import TicketConversation from './TicketConversation';
+import ActionsTaken from './ActionsTaken';
 export default function StaffTicketDetail({ user, ticketId, onBack }: { user: AuthUser; ticketId: string; onBack: () => void }) {
   const [ticket, setTicket] = useState<WorkflowTicket | null>(null), [error, setError] = useState(''), [retry, setRetry] = useState(0);
   const [owners, setOwners] = useState<Owner[]>([]), [ownerError, setOwnerError] = useState('');
@@ -57,6 +58,7 @@ export default function StaffTicketDetail({ user, ticketId, onBack }: { user: Au
       </aside>
       <section className="wf-panel wf-attachments"><h2>Attachments</h2>{!ticket.attachments.length && <p className="wf-muted">No attachments.</p>}<ul>{ticket.attachments.map(file => <li key={file.id}><div><strong>{file.originalName}</strong><small>{file.mimeType} · {Math.ceil(file.sizeBytes / 1024)} KB</small>{file.removedAt && <p>Removed · {file.removalReason}</p>}{unavailable[file.id] && <p role="alert">File unavailable. Try downloading again.</p>}</div>{file.canDownload && <button onClick={() => void download(file.id, file.originalName)}>{unavailable[file.id] ? 'Retry download' : 'Download'}</button>}</li>)}</ul></section>
     </div><TicketConversation key={ticket.id} ticketId={ticket.id} role={user.role} terminal={terminal} />
+    <ActionsTaken ticketId={ticket.id} role={user.role} terminal={terminal} onChanged={() => { void workflow<{ data: WorkflowTicket }>(`/staff/tickets/${ticket.id}`).then(({ data }) => setTicket(data)).catch(() => {}); }} />
     {confirm && <Confirmation title="Confirm ticket update" onCancel={() => setConfirm(null)} onConfirm={() => void mutate(confirm.operation, confirm.body)}>{confirm.text}</Confirmation>}
   </main>;
 }

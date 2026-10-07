@@ -22,6 +22,7 @@ Current Action DTO:
 
 | Method/path | Roles | Behavior |
 |---|---|---|
+| `GET /tickets/:ticketId/actions/eligible-assignees` | Staff/Admin | Active IT_STAFF/ADMINISTRATOR choices only; `{data:[{id,name,isActive}]}` ordered by name/ID. Separate from Ticket Owner choices so existing Staff-only owner permissions are retained. |
 | `GET /tickets/:ticketId/actions?page=1&pageSize=20` | owning Requester; Staff/Admin | Ordered `actionAt ASC, id ASC`; `{data,meta}` with one-based page and pageSize 10/20/50. Requesters receive shared Action fields, not revisions. |
 | `GET /tickets/:ticketId/actions/:actionId` | owning Requester; Staff/Admin | `{data}`; Staff/Admin additionally receive `revisions` sorted `createdAt ASC,id ASC`. |
 | `POST /tickets/:ticketId/actions` | Staff/Admin | Create PLANNED Action, version 1; `201 {data}`. Requires `Idempotency-Key` UUID. |
