@@ -16,7 +16,12 @@ Model used: record the exact model names from the Codex UI at final submission; 
 10. User: “เพื่อนตรวจละ”. Outcome: read the re-review of `25b478c`, which confirmed the original fixes and independently passing 426 tests/six browser tests/both builds, but found recovery stranded after definitive server rejection. Shared creation-error classification between Save and recovery, preserved the corrected draft and allowed a fresh key only for known rejection outcomes. Added component and real-browser regression coverage; actual final checks and an initial selector failure are recorded in actions.md. Re-approval remains pending.
 11. User: “ต่อเลย” after Datakung approved/merged #43. Outcome: created Issue #44 and branch from reviewed merge `68a88cc`; implemented atomic resolution gating, server snapshot counts and recoverable Staff UI, retaining Requester advisory/Admin status denial. Extended fixture/lifecycle coverage, passed 458 tests and both builds, corrected a native-option browser assertion and kept failed captures from publication. Actual browser/visual evidence is in workflow.md; independent workflow approval remains pending.
 
-Add 4–8 further actual prompts and concrete results as the implementation and review proceed. Do not invent prompts or claim unobserved tests.
+12. User: “เป็นไง”. Outcome: verified Datakung's approval of `a1d1fce` and PR #45 merge `69b32d6` on 2026-10-09, then closed Issue #44 and set Project Done. Peer confirmed 458 tests, 14 relevant browser cases and both builds.
+13. User: “ทำต่อเลย”. Outcome: created Issue #46 and an isolated dashboard branch from reviewed merge `69b32d6`. Added authoritative role metrics, shared open scopes, distinct follow-up Ticket drill-down and query-aware routes. Actual execution, failed-first-run test corrections and visual evidence are recorded in [dashboards.md](dashboards.md). Independent approval remains pending.
+
+Entries above record the state at each prompt; later review outcomes supersede earlier pending statements. Do not invent prompts or claim unobserved tests.
+
+14. User: “เพื่ออนรีวิวละ”. Outcome: read Datakung's requested change on PR #47, corrected the dashboard fixture to resolve the generated server Prisma client through `server/package.json`, and reran the requested normal test/capture commands without `NODE_PATH`. Observed verification and re-review status are recorded in [dashboards.md](dashboards.md).
 
 ## My Reflection
 

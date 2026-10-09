@@ -2,6 +2,8 @@
 
 Build on the Lab 3 Zen Green tokens and Ticket components. Dashboard navigation is visible only to its role and has `aria-current="page"` on the active route. Server permissions remain authoritative.
 
+Requester/Staff normal sign-in landing is the corresponding dashboard; Admin retains Users. Explicit role-allowed list/detail destinations and their dashboard filters survive authentication. Lists expose Ticket scope and follow-up controls, and clearing filters releases dashboard scopes. Recent/resolved cards identify the seven-day metric window; their destination lists retain the contract's broader sorted/status scope. Multiple qualifying Actions may lead to one Ticket in the follow-up list, with this distinction stated on screen.
+
 ## Requester dashboard `/dashboard`
 
 Four compact cards: Open Tickets, Waiting for You, Recently Updated (7 days), Recently Resolved (7 days). Below, up to five recently updated owned Tickets show number, summary, status text and update time. Each card has an accessible link to My Tickets with its filter; each row links to owned Ticket Detail. Use zero values and a clear “No recent tickets” message. Show skeleton/status while loading, Retry for safe failure, and Sign in/Return if session or role is invalid. On mobile, cards stack and links remain touch sized.

@@ -20,7 +20,7 @@ test('E2E-03 Admin creates, edits and resets an account; new credentials require
   await page.getByRole('button', { name: 'Set initial password', exact: true }).click(); await expect(page.getByRole('status').filter({ hasText: 'Initial password updated.' })).toBeVisible();
   await login(page, email, replacement); await expect(page.getByRole('heading', { name: 'Choose your new password' })).toBeVisible();
   expect((await page.context().request.get(`http://127.0.0.1:${process.env.E2E_API_PORT ?? '5100'}/api/admin/users`)).status()).toBe(403);
-  await page.getByLabel('Current password', { exact: true }).fill(replacement); await page.getByLabel('New password', { exact: true }).fill('Chosen personal green garden password 2026'); await page.getByLabel('Confirm new password', { exact: true }).fill('Chosen personal green garden password 2026'); await page.getByRole('button', { name: 'Save password and continue', exact: true }).click(); await expect(page).toHaveURL(/\/staff\/tickets$/);
+  await page.getByLabel('Current password', { exact: true }).fill(replacement); await page.getByLabel('New password', { exact: true }).fill('Chosen personal green garden password 2026'); await page.getByLabel('Confirm new password', { exact: true }).fill('Chosen personal green garden password 2026'); await page.getByRole('button', { name: 'Save password and continue', exact: true }).click(); await expect(page).toHaveURL(/\/staff\/dashboard$/);
   expect((await page.context().request.get(`http://127.0.0.1:${process.env.E2E_API_PORT ?? '5100'}/api/admin/users`)).status()).toBe(403);
 });
 test('RESP/VIS administrator directory, editor and reset dialog at four widths', async ({ page }) => {

@@ -1,0 +1,76 @@
+{
+  "observedAt": "2026-10-09T20:31:22.298Z",
+  "browserChecks": "Complete dashboards suite passed before publication; observed counts in docs/lab-04/dashboards.md.",
+  "baseCommit": "1f1adc2c0227ef3b3b7a655fd2242cd1076dbb7e",
+  "workingTree": "M docs/lab-04/ai-use.md\n M docs/lab-04/dashboards.md\n M docs/lab-04/reviewer.md\n M e2e/lab-04/dashboards.spec.ts",
+  "viewports": [
+    "1440x900",
+    "834x1112",
+    "390x844"
+  ],
+  "files": [
+    {
+      "path": "screenshots/requester-1440.png",
+      "width": 1440,
+      "height": 1118,
+      "bytes": 192795,
+      "sha256": "2d0e5b6c241143a6d12c920019633b81bf3755544ab52c0cc542ec717d07d92e"
+    },
+    {
+      "path": "screenshots/requester-834.png",
+      "width": 834,
+      "height": 1313,
+      "bytes": 174786,
+      "sha256": "3385b1bb5dcef3c6dd431cdd1e8818086193ac394cb0034c230db0099a0d48d9"
+    },
+    {
+      "path": "screenshots/requester-390.png",
+      "width": 390,
+      "height": 2148,
+      "bytes": 150136,
+      "sha256": "0304f8b5ab7ecbd5587ed3b17a277f4cbce0f856f1b42f400ba49796fcc7eaaf"
+    },
+    {
+      "path": "screenshots/staff-1440.png",
+      "width": 1440,
+      "height": 1442,
+      "bytes": 210980,
+      "sha256": "34944221a5c9e6b6415e22720411f826bcd686108820c0a2e6d903623f1bd02f"
+    },
+    {
+      "path": "screenshots/staff-834.png",
+      "width": 834,
+      "height": 1855,
+      "bytes": 179444,
+      "sha256": "fe37b7f186cdcdae2288611e5270b6ee9f6aecb339fe6b4b4fa17177e9a91702"
+    },
+    {
+      "path": "screenshots/staff-390.png",
+      "width": 390,
+      "height": 2525,
+      "bytes": 165079,
+      "sha256": "fef09b97a8a6ddd2718788dfadcd756e2b3175c520a0b51b490492d5e3d7df01"
+    },
+    {
+      "path": "screenshots/admin-1440.png",
+      "width": 1440,
+      "height": 1442,
+      "bytes": 212496,
+      "sha256": "393c2080ca000a6600cd12b51f9ea1b193e24f7f08aea36aa53ffe600b6d6d16"
+    },
+    {
+      "path": "screenshots/admin-834.png",
+      "width": 834,
+      "height": 1855,
+      "bytes": 180226,
+      "sha256": "3db657d7008380264af8114b6a6ccca8acde7328e5497d43d1551ef65646c736"
+    },
+    {
+      "path": "screenshots/admin-390.png",
+      "width": 390,
+      "height": 2525,
+      "bytes": 165069,
+      "sha256": "2215fbf20d335875d657a8807960e85e1a8568beed84622a9ab50426c6d0413a"
+    }
+  ]
+}
