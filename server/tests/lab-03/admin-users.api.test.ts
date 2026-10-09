@@ -27,6 +27,9 @@ beforeAll(async () => {
   relatedSystemId = (await prisma.relatedSystem.create({ data: { name: prefix } })).id;
 });
 afterAll(async () => {
+  await prisma.actionRevision.deleteMany({ where: { action: { ticketId: { in: ticketIds } } } });
+  await prisma.actionCreateRequest.deleteMany({ where: { action: { ticketId: { in: ticketIds } } } });
+  await prisma.actionTaken.deleteMany({ where: { ticketId: { in: ticketIds } } });
   await prisma.ticket.deleteMany({ where: { id: { in: ticketIds } } });
   await prisma.authSession.deleteMany({ where: { userId: { in: ids } } });
   await prisma.user.deleteMany({ where: { id: { in: ids } } });
@@ -113,6 +116,7 @@ describe('API-12–14 administrator accounts', () => {
   });
   it.each(['IN_PROGRESS', 'RESOLVED'] as const)('keeps a valid owner when %s races deactivation', async status => {
     const owner = await makeUser('IT_STAFF'); const row = await ticket(owner.user.id, 'IN_PROGRESS');
+    if (status === 'RESOLVED') await prisma.actionTaken.create({ data: { ticketId: row.id, assignedToId: staff.user.id, createdById: staff.user.id, performedById: staff.user.id, actionAt: new Date(), description: 'Verified service recovery', result: 'Connection restored', status: 'COMPLETED' } });
     if (status === 'IN_PROGRESS') await prisma.ticket.update({ where: { id: row.id }, data: { currentStatus: 'OPEN' } });
     const results = await Promise.all([request(app).patch(`/api/staff/tickets/${row.id}/status`).set(staff.headers).send({ currentStatus: status, expectedVersion: 1, confirmed: true }), edit(owner.user, { isActive: false })]);
     expect(results[0].status).toBe(200); expect(results[1].body.error.code).toBe('USER_HAS_ACTIVE_TICKETS'); expect((await prisma.user.findUniqueOrThrow({ where: { id: owner.user.id } })).isActive).toBe(true);

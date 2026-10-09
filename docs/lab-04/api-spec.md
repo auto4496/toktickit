@@ -35,7 +35,9 @@ Actions are stored under one Ticket. The list and detail never include attachmen
 
 ## Ticket workflow increment
 
-`PATCH /staff/tickets/:ticketId/status` keeps the Lab 3 body (`currentStatus`, `expectedVersion`, optional `confirmed`) and response. Entry into `RESOLVED` additionally checks the Action gate inside the same Ticket-row transaction. Failure returns `409 ACTIONS_INCOMPLETE` with a safe message. Version mismatch still returns `409 TICKET_CONFLICT`. The transition matrix and Staff-only status permission are in [specification.md](specification.md). Requester resolution indication remains advisory.
+`PATCH /staff/tickets/:ticketId/status` keeps the Lab 3 body (`currentStatus`, `expectedVersion`, optional `confirmed`). Entry into `RESOLVED` additionally checks the Action gate inside the same Ticket-row transaction and shared account/Ticket locks used by Action writes. Failure returns `409 ACTIONS_INCOMPLETE` with a safe message and no Ticket mutation. Version mismatch still returns `409 TICKET_CONFLICT`; active owner and confirmation checks retain precedence. The transition matrix and Staff-only status permission are in [specification.md](specification.md). Requester resolution indication remains advisory.
+
+Staff/Admin Ticket detail and operational mutation responses add `data.resolutionGate: {ready:boolean, unfinished:number, completedWithResult:number}` to the existing DTO. `unfinished` counts PLANNED/IN_PROGRESS Actions; `completedWithResult` counts COMPLETED Actions with a Result containing a non-whitespace character (including Unicode trim whitespace). `ready` requires zero unfinished and at least one documented completion. Counts exclude other Tickets and do not expose Action text/actors/history. GET detail uses one repeatable-read snapshot; status mutation rechecks the gate under the Ticket lock and returns the updated detail from its transaction. Owning Requester read/indication DTOs retain their prior shape. Readiness reports the Action condition; valid transition, active owner, Staff permission, version and confirmation are also required to Resolve.
 
 ## Dashboards
 
