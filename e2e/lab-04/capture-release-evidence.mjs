@@ -11,7 +11,9 @@ const requested = [];
 for (const width of [1440, 834, 390]) {
   for (const scene of ['requester-read-only', 'staff-started', 'start-conflict']) requested.push({ source: `test-results/lab-04/actions/screenshots/${scene}-${width}.png`, target: `actions/${scene}-${width}.png`, width });
   for (const scene of ['resolution-blocked', 'resolution-ready', 'resolution-closed', 'resolution-gate-rejected']) requested.push({ source: `test-results/lab-04/workflow/${scene}-${width}.png`, target: `workflow/${scene}-${width}.png`, width });
-  for (const scene of ['requester', 'staff', 'admin']) requested.push({ source: `test-results/lab-04/dashboards/${scene}-${width}.png`, target: `dashboards/${scene}-${width}.png`, width });
+  for (const scene of ['requester', 'staff', 'admin', 'loading-simulated', 'failure-simulated', 'empty', 'forbidden-simulated']) requested.push({ source: `test-results/lab-04/dashboards/${scene}-${width}.png`, target: `dashboards/${scene}-${width}.png`, width });
+  for (const scene of ['action-create', 'action-validation', 'action-edit']) requested.push({ source: `test-results/lab-04/release-forms/${scene}-${width}.png`, target: `forms/${scene}-${width}.png`, width });
+  for (const scene of ['staff', 'requester']) requested.push({ source: `test-results/lab-04/actions-taken/${scene}-${width}.png`, target: `multiple-actions/${scene}-${width}.png`, width });
 }
 for (const [name, width] of [['desktop', 1440], ['tablet', 834], ['mobile', 390]]) {
   for (const scene of ['login-ready', 'staff-public', 'staff-private', 'staff-conflict', 'requester-public-attachment', 'admin-create-validation']) requested.push({ source: `test-results/lab-03/system-states/${name}-${scene}.png`, target: `regression/${name}-${scene}.png`, width });
