@@ -24,4 +24,6 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 | Actions API/UI | Datakung | [#43](https://github.com/auto4496/toktickit/pull/43) | Independently passed 431 tests, seven browser journeys and both builds at `935bcdf`; all findings corrected | Approved `935bcdf`; merged `68a88cc` |
 | Ticket workflow | Datakung | [#45](https://github.com/auto4496/toktickit/pull/45) | Independently confirmed 458 tests, 14 browser cases and both builds; no blocking findings | Approved `a1d1fce`; merged `69b32d6` |
 | Dashboards and UI | Datakung | [#47](https://github.com/auto4496/toktickit/pull/47) | Changes requested on `1f1adc2`: E2E fixture resolved an ungenerated root Prisma client. Fixed server client resolution; [author response](https://github.com/auto4496/toktickit/pull/47#issuecomment-6088818239) records both commands passing four cases each without workaround. Peer re-reviewed and found no blockers | Approved `884df39`; merged `72c5553` |
-| Final regression | Pending | Pending | Pending | Pending |
+| Final hardening / regression / report | Datakung (requested) | [#49](https://github.com/auto4496/toktickit/pull/49) | Author: 484 tests / 48 files, 32 browser cases, both builds, 75 new captures and 29-page review PDF; independent review pending | Pending |
+
+The committed review PDF is a pre-PR preparation snapshot. This record and [release gates](release.md) track subsequent review facts. Issue #48 stays open through the reviewed main release and post-merge acceptance.

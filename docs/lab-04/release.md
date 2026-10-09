@@ -1,6 +1,6 @@
 # LAB4 Final Hardening and Release - Issue #48
 
-Status: final author verification/report preparation from independently approved dashboard merge `72c5553`. Features #38/40/42/44/46 are closed/Done. The final hardening feature branch is `codex/lab4-6-release-evidence`; its review and the subsequent staging-to-main release are pending. No final-main acceptance is claimed.
+Status: final author verification/report prepared in [PR #49](https://github.com/auto4496/toktickit/pull/49), from independently approved dashboard merge `72c5553`. Features #38/40/42/44/46 are closed/Done. The final hardening feature branch is `codex/lab4-6-release-evidence`; independent review and the subsequent staging-to-main release are pending. No final-main acceptance is claimed. The committed PDF is a pre-PR preparation snapshot; this checklist tracks later release facts.
 
 ## Completion gates
 
