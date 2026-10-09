@@ -23,5 +23,5 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 | Data foundation / recovery | Datakung | [#41](https://github.com/auto4496/toktickit/pull/41) | Reported independently passing 391 tests and both builds; no blocking findings | Approved `301c902`; merged |
 | Actions API/UI | Datakung | [#43](https://github.com/auto4496/toktickit/pull/43) | Independently passed 431 tests, seven browser journeys and both builds at `935bcdf`; all findings corrected | Approved `935bcdf`; merged `68a88cc` |
 | Ticket workflow | Datakung | [#45](https://github.com/auto4496/toktickit/pull/45) | Independently confirmed 458 tests, 14 browser cases and both builds; no blocking findings | Approved `a1d1fce`; merged `69b32d6` |
-| Dashboards and UI | Datakung (designated reviewer) | Pending | Issue #46; author evidence in [dashboards.md](dashboards.md) | Pending |
+| Dashboards and UI | Datakung (designated reviewer) | [#47](https://github.com/auto4496/toktickit/pull/47) | Issue #46; 483 tests, 26 browser cases, both builds and nine dashboard screenshots; author evidence in [dashboards.md](dashboards.md) | Pending |
 | Final regression | Pending | Pending | Pending | Pending |
