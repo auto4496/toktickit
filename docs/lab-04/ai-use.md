@@ -1,28 +1,26 @@
 # Lab 4 AI Use
 
-Model used: record the exact model names from the Codex UI at final submission; the user changed model during this work, so a single inferred name would be inaccurate.
+Tool: Codex desktop with OpenAI models. The user changed the model during LAB4. Exact before/after model names are awaiting the student's confirmation; do not infer them from the agent's identity. The complete chronological prompt record is retained in [ai-use-history.md](ai-use-history.md).
 
-## Selected prompts and outcomes
+## Eight selected key prompts and observed outcomes
 
-1. User: “เริ่มอันนี้เลยอันนี้ LAB4” with `SE+Lab+4.pdf`. Outcome: inspected the 11-page brief and located the integrated Lab 3 baseline.
-2. User: “ผมเปลี่ยนโมเดลนะ”. Outcome: continued the same Lab 4 work on the existing branch.
-3. User: “จัดการเลย” after discussing the first Issue and PR. Outcome: created Issue #38 and the documentation-only PR #39 into `codex/lab4-staging`; Datakung subsequently approved and merged the corrected contract.
-4. User: “เพื่อนตรวจยัง”. Outcome: read Datakung's actual changes-requested review, added the planned migration-recovery and Start-control coverage, formally linked Issue/PR through Development, and corrected the Project status. These were contract corrections; test execution was still pending at that point.
-5. User: “ส่งไปบอกยัง”. Outcome: posted the four-correction reply in PR #39 and requested Datakung's re-review.
-6. User: “เหมือนจะอนุมัติแล้วนะ”. Outcome: verified actual approval of `4886585` and merge into staging by Datakung.
-7. User: “จัดการเลย” after contract approval. Outcome: closed Issue #38/marked Done, created Issue #40 and isolated its additive data migration, seed and recovery checks from later API/UI work. Implemented INT-02 with a real database backup/restore and authenticated download. Fixed a test schema-selection mismatch found by Prisma diff; the corrected comparison and recovery passed. The first unavailable-Docker run was a failure, not evidence of acceptance.
-8. User: “ทำต่อเลย” after the status check confirmed Datakung approved/merged #41 and Issue #40 was closed/Done. Outcome: created Issue #42 from the reviewed staging state, implemented Actions API/UI and the focused Start suite, preserved existing Owner/status permissions through a separate assignee endpoint, and corrected missing Starting/history/conflict/focus behavior. Five browser checks and both builds passed; refreshed three-width screenshots after fixing linked dependency font serving. Extended the same-Ticket journey to two IT Staff plus Admin and recorded final runs in actions.md. Independent Actions approval remains pending.
-9. User: “ตอนนี้เป็นไง”. Outcome: checked the actual PR #43 review and found two reproduced changes requested by Datakung. Preserved original create payload/key for explicit ambiguous-response recovery while retaining later draft edits; added real-browser commit-plus-lost-response coverage. Moved routine screenshots to ignored test results and added explicit complete-suite evidence publication with refreshed manifest. Actual verification is recorded in actions.md; independent re-approval remains pending.
-10. User: “เพื่อนตรวจละ”. Outcome: read the re-review of `25b478c`, which confirmed the original fixes and independently passing 426 tests/six browser tests/both builds, but found recovery stranded after definitive server rejection. Shared creation-error classification between Save and recovery, preserved the corrected draft and allowed a fresh key only for known rejection outcomes. Added component and real-browser regression coverage; actual final checks and an initial selector failure are recorded in actions.md. Re-approval remains pending.
-11. User: “ต่อเลย” after Datakung approved/merged #43. Outcome: created Issue #44 and branch from reviewed merge `68a88cc`; implemented atomic resolution gating, server snapshot counts and recoverable Staff UI, retaining Requester advisory/Admin status denial. Extended fixture/lifecycle coverage, passed 458 tests and both builds, corrected a native-option browser assertion and kept failed captures from publication. Actual browser/visual evidence is in workflow.md; independent workflow approval remains pending.
-
-12. User: “เป็นไง”. Outcome: verified Datakung's approval of `a1d1fce` and PR #45 merge `69b32d6` on 2026-10-09, then closed Issue #44 and set Project Done. Peer confirmed 458 tests, 14 relevant browser cases and both builds.
-13. User: “ทำต่อเลย”. Outcome: created Issue #46 and an isolated dashboard branch from reviewed merge `69b32d6`. Added authoritative role metrics, shared open scopes, distinct follow-up Ticket drill-down and query-aware routes. Actual execution, failed-first-run test corrections and visual evidence are recorded in [dashboards.md](dashboards.md). Independent approval remains pending.
-
-Entries above record the state at each prompt; later review outcomes supersede earlier pending statements. Do not invent prompts or claim unobserved tests.
-
-14. User: “เพื่ออนรีวิวละ”. Outcome: read Datakung's requested change on PR #47, corrected the dashboard fixture to resolve the generated server Prisma client through `server/package.json`, and reran the requested normal test/capture commands without `NODE_PATH`. Observed verification and re-review status are recorded in [dashboards.md](dashboards.md).
+1. “เริ่มอันนี้เลยอันนี้ LAB4” with the LAB4 PDF: inspected the brief and existing Lab 3 baseline; separated the engineering contract from implementation.
+2. “ผมเปลี่ยนโมเดลนะ”: continued the same work; the model change is why exact model names must be confirmed rather than guessed.
+3. “จัดการเลย” after discussing the first Issue: created #38/#39 for the specification, UI/API contract and test plan before feature implementation. Peer review required explicit recovery and Start-control coverage.
+4. “ส่งไปบอกยัง”: posted the actual contract correction reply and requested Datakung's re-review. Author checks were kept separate from independent approval.
+5. “ทำต่อเลย” after foundation approval: implemented staged Actions API/UI with server identity, active assignee, immutable revisions, optimistic concurrency and safe creation recovery. Real browser tests reproduced a committed response loss and a definitively rejected creation response loss.
+6. “ต่อเลย” after Actions approval: implemented the atomic resolution gate and recoverable Staff UI. A concurrent unfinished Action can invalidate displayed readiness, so the backend transaction rechecks the condition.
+7. “เพื่ออนรีวิวละ”: read the dashboard changes-requested review, fixed fixture client resolution through server/package.json and passed both requested commands without NODE_PATH. Datakung approved exact head 884df39 and merged #47 into staging.
+8. “งั้นทำเลย” after dashboard approval: opened #48 from approved merge 72c5553, added a real 5,000-Ticket/10,000-Action smoke check, ran complete regression/builds and prepared responsive evidence and this nine-part review report. Actual results and remaining release gates are in [final-verification.md](final-verification.md) and [release.md](release.md).
 
 ## My Reflection
 
-Pending student reflection. Describe how the specification-agent pass resolved open design choices and how the coding-agent pass implemented and tested them; include a specific correction or limitation observed during review.
+**AI-assisted draft for the student to read, revise and confirm before submission.** It is not a verified statement of the student's personal learning.
+
+การแยกงานกำหนดสเปกออกจากงานเขียนโค้ดช่วยให้เห็นกฎที่โจทย์ยังไม่ได้กำหนดชัด เช่น สถานะของ Action เงื่อนไข Resolve และช่วงเวลาที่ Dashboard ใช้คำนวณ เมื่อระบุ FR, BR และ AC ก่อน จึงสามารถใช้ข้อกำหนดเดียวกันตรวจ API, หน้าจอ และชุดทดสอบได้
+
+ตัวอย่างที่ควรอธิบายให้ได้คือ Ticket Owner กับผู้รับผิดชอบ Action เป็นคนละบทบาท และการซ่อนปุ่ม Resolve อย่างเดียวไม่เพียงพอ เพราะผู้ใช้ส่งคำขอ API โดยตรงหรือมีคนเพิ่ม Action พร้อมกันได้ จึงต้องตรวจเงื่อนไขใน transaction ที่ล็อก Ticket ร่วมกับการแก้ Action
+
+การรีวิวจากเพื่อนทำให้พบข้อผิดพลาดที่การทดสอบบนเครื่องผู้เขียนมองไม่เห็น เช่น Prisma client ของชุดทดสอบ Dashboard ถูกเรียกจากตำแหน่งที่ยังไม่ได้ generate การแก้ให้ใช้ client ของ server และรันคำสั่งปกติใหม่แสดงว่าหลักฐานต้องทำซ้ำได้ ความสำเร็จบนเครื่องหนึ่งยังไม่เพียงพอ ผลทดสอบบน feature branch ก็ต้องแยกจากผลบน main หลังรีวิวและ merge จริง
+
+ก่อนส่ง ฉันต้องทดลองสาธิตด้วยตนเอง อธิบายเงื่อนไขธุรกิจ ตรวจชื่อโมเดลที่ใช้จริง และปรับข้อความสะท้อนคิดนี้ให้ตรงกับสิ่งที่ฉันได้เรียนรู้

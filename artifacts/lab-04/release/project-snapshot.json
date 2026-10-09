@@ -1,0 +1,37 @@
+{
+  "observedAt": "2026-10-09T21:11:50.9866410Z",
+  "project": "https://github.com/users/auto4496/projects/1",
+  "note": "Pre-release snapshot: five approved feature Issues Done; #48 remains in progress through final release acceptance.",
+  "items": [
+    {
+      "issue": "https://github.com/auto4496/toktickit/issues/38",
+      "title": "[Lab 4] Sprint 4 Engineering Contract",
+      "status": "Done"
+    },
+    {
+      "issue": "https://github.com/auto4496/toktickit/issues/40",
+      "title": "[Lab 4] Data Foundation and Migration Recovery",
+      "status": "Done"
+    },
+    {
+      "issue": "https://github.com/auto4496/toktickit/issues/42",
+      "title": "[Lab 4] Actions Taken API and UI",
+      "status": "Done"
+    },
+    {
+      "issue": "https://github.com/auto4496/toktickit/issues/44",
+      "title": "[Lab 4] Ticket Workflow and Resolution Gate",
+      "status": "Done"
+    },
+    {
+      "issue": "https://github.com/auto4496/toktickit/issues/46",
+      "title": "[Lab 4] Role Dashboards and Ticket Drill-down",
+      "status": "Done"
+    },
+    {
+      "issue": "https://github.com/auto4496/toktickit/issues/48",
+      "title": "[Lab 4] Final Hardening, Regression and Release Evidence",
+      "status": "Started"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "name": "toktickit-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "TokTickIT Lab 1 Initial Project Setup",
+  "description": "TokTickIT Lab 4 service desk, Actions Taken and role dashboards",
   "scripts": {
     "dev:server": "npm --prefix server run dev",
     "dev:client": "npm --prefix client run dev",

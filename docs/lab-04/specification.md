@@ -1,6 +1,6 @@
 # Lab 4 Engineering Contract
 
-Status: contract [Issue #38](https://github.com/auto4496/toktickit/issues/38) approved by Datakung at `4886585` and integrated through [PR #39](https://github.com/auto4496/toktickit/pull/39). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`. Data foundation #40/#41, Actions #42/#43 and workflow #44/#45 are approved and merged. Dashboard #46 starts at the reviewed staging merge `69b32d6`.
+Status: contract [Issue #38](https://github.com/auto4496/toktickit/issues/38) approved by Datakung at `4886585` and integrated through [PR #39](https://github.com/auto4496/toktickit/pull/39). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`. Data foundation #40/#41, Actions #42/#43, workflow #44/#45 and dashboards #46/#47 are approved/merged. Final hardening and release [#48](https://github.com/auto4496/toktickit/issues/48) starts from reviewed dashboard merge `72c5553`.
 
 ## 1. Sprint goal
 
@@ -102,4 +102,4 @@ Every AC maps to passing tests in [tests.md](tests.md); backend role, ownership 
 
 ## 11. Assumptions and decisions
 
-The handout does not specify Action statuses, assignee representation, dashboard window or precise resolution gate. This contract chooses explicit statuses, one current assignee, seven days UTC and one completed Action with Result before resolution. Ticket status authority remains Lab 3's. These choices remain open for peer review before integration into staging.
+The handout does not specify Action statuses, assignee representation, dashboard window or precise resolution gate. This contract chooses explicit statuses, one current assignee, seven days UTC and one completed Action with Result before resolution. Ticket status authority remains Lab 3's. The contract and all five feature work items are independently approved and integrated into staging; final hardening/release remains #48.
