@@ -1,0 +1,76 @@
+{
+  "observedAt": "2026-10-09T15:33:06.048Z",
+  "browserChecks": "Complete dashboards suite passed before publication; observed counts in docs/lab-04/dashboards.md.",
+  "baseCommit": "69b32d676efa567e499b40fc5a7d51f8bf4602ac",
+  "workingTree": "M client/src/App.tsx\n M client/src/MyTickets.tsx\n M client/src/StaffTicketQueue.tsx\n M client/src/useAppNavigation.ts\n M client/tests/lab-03/ApplicationShell.test.tsx\n M client/tests/lab-03/ReviewRegressions.test.tsx\n M docs/lab-04/ai-use.md\n M docs/lab-04/api-spec.md\n M docs/lab-04/issue-plan.md\n M docs/lab-04/reviewer.md\n M docs/lab-04/specification.md\n M docs/lab-04/tests.md\n M docs/lab-04/ui-spec.md\n M docs/lab-04/workflow.md\n M e2e/lab-02/authentication.spec.ts\n M e2e/lab-02/helpers.ts\n M e2e/lab-03/admin-users.spec.ts\n M package.json\n M playwright.actions.config.ts\n M server/src/app.ts\n M server/src/staff-workflow.ts\n M server/src/ticket-query.ts\n?? artifacts/lab-04/dashboards/\n?? client/src/Dashboard.tsx\n?? client/src/dashboard.css\n?? client/tests/lab-04/DashboardRouting.test.tsx\n?? client/tests/lab-04/RequesterDashboard.test.tsx\n?? client/tests/lab-04/StaffDashboard.test.tsx\n?? docs/lab-04/dashboards.md\n?? e2e/lab-04/capture-dashboard-evidence.mjs\n?? e2e/lab-04/dashboards.spec.ts\n?? playwright.dashboards.config.ts\n?? server/src/dashboards.ts\n?? server/src/ticket-scopes.ts\n?? server/tests/lab-04/requester-dashboard.api.test.ts\n?? server/tests/lab-04/staff-dashboard.api.test.ts",
+  "viewports": [
+    "1440x900",
+    "834x1112",
+    "390x844"
+  ],
+  "files": [
+    {
+      "path": "screenshots/requester-1440.png",
+      "width": 1440,
+      "height": 1118,
+      "bytes": 191552,
+      "sha256": "47828d2196e2bb5ad7ea19e7366fab277300d93fd75074242404084fc50df6e0"
+    },
+    {
+      "path": "screenshots/requester-834.png",
+      "width": 834,
+      "height": 1313,
+      "bytes": 172641,
+      "sha256": "cab0a17d1421deb68c0d341ad2abd1e945db2f50758588e024e59ffa90421fb7"
+    },
+    {
+      "path": "screenshots/requester-390.png",
+      "width": 390,
+      "height": 2124,
+      "bytes": 149040,
+      "sha256": "3cf15875c6d23dedbe5670a7c8af34d9a534a86f6735cbed6efc36dabf35c90e"
+    },
+    {
+      "path": "screenshots/staff-1440.png",
+      "width": 1440,
+      "height": 1442,
+      "bytes": 210217,
+      "sha256": "5eeaf687ce14a82a6b6bdcd6c7ca94ae782941eff0cec1f7edc141bfaef8e25b"
+    },
+    {
+      "path": "screenshots/staff-834.png",
+      "width": 834,
+      "height": 1855,
+      "bytes": 178044,
+      "sha256": "2a958be0e8fd39823725aef9bb1ec1859f4264be8f305c4df42251792dce1cdd"
+    },
+    {
+      "path": "screenshots/staff-390.png",
+      "width": 390,
+      "height": 2501,
+      "bytes": 163949,
+      "sha256": "b036f5f2cb6385d2252dcb08e7915778fa1c5d4274dd24f765c3dc1b4d33dd20"
+    },
+    {
+      "path": "screenshots/admin-1440.png",
+      "width": 1440,
+      "height": 1442,
+      "bytes": 211765,
+      "sha256": "f132979dfb660ae5e50483092293640a26a31fd15d47132c9889f33967b3d197"
+    },
+    {
+      "path": "screenshots/admin-834.png",
+      "width": 834,
+      "height": 1855,
+      "bytes": 178825,
+      "sha256": "634adace82ff98de44ee700feb35ba66a57fa405770d2a2c943a845c8e136416"
+    },
+    {
+      "path": "screenshots/admin-390.png",
+      "width": 390,
+      "height": 2501,
+      "bytes": 163937,
+      "sha256": "4d68db3d1737d10123baf5cfe5ec94e4318fdb089137ed95bc69eab9988b85fb"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Lab 4 Engineering Contract
 
-Status: contract [Issue #38](https://github.com/auto4496/toktickit/issues/38) approved by Datakung at `4886585` and integrated through [PR #39](https://github.com/auto4496/toktickit/pull/39). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`. Data foundation #40/#41 and Actions #42/#43 are approved and merged. Ticket workflow #44 starts at the reviewed staging merge `68a88cc`.
+Status: contract [Issue #38](https://github.com/auto4496/toktickit/issues/38) approved by Datakung at `4886585` and integrated through [PR #39](https://github.com/auto4496/toktickit/pull/39). The initial contract was committed separately in `dd34049` before feature implementation. Baseline: integrated Lab 3 `origin/main` at `da5a566`. Data foundation #40/#41, Actions #42/#43 and workflow #44/#45 are approved and merged. Dashboard #46 starts at the reviewed staging merge `69b32d6`.
 
 ## 1. Sprint goal
 

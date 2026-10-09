@@ -40,6 +40,7 @@ function installApi(initialPassword = false) {
     if (input.endsWith('/auth/change-password')) { restricted = false; return Promise.resolve(json({ user, csrfToken: 'rotated-csrf' })); }
     if (input.endsWith(`/api${target}`)) return Promise.resolve(json({ error: { code: 'RESOURCE_NOT_FOUND' } }, 404));
     if (input.endsWith('/api/categories')) return Promise.resolve(json([]));
+    if (input.endsWith('/api/dashboard/requester')) return Promise.resolve(json({ asOf: '2026-10-09T10:00:00Z', windowStart: '2026-10-02T10:00:00Z', metrics: { open: 0, waitingForRequester: 0, recentlyUpdated: 0, recentlyResolved: 0 }, recentTickets: [] }));
     if (input.includes('/api/tickets?')) return Promise.resolve(json({ data: [], meta: { page: 1, pageSize: 10, totalItems: 0, totalPages: 0, sortBy: 'updatedAt', sortDirection: 'desc' } }));
     throw new Error(`Unexpected request: ${input}`);
   });
@@ -74,7 +75,7 @@ describe('Intended destination after authentication', () => {
   it.each(['/admin/users', '/tickets/not-a-uuid', '//evil.example/path', 'https://evil.example/path', '/tickets/%2f%2fevil.example'])('rejects untrusted or disallowed intended destination %s', async intended => {
     history.replaceState({ toktickitReturnTo: intended }, '', '/login'); installApi();
     render(<App />); await signIn();
-    await waitFor(() => expect(location.pathname).toBe('/tickets'));
+    await waitFor(() => expect(location.pathname).toBe('/dashboard'));
     expect(location.origin).not.toContain('evil.example');
   });
 });

@@ -8,6 +8,7 @@ import { parseTicketListQuery, mapTicketSummary, ticketSummarySelect } from './t
 import { lockAccounts } from './account-lock.js';
 import { canIndicate, needsConfirmation, needsOwner, normalizeContent, statusTransitions, terminal } from './workflow-rules.js';
 import { getResolutionGate } from './resolution-gate.js';
+import { openTicketStatuses } from './ticket-scopes.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 class WorkflowError extends Error {
@@ -65,6 +66,8 @@ workflowRouter.get('/staff/eligible-owners', requireRole('IT_STAFF'), wrap(async
 workflowRouter.get('/staff/tickets', requireRole('IT_STAFF', 'ADMINISTRATOR'), wrap(async (req, res) => {
   const raw = { ...req.query } as Record<string, unknown>;
   const owner = raw.owner ?? 'all'; delete raw.owner;
+  const actionAssignee = raw.actionAssignee; delete raw.actionAssignee;
+  if (actionAssignee !== undefined && actionAssignee !== 'me') invalid();
   if (typeof owner !== 'string' || (!['all', 'unassigned', 'me'].includes(owner) && !uuid.test(owner))) invalid();
   if ('requestedPriority' in raw || raw.sortBy === 'requestedPriority') invalid();
   if ('itPriority' in raw) { raw.requestedPriority = raw.itPriority; delete raw.itPriority; }
@@ -73,6 +76,8 @@ workflowRouter.get('/staff/tickets', requireRole('IT_STAFF', 'ADMINISTRATOR'), w
   const parsed = parseTicketListQuery(raw); if (!parsed.success) return invalid();
   const q = parsed.value;
   const where: Prisma.TicketWhereInput = {
+    ...(q.status === 'open' || actionAssignee === 'me' ? { AND: [{ currentStatus: { in: openTicketStatuses } }] } : {}),
+    ...(actionAssignee === 'me' ? { actionsTaken: { some: { assignedToId: req.auth!.user.id, followUpRequired: true, status: { in: ['PLANNED', 'IN_PROGRESS'] } } } } : {}),
     ...(q.categoryId ? { categoryId: q.categoryId } : {}), ...(q.currentStatus ? { currentStatus: q.currentStatus } : {}),
     ...(q.requestedPriority ? { itPriority: q.requestedPriority } : {}),
     ...(owner === 'unassigned' ? { ownerId: null } : owner === 'me' ? { ownerId: req.auth!.user.id } : owner !== 'all' ? { ownerId: owner as string } : {}),

@@ -1,6 +1,6 @@
 # Lab 4 Ticket Workflow and Resolution Gate
 
-Work item: [Issue #44](https://github.com/auto4496/toktickit/issues/44), proposed in [PR #45](https://github.com/auto4496/toktickit/pull/45). Branch `codex/lab4-4-ticket-workflow` starts from approved Actions merge `68a88cc` into `codex/lab4-staging`. Feature/evidence commit: `46ac747`; independent review/integration pending.
+Work item: [Issue #44](https://github.com/auto4496/toktickit/issues/44), integrated through [PR #45](https://github.com/auto4496/toktickit/pull/45). Branch `codex/lab4-4-ticket-workflow` starts from approved Actions merge `68a88cc` into `codex/lab4-staging`. Feature/evidence commit: `46ac747`; Datakung approved final head `a1d1fce` and merged `69b32d6` on 2026-10-09, confirming 458 tests, 14 relevant browser cases and both builds. Issue #44 is closed/Done.
 
 ## Implemented
 
@@ -38,4 +38,4 @@ npm run build:client
 
 ## Remaining
 
-Independent review/integration remains pending. Dashboard/list drill-down alignment, performance, final full browser/release verification and submission report remain work items 5/6.
+Workflow independent review/integration is complete. Dashboard/list drill-down alignment is work item 5; performance, final release verification and submission report remain work item 6.
