@@ -1,11 +1,16 @@
 import { randomUUID } from 'node:crypto';
 import { mkdir } from 'node:fs/promises';
-import { PrismaClient } from '@prisma/client';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { e2ePassword, expectNoHorizontalOverflow } from '../lab-02/helpers';
 import { hashPassword } from '../../server/src/auth/password';
 import { requireTestDatabaseUrl } from '../../server/tests/test-database';
 import { loginAs } from './helpers';
+
+// Normal setup generates the server client; the root package may be ungenerated.
+const serverRequire = createRequire(path.resolve('server/package.json'));
+const { PrismaClient } = serverRequire('@prisma/client') as typeof import('@prisma/client');
 
 const requesterId = randomUUID(), staffId = randomUUID(), adminId = randomUUID(), emptyId = randomUUID();
 const requesterEmail = `${requesterId}@example.test`, staffEmail = `${staffId}@example.test`, adminEmail = `${adminId}@example.test`, emptyEmail = `${emptyId}@example.test`;

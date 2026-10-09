@@ -33,6 +33,7 @@ Commands (isolated test PostgreSQL only; DB suites run sequentially):
 npx vitest run
 npm run build:server
 npm run build:client
+npm run test:e2e:dashboards
 npm run test:e2e:capture:dashboards
 npm run test:e2e:actions
 npm run test:e2e:workflow
@@ -50,3 +51,18 @@ Routine dashboard screenshots write only ignored `test-results/lab-04/dashboards
 - A subsequent 3/4 browser run exposed an overly exact selector for the existing implicitly labelled Status select. The test now uses its combobox role/name prefix, retaining the actual CLOSED/follow-up intersection assertion.
 - Inspection before review found that shared global E2E accounts could pick up other journeys' Tickets/Actions in a combined run. Dashboard fixtures now create four dedicated accounts, scope their exact metric assertions to those users, and clean up only their created IDs/sessions.
 - Full final release/report, seed-scale query-plan evidence and student reflection remain work item 6. Author execution does not substitute for Datakung's independent approval.
+
+## Peer review correction — 2026-10-10
+
+Datakung [requested changes](https://github.com/auto4496/toktickit/pull/47#discussion_r4232825709) on `1f1adc2`: the dashboard fixture's root-level Prisma import depended on a generated root client, while normal `npm run prisma:generate` generates the server client. Peer confirmed 483 tests and both builds, and 26 relevant browser cases using a temporary client-path workaround; normal dashboard collection/capture was blocked on their installation.
+
+The fixture now resolves `@prisma/client` through `createRequire(path.resolve('server/package.json'))`, matching the existing E2E database/setup helpers. The root package import is type-only and erased at runtime. Both fixture setup and cleanup use that same server client.
+
+Observed correction verification on 2026-10-10, with `NODE_PATH` unset and no client-path workaround:
+
+- `npm run prisma:generate` succeeded and generated the server client (v6.19.3). A runtime resolution check loaded the server package successfully.
+- `npm run test:e2e:dashboards`: **4 passed**, 29.8 seconds. This routine run preserved all 30 curated screenshot hashes and byte lengths.
+- `npm run test:e2e:capture:dashboards`: **4 passed**, 15.4 seconds, then explicitly published all nine updated dashboard PNGs with a refreshed manifest. The same four cases ran twice; this is not eight distinct cases. Actions/workflow artifacts remain unchanged.
+- Both browser commands also ran with `DEBUG` unset. Only fixture dependency resolution and evidence/docs changed; the earlier application test/build results are retained rather than claimed as new runs.
+
+Correction published for Datakung's re-review; independent approval remains pending.
