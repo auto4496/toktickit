@@ -1,0 +1,92 @@
+{
+  "publishedAt": "2026-10-10T17:08:58.877778+00:00",
+  "mainMerge": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+  "reviewedRelease": "https://github.com/auto4496/toktickit/pull/50",
+  "mainSourceWorkingTree": "clean detached checkout before each command",
+  "runs": [
+    {
+      "source": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "branch": "",
+      "workingTree": "",
+      "startedAt": "2026-10-10T16:51:19.874Z",
+      "command": "npm run prisma:generate",
+      "schema": "lab4_main_test_20261010",
+      "host": "127.0.0.1",
+      "port": 55433,
+      "database": "lab3_test",
+      "finishedAt": "2026-10-10T16:51:57.248Z",
+      "exitCode": 0
+    },
+    {
+      "source": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "branch": "",
+      "workingTree": "",
+      "startedAt": "2026-10-10T16:51:57.496Z",
+      "command": "node node_modules/prisma/build/index.js migrate deploy --schema=server/prisma/schema.prisma",
+      "schema": "lab4_main_test_20261010",
+      "host": "127.0.0.1",
+      "port": 55433,
+      "database": "lab3_test",
+      "finishedAt": "2026-10-10T16:52:00.059Z",
+      "exitCode": 0
+    },
+    {
+      "source": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "branch": "",
+      "workingTree": "",
+      "startedAt": "2026-10-10T16:52:16.071Z",
+      "command": "npm test",
+      "schema": "lab4_main_test_20261010",
+      "host": "127.0.0.1",
+      "port": 55433,
+      "database": "lab3_test",
+      "finishedAt": "2026-10-10T16:54:57.924Z",
+      "exitCode": 0
+    },
+    {
+      "source": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "branch": "",
+      "workingTree": "",
+      "startedAt": "2026-10-10T16:55:26.493Z",
+      "command": "npm run test:e2e:capture:release",
+      "schema": "lab4_main_e2e_test_20261010",
+      "host": "127.0.0.1",
+      "port": 55433,
+      "database": "lab3_test",
+      "finishedAt": "2026-10-10T16:57:46.380Z",
+      "exitCode": 0
+    },
+    {
+      "source": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "branch": "",
+      "workingTree": "",
+      "startedAt": "2026-10-10T16:52:16.655Z",
+      "command": "npm run build:server",
+      "schema": "lab4_main_test_20261010",
+      "host": "127.0.0.1",
+      "port": 55433,
+      "database": "lab3_test",
+      "finishedAt": "2026-10-10T16:52:21.737Z",
+      "exitCode": 0
+    },
+    {
+      "source": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "branch": "",
+      "workingTree": "",
+      "startedAt": "2026-10-10T16:52:22.002Z",
+      "command": "npm run build:client",
+      "schema": "lab4_main_test_20261010",
+      "host": "127.0.0.1",
+      "port": 55433,
+      "database": "lab3_test",
+      "finishedAt": "2026-10-10T16:52:29.871Z",
+      "exitCode": 0
+    }
+  ],
+  "testFiles": 48,
+  "tests": 484,
+  "browserCases": 32,
+  "selectedCaptures": 75,
+  "remaining": "Student demonstration/native zoom and final submission closeout. No all-Issues-Done claim.",
+  "textNormalization": "ANSI color and trailing whitespace removed; result lines retained."
+}
