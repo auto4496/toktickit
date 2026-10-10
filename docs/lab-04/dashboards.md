@@ -1,6 +1,6 @@
 # Lab 4 Role Dashboards and Drill-down
 
-Work item: [Issue #46](https://github.com/auto4496/toktickit/issues/46), proposed in [PR #47](https://github.com/auto4496/toktickit/pull/47). Branch `codex/lab4-5-role-dashboards` starts at independently reviewed staging merge `69b32d676efa567e499b40fc5a7d51f8bf4602ac` (#44/#45). Implementation/evidence commit: `e0c3a98`. Dashboard independent review and integration remain pending.
+Work item: [Issue #46](https://github.com/auto4496/toktickit/issues/46), approved/merged [PR #47](https://github.com/auto4496/toktickit/pull/47). Datakung approved correction head `884df39` on 2026-10-10 at 03:41:12 Asia/Bangkok, then merged `72c5553` at 03:41:27. Issue #46 is closed/Done. Branch `codex/lab4-5-role-dashboards` started at independently reviewed merge `69b32d6`; original implementation/evidence commit `e0c3a98`. Dated pending statements below describe the earlier author runs; this final approval supersedes them.
 
 ## Implementation
 

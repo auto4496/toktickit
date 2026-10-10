@@ -108,10 +108,14 @@ test('E2E-03 Dashboard loading, safe failure, retry, zero and forbidden states',
   await loginAs(page, requesterEmail, '/dashboard'); await expect(page.getByRole('link', { name: /Open tickets/ })).toBeVisible();
   let finish!: () => void; const delayed = new Promise<void>(resolve => { finish = resolve; });
   await page.route('**/api/dashboard/requester', async route => { await delayed; await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: { code: 'DASHBOARD_UNAVAILABLE', message: 'Synthetic private error' } }) }); });
-  await page.reload(); await expect(page.getByRole('status', { name: '' }).filter({ hasText: 'Loading dashboard' })).toBeVisible(); finish();
+  await page.reload(); await expect(page.getByRole('status', { name: '' }).filter({ hasText: 'Loading dashboard' })).toBeVisible();
+  try { await capture(page, 'loading-simulated'); } finally { finish(); }
   await expect(page.getByRole('alert')).toContainText('Dashboard information could not be loaded'); await expect(page.getByRole('alert')).not.toContainText('Synthetic private');
+  await capture(page, 'failure-simulated');
   await page.unroute('**/api/dashboard/requester'); await page.getByRole('button', { name: 'Retry', exact: true }).click(); await expect(page.getByRole('link', { name: /Open tickets/ })).toBeVisible();
   await loginAs(page, emptyEmail, '/dashboard'); await expect(page.getByRole('link', { name: /Open tickets/ })).toContainText('0'); await expect(page.getByText('No tickets were updated in the last seven days.')).toBeVisible();
+  await capture(page, 'empty');
   await page.route('**/api/dashboard/requester', route => route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ error: { code: 'FORBIDDEN' } }) }));
   await page.reload(); await expect(page.getByRole('alert')).toContainText('not available for your role');
+  await capture(page, 'forbidden-simulated');
 });

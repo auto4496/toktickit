@@ -1,6 +1,6 @@
 # Lab 4 Review Record
 
-Status: contract #39, data foundation #41, Actions #43 and workflow #45 are independently approved and merged into `codex/lab4-staging`. Datakung approved workflow head `a1d1fce` on 2026-10-09 at 15:46:46 Asia/Bangkok and merged at 15:46:56 (`69b32d6`), confirming 458 tests, 14 relevant browser cases and both builds. Issue #46 dashboard independent review remains pending.
+Status: contract #39, data foundation #41, Actions #43, workflow #45 and dashboards #47 are independently approved and merged into `codex/lab4-staging`; Issues #38/40/42/44/46 are closed/Done. Datakung approved exact dashboard correction head `884df39` on 2026-10-10 at 03:41:12 Asia/Bangkok and merged at 03:41:27 (`72c5553`). The re-review confirmed both normal test/capture commands pass without the Prisma client-path workaround and no blocking findings remain. Final hardening/release #48 is in progress; author checks do not count as peer approval.
 
 Engineering contract issue: [#38](https://github.com/auto4496/toktickit/issues/38). Local document checks and author review do not count as independent peer approval.
 
@@ -23,5 +23,7 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 | Data foundation / recovery | Datakung | [#41](https://github.com/auto4496/toktickit/pull/41) | Reported independently passing 391 tests and both builds; no blocking findings | Approved `301c902`; merged |
 | Actions API/UI | Datakung | [#43](https://github.com/auto4496/toktickit/pull/43) | Independently passed 431 tests, seven browser journeys and both builds at `935bcdf`; all findings corrected | Approved `935bcdf`; merged `68a88cc` |
 | Ticket workflow | Datakung | [#45](https://github.com/auto4496/toktickit/pull/45) | Independently confirmed 458 tests, 14 browser cases and both builds; no blocking findings | Approved `a1d1fce`; merged `69b32d6` |
-| Dashboards and UI | Datakung | [#47](https://github.com/auto4496/toktickit/pull/47) | Changes requested on `1f1adc2`: E2E fixture resolved an ungenerated root Prisma client. Peer confirmed 483 tests/both builds and 26 browser cases with a temporary client-path workaround. Correction and requested command reruns in [dashboards.md](dashboards.md) | Re-review pending |
-| Final regression | Pending | Pending | Pending | Pending |
+| Dashboards and UI | Datakung | [#47](https://github.com/auto4496/toktickit/pull/47) | Changes requested on `1f1adc2`: E2E fixture resolved an ungenerated root Prisma client. Fixed server client resolution; [author response](https://github.com/auto4496/toktickit/pull/47#issuecomment-6088818239) records both commands passing four cases each without workaround. Peer re-reviewed and found no blockers | Approved `884df39`; merged `72c5553` |
+| Final hardening / regression / report | Datakung (requested) | [#49](https://github.com/auto4496/toktickit/pull/49) | Author: 484 tests / 48 files, 32 browser cases, both builds, 75 new captures and 29-page review PDF; independent review pending | Pending |
+
+The committed review PDF is a pre-PR preparation snapshot. This record and [release gates](release.md) track subsequent review facts. Issue #48 stays open through the reviewed main release and post-merge acceptance.
