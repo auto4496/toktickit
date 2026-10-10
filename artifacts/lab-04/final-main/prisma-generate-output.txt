@@ -1,0 +1,11 @@
+
+> toktickit-monorepo@1.0.0 prisma:generate
+> npx prisma generate --schema=server/prisma/schema.prisma
+
+Prisma schema loaded from server\prisma\schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to .\..\lab4\server\node_modules\@prisma\client in 254ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints

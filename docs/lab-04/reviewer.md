@@ -1,6 +1,6 @@
 # Lab 4 Review Record
 
-Status: contract #39, data foundation #41, Actions #43, workflow #45 and dashboards #47 are independently approved and merged into `codex/lab4-staging`; Issues #38/40/42/44/46 are closed/Done. Datakung approved exact dashboard correction head `884df39` on 2026-10-10 at 03:41:12 Asia/Bangkok and merged at 03:41:27 (`72c5553`). The re-review confirmed both normal test/capture commands pass without the Prisma client-path workaround and no blocking findings remain. Final hardening/release #48 is in progress; author checks do not count as peer approval.
+Status: all six LAB4 increments and the staging-to-main release are independently approved and merged by Datakung. PR #49 was approved at fa03f754 and merged as 27272813; PR #50 was approved at 27272813 and merged into main as 7a697d2. Fresh main verification passed 484 tests / 48 files, 32 browser cases and both builds; see [main-verification.md](main-verification.md). Issue #48 remains open for student demonstration and final submission closeout.
 
 Engineering contract issue: [#38](https://github.com/auto4496/toktickit/issues/38). Local document checks and author review do not count as independent peer approval.
 
@@ -24,6 +24,7 @@ Verified relative links across seven documents, AC-01 through AC-11 test-plan co
 | Actions API/UI | Datakung | [#43](https://github.com/auto4496/toktickit/pull/43) | Independently passed 431 tests, seven browser journeys and both builds at `935bcdf`; all findings corrected | Approved `935bcdf`; merged `68a88cc` |
 | Ticket workflow | Datakung | [#45](https://github.com/auto4496/toktickit/pull/45) | Independently confirmed 458 tests, 14 browser cases and both builds; no blocking findings | Approved `a1d1fce`; merged `69b32d6` |
 | Dashboards and UI | Datakung | [#47](https://github.com/auto4496/toktickit/pull/47) | Changes requested on `1f1adc2`: E2E fixture resolved an ungenerated root Prisma client. Fixed server client resolution; [author response](https://github.com/auto4496/toktickit/pull/47#issuecomment-6088818239) records both commands passing four cases each without workaround. Peer re-reviewed and found no blockers | Approved `884df39`; merged `72c5553` |
-| Final hardening / regression / report | Datakung (requested) | [#49](https://github.com/auto4496/toktickit/pull/49) | Author: 484 tests / 48 files, 32 browser cases, both builds, 75 new captures and 29-page review PDF; independent review pending | Pending |
+| Final hardening / regression / report | Datakung | [#49](https://github.com/auto4496/toktickit/pull/49) | Independently reproduced 484 tests, 32 browser cases and both builds; no blockers | Approved fa03f754; merged 27272813 |
+| Staging-to-main release | Datakung | [#50](https://github.com/auto4496/toktickit/pull/50) | Verified staging tree equals approved feature tree, with all six reviewed increments; no blockers | Approved 27272813; merged 7a697d2 |
 
-The committed review PDF is a pre-PR preparation snapshot. This record and [release gates](release.md) track subsequent review facts. Issue #48 stays open through the reviewed main release and post-merge acceptance.
+The earlier review PDF was a pre-PR preparation snapshot. The refreshed report uses recorded main evidence and edited technical prompt summaries. This record and [release gates](release.md) track current facts. Issue #48 stays open through the reviewed main release and post-merge acceptance.

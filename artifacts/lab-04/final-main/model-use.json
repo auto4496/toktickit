@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-10-10T17:08:59.251884+00:00",
+  "source": "Local Codex turn_context metadata for this LAB4 chat; no conversation messages exported.",
+  "models": [
+    {
+      "firstObservedAt": "2026-10-04T09:38:44.044Z",
+      "model": "gpt-6-sol"
+    },
+    {
+      "firstObservedAt": "2026-10-04T15:41:32.090Z",
+      "model": "gpt-6.1-sol"
+    }
+  ],
+  "scope": "LAB4 only. These IDs do not establish the model used in other labs."
+}

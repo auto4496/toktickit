@@ -1,26 +1,69 @@
-# Lab 4 AI Use
+# Lab 4 AI Use with Reflection
 
-Tool: Codex desktop with OpenAI models. The user changed the model during LAB4. Exact before/after model names are awaiting the student's confirmation; do not infer them from the agent's identity. The complete chronological prompt record is retained in [ai-use-history.md](ai-use-history.md).
+## LLM and working roles
 
-## Eight selected key prompts and observed outcomes
+Tool: OpenAI Codex desktop. Recorded model IDs: **gpt-6-sol**, followed by **gpt-6.1-sol**, verified from this chat's model metadata. [Model-use provenance](../../artifacts/lab-04/final-main/model-use.json).
 
-1. “เริ่มอันนี้เลยอันนี้ LAB4” with the LAB4 PDF: inspected the brief and existing Lab 3 baseline; separated the engineering contract from implementation.
-2. “ผมเปลี่ยนโมเดลนะ”: continued the same work; the model change is why exact model names must be confirmed rather than guessed.
-3. “จัดการเลย” after discussing the first Issue: created #38/#39 for the specification, UI/API contract and test plan before feature implementation. Peer review required explicit recovery and Start-control coverage.
-4. “ส่งไปบอกยัง”: posted the actual contract correction reply and requested Datakung's re-review. Author checks were kept separate from independent approval.
-5. “ทำต่อเลย” after foundation approval: implemented staged Actions API/UI with server identity, active assignee, immutable revisions, optimistic concurrency and safe creation recovery. Real browser tests reproduced a committed response loss and a definitively rejected creation response loss.
-6. “ต่อเลย” after Actions approval: implemented the atomic resolution gate and recoverable Staff UI. A concurrent unfinished Action can invalidate displayed readiness, so the backend transaction rechecks the condition.
-7. “เพื่ออนรีวิวละ”: read the dashboard changes-requested review, fixed fixture client resolution through server/package.json and passed both requested commands without NODE_PATH. Datakung approved exact head 884df39 and merged #47 into staging.
-8. “งั้นทำเลย” after dashboard approval: opened #48 from approved merge 72c5553, added a real 5,000-Ticket/10,000-Action smoke check, ran complete regression/builds and prepared responsive evidence and this nine-part review report. Actual results and remaining release gates are in [final-verification.md](final-verification.md) and [release.md](release.md).
+The same agent was used in two working roles. The **specification-agent role** clarified requirements, business rules, acceptance criteria and test mappings before implementation. The **coding-agent role** implemented the approved contract, investigated failures and prepared reproducible evidence. Independent approval and integration were performed by Datakung through the recorded pull requests.
+
+## Eight selected technical prompts and outcomes
+
+The prompts below are edited summaries of technical tasks and their context, consolidated for this report. They are not verbatim chat quotations. Outcomes describe recorded project work; they do not attribute the agent's test execution to the student.
+
+### 1. Requirements and acceptance criteria - specification agent
+
+Analyze the LAB4 brief against the existing Lab 3 system. Define numbered requirements, business rules and acceptance criteria for Actions Taken, Ticket transitions and role dashboards. Resolve ambiguous status, ownership and calculation rules explicitly. Preserve Lab 1-3 behavior and map each acceptance criterion to a verification method.
+
+**Outcome:** The engineering contract was committed before feature completion in PR #39. Peer feedback added explicit Start-control and migration-recovery coverage. See [specification](specification.md) and [test traceability](tests.md).
+
+### 2. Incremental delivery and review gates - specification agent
+
+Organize LAB4 into six dependency-ordered work items with clear boundaries and acceptance evidence. Integrate each feature through independent review into staging, then review staging into main. Distinguish implementation, author verification, peer approval and post-merge acceptance when reporting progress.
+
+**Outcome:** Issues #38/40/42/44/46/48 and PRs #39/41/43/45/47/49 followed this sequence. PR #50 integrated reviewed staging into main. See [work items](issue-plan.md) and [review record](reviewer.md).
+
+### 3. Additive migration and recoverability - coding agent
+
+Implement Action and revision storage without losing existing Tickets, identities, relationships or attachments. Make seed execution repeatable and preserve edited records. Test migration against a historical fixture, then verify real backup/restore after a controlled failure using isolated targets and authenticated attachment downloads.
+
+**Outcome:** PR #41 added the data foundation. Integration tests compare records, constraints and attachment hashes; recovery uses actual pg_dump/pg_restore. See [data foundation](data-foundation.md).
+
+### 4. Action lifecycle, accountability and safe retries - coding agent
+
+Implement Action creation, assignment, Start, edit, completion and cancellation. Derive the performer from the authenticated session, validate active assignees and enforce roles on the server. Preserve append-only revisions, reject stale expectedVersion values and use idempotency keys to recover ambiguous creation responses without duplicate Actions or lost drafts.
+
+**Outcome:** PR #43 implements the lifecycle. Peer findings led to separate recovery for committed response loss and definitive rejection; component and real-browser regressions cover both. See [Actions evidence](actions.md).
+
+### 5. Atomic Ticket resolution - coding agent
+
+Enforce the complete Ticket transition matrix. Resolve only when a completed Action has a nonblank Result and no unfinished Action remains. Evaluate this gate inside the transaction using the same Ticket lock as Action writes. Preserve Requester advisory behavior, Admin status restrictions and history across closing or reopening.
+
+**Outcome:** PR #45 implements the atomic gate. Tests cover all 64 status edges, competing Action writes and stale displayed readiness; the UI can refresh and retry safely. See [workflow evidence](workflow.md).
+
+### 6. Authoritative and bounded dashboards - coding agent
+
+Compute Requester-owned and Staff/Admin metrics from the database in one consistent snapshot. Define follow-up Action counts separately from distinct-Ticket drill-downs. Return at most five deterministic recent rows without large descriptions. Verify exact metrics, intersecting filters and natural query plans using 5,000 Tickets and 10,000 Actions.
+
+**Outcome:** PR #47 added dashboards; final hardening added the scale check. The fresh main run matched independent database counts and bounded response/query assertions. See [dashboard evidence](dashboards.md) and [main verification](main-verification.md).
+
+### 7. Responsive interaction and accessible feedback - coding agent
+
+Check dashboards, Action forms and workflow feedback at desktop, tablet, mobile and narrow widths. Verify labels, keyboard focus, required-field validation, draft retention and role restrictions. Exercise loading, empty, forbidden, safe failure and conflict states; distinguish simulated UI responses from real authorization tests.
+
+**Outcome:** Real-browser checks include ten permitted role routes and three-width Action forms. Visual inspection corrected the Follow-up checkbox. The main capture contains 75 selected images with checksum provenance. See [visual/accessibility checks](visual-accessibility.md).
+
+### 8. Reproducible review corrections and main acceptance - coding agent
+
+Investigate peer findings using normal project commands and generated dependencies. After the reviewed main merge, run complete regression and browser suites plus both production builds from that exact source on fresh guarded targets. Retain complete outputs, source state, image hashes and remaining submission gates.
+
+**Outcome:** The Dashboard fixture now resolves the server-generated Prisma client without NODE_PATH. Datakung approved all increments and the release. Fresh main verification passed 484 tests / 48 files, 32 browser cases and both builds at 7a697d2. See [main verification](main-verification.md).
 
 ## My Reflection
 
-**AI-assisted draft for the student to read, revise and confirm before submission.** It is not a verified statement of the student's personal learning.
+การใช้ AI ในบทบาท specification agent มีประโยชน์เมื่อเปลี่ยนโจทย์กว้างให้เป็นกฎที่ตรวจสอบได้ เช่น ความแตกต่างระหว่าง Ticket Owner กับผู้รับผิดชอบ Action เงื่อนไข Resolve และขอบเขตข้อมูลที่ Dashboard ของแต่ละบทบาทมองเห็น การกำหนด FR, BR และ AC ก่อนพัฒนาทำให้ API หน้าจอ และชุดทดสอบอ้างอิงข้อกำหนดเดียวกัน และช่วยลดการตัดสินใจโดยไม่มีหลักฐานระหว่างเขียนโค้ด
 
-การแยกงานกำหนดสเปกออกจากงานเขียนโค้ดช่วยให้เห็นกฎที่โจทย์ยังไม่ได้กำหนดชัด เช่น สถานะของ Action เงื่อนไข Resolve และช่วงเวลาที่ Dashboard ใช้คำนวณ เมื่อระบุ FR, BR และ AC ก่อน จึงสามารถใช้ข้อกำหนดเดียวกันตรวจ API, หน้าจอ และชุดทดสอบได้
+ในบทบาท coding agent สิ่งสำคัญคือการแปลงกฎเหล่านั้นเป็นข้อบังคับที่ backend ไม่ใช่เพียงเงื่อนไขแสดงปุ่ม ตัวอย่างคือหน้าจออาจแสดงว่า Ticket พร้อม Resolve แต่มีผู้ใช้เพิ่ม Action ที่ยังไม่เสร็จในเวลาใกล้กัน การตรวจซ้ำใน transaction ที่ใช้ Ticket lock ร่วมกันจึงจำเป็น ส่วน expectedVersion และ idempotency key แก้คนละปัญหา โดยอย่างแรกป้องกันการเขียนทับข้อมูลเก่า และอย่างหลังป้องกันการสร้างข้อมูลซ้ำเมื่อไม่แน่ใจว่าคำขอเดิมสำเร็จหรือไม่
 
-ตัวอย่างที่ควรอธิบายให้ได้คือ Ticket Owner กับผู้รับผิดชอบ Action เป็นคนละบทบาท และการซ่อนปุ่ม Resolve อย่างเดียวไม่เพียงพอ เพราะผู้ใช้ส่งคำขอ API โดยตรงหรือมีคนเพิ่ม Action พร้อมกันได้ จึงต้องตรวจเงื่อนไขใน transaction ที่ล็อก Ticket ร่วมกับการแก้ Action
+ข้อแก้ไขจากเพื่อนแสดงให้เห็นว่าผลผ่านบนเครื่องหนึ่งยังไม่เพียงพอ ชุดทดสอบ Dashboard เคยอ้าง Prisma client จากตำแหน่งที่ยังไม่ได้ generate จึงต้องแก้ให้ใช้ client ของ server และรันคำสั่งปกติโดยไม่มีตัวช่วยเฉพาะเครื่อง อีกกรณีคือการกู้คืน Action หลังคำขอถูกปฏิเสธ ต้องเก็บ draft ที่แก้แล้วและแยกจากกรณี server บันทึกสำเร็จแต่ response สูญหาย การรีวิวจึงช่วยตรวจทั้งพฤติกรรมระบบและความน่าเชื่อถือของชุดทดสอบ
 
-การรีวิวจากเพื่อนทำให้พบข้อผิดพลาดที่การทดสอบบนเครื่องผู้เขียนมองไม่เห็น เช่น Prisma client ของชุดทดสอบ Dashboard ถูกเรียกจากตำแหน่งที่ยังไม่ได้ generate การแก้ให้ใช้ client ของ server และรันคำสั่งปกติใหม่แสดงว่าหลักฐานต้องทำซ้ำได้ ความสำเร็จบนเครื่องหนึ่งยังไม่เพียงพอ ผลทดสอบบน feature branch ก็ต้องแยกจากผลบน main หลังรีวิวและ merge จริง
-
-ก่อนส่ง ฉันต้องทดลองสาธิตด้วยตนเอง อธิบายเงื่อนไขธุรกิจ ตรวจชื่อโมเดลที่ใช้จริง และปรับข้อความสะท้อนคิดนี้ให้ตรงกับสิ่งที่ฉันได้เรียนรู้
+แนวทางที่ควรใช้ต่อคือให้ AI ทำงานภายใต้ contract และเกณฑ์ยอมรับที่ชัดเจน ตรวจทั้งกรณีสำเร็จ ผิดพลาด และข้อมูลเปลี่ยนพร้อมกัน แล้วแยกผลทดสอบของผู้เขียน การอนุมัติจากเพื่อน และผลบน main ออกจากกัน หลักฐานในงานนี้เป็นผลที่ agent รันและ peer ตรวจซ้ำ ไม่ใช่การอ้างว่าผู้ส่งรายงานรันทดสอบทุกชุดด้วยตนเอง การอธิบายเหตุผลของการออกแบบและการสาธิตระบบยังเป็นส่วนที่ผู้ส่งงานต้องรับผิดชอบ
