@@ -1,29 +1,34 @@
 {
-  "checkedAt": "2026-10-09T21:20:12.665562+00:00",
-  "scope": "Author review draft; final-main acceptance pending",
-  "pdfPages": 29,
-  "answerPartsInOrder": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9
-  ],
-  "draftFooterOnEveryPage": true,
-  "pdfHttpsLinks": 76,
-  "uniquePdfHttpsLinks": 56,
-  "reportSha256": "07962300b53697c6c375869b5078e636fbe03886819b19ee8e097a7c7bc9ab7a",
+  "pages": 30,
+  "partStartingPages": {
+    "1": 1,
+    "2": 2,
+    "3": 5,
+    "4": 13,
+    "5": 15,
+    "6": 19,
+    "7": 23,
+    "8": 24,
+    "9": 28
+  },
+  "httpsLinks": 90,
+  "uniqueLinks": 60,
+  "rawChatPhrasesAbsent": true,
+  "checkedAt": "2026-10-10T17:15:08.131236+00:00",
+  "scope": "Updated LAB4 report; fresh main runtime source 7a697d2; student closeout pending.",
+  "reportSha256": "748908a98e95b9ec483c5a421f3ac1cc06a779c0d20063c742aa84b0dd5b7aa5",
   "captureChecksumsBytesAndDimensions": {
     "actions": 9,
     "workflow": 12,
     "dashboards": 9,
-    "release": 75
+    "release": 75,
+    "final-main": 75
   },
-  "totalCaptureChecks": 105,
-  "relativeMarkdownTargetsChecked": 69,
-  "visualInspection": "All 29 rendered pages inspected; focused checks on traceability, forms, workflow readiness and completed author checklist."
+  "totalCaptureChecks": 180,
+  "relativeMarkdownTargetsChecked": 102,
+  "reportBuilderRepositoryTargets": 48,
+  "textFilesCredentialPatternScanned": 30,
+  "credentialPatternHits": 0,
+  "visualInspection": "All 30 pages rendered and inspected; full-size AI Use/Reflection pages 13-15 inspected after keeping each prompt and outcome together.",
+  "unchangedScope": "No LAB2/LAB3 edits; no application/test/config changes."
 }
