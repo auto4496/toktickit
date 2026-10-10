@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-09T21:20:12.665562+00:00",
+  "scope": "Author review draft; final-main acceptance pending",
+  "pdfPages": 29,
+  "answerPartsInOrder": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "draftFooterOnEveryPage": true,
+  "pdfHttpsLinks": 76,
+  "uniquePdfHttpsLinks": 56,
+  "reportSha256": "07962300b53697c6c375869b5078e636fbe03886819b19ee8e097a7c7bc9ab7a",
+  "captureChecksumsBytesAndDimensions": {
+    "actions": 9,
+    "workflow": 12,
+    "dashboards": 9,
+    "release": 75
+  },
+  "totalCaptureChecks": 105,
+  "relativeMarkdownTargetsChecked": 69,
+  "visualInspection": "All 29 rendered pages inspected; focused checks on traceability, forms, workflow readiness and completed author checklist."
+}

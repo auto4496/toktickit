@@ -13,6 +13,7 @@ export default async function setup() {
     const passwordHash = await hashPassword(e2ePassword);
     for (const [id, name, email, role] of [
       ['99999999-9999-4999-8999-999999999996', 'Alex Morgan', 'e2e.staff@example.test', 'IT_STAFF'],
+      ['99999999-9999-4999-8999-999999999992', 'Jamie Support', 'e2e.staff2@example.test', 'IT_STAFF'],
       ['99999999-9999-4999-8999-999999999997', 'Taylor Admin', 'e2e.admin@example.test', 'ADMINISTRATOR'],
       ['99999999-9999-4999-8999-999999999998', 'Initial Password Evidence', 'e2e.visual-initial@example.test', 'IT_STAFF'],
     ]) {

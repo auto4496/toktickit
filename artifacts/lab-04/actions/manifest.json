@@ -1,0 +1,75 @@
+{
+  "observedAt": "2026-10-06T15:38:16.765Z",
+  "browserChecks": "Complete Actions suite passed before publication; see docs/lab-04/actions.md for the observed count.",
+  "baseCommit": "29480ebbd5e69f7ec15d38302f321934c9e3a7d7",
+  "viewports": [
+    "1440x900",
+    "834x1112",
+    "390x844"
+  ],
+  "files": [
+    {
+      "path": "screenshots/requester-read-only-1440.png",
+      "width": 1440,
+      "height": 2049,
+      "bytes": 199280,
+      "sha256": "4be7ab24e6e3d28c141bf0284736ec054e6083cb750605c8003e757320d80654"
+    },
+    {
+      "path": "screenshots/requester-read-only-834.png",
+      "width": 834,
+      "height": 2110,
+      "bytes": 177414,
+      "sha256": "dba6cd316b33de4dfa6c6231866533b7040a26a918b06bcb5be10593a21dd975"
+    },
+    {
+      "path": "screenshots/requester-read-only-390.png",
+      "width": 390,
+      "height": 2677,
+      "bytes": 156560,
+      "sha256": "48dfd12ec4ff9a447ab841aabd1402f75a8bb0f65eb39a3400d641b03923f981"
+    },
+    {
+      "path": "screenshots/staff-started-1440.png",
+      "width": 1440,
+      "height": 2404,
+      "bytes": 216142,
+      "sha256": "f9b81c96cec58a01e6500ab63576df60d1d64527a20d1ad280e8b836a5084175"
+    },
+    {
+      "path": "screenshots/staff-started-834.png",
+      "width": 834,
+      "height": 3049,
+      "bytes": 195211,
+      "sha256": "5d3e29762ca65e7cf464f56b4302b19ce871a253cee9e578d2afda823ec79379"
+    },
+    {
+      "path": "screenshots/staff-started-390.png",
+      "width": 390,
+      "height": 3637,
+      "bytes": 177649,
+      "sha256": "26ea70b1efa6a2b434f1b93d6f63a88a18e8b2bd5662c0dfc990af19440f48b5"
+    },
+    {
+      "path": "screenshots/start-conflict-1440.png",
+      "width": 1440,
+      "height": 2424,
+      "bytes": 217318,
+      "sha256": "dda42ca770b06418c3db94ffa3db3bd849ec40172fac1c9f0ebae7f4f7bdc071"
+    },
+    {
+      "path": "screenshots/start-conflict-834.png",
+      "width": 834,
+      "height": 3069,
+      "bytes": 196475,
+      "sha256": "67519f80a074a7a0ced6637f04963b691dd0a4e5943204eb2138f37770bc07b6"
+    },
+    {
+      "path": "screenshots/start-conflict-390.png",
+      "width": 390,
+      "height": 3657,
+      "bytes": 178829,
+      "sha256": "e0bbf1b40efb0270ad81dcdc1a7ee6712d35532ef6e790ea3cb01d24bf6d659f"
+    }
+  ]
+}

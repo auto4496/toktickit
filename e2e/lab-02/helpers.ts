@@ -23,7 +23,7 @@ export const pdfBytes = Buffer.from('%PDF-1.4\n% TokTickIT E2E evidence\n');
 export const e2ePassword = 'Synthetic e2e green garden 2026';
 export async function selectRequester(page: Page, requester = requesterA) {
   await page.context().clearCookies();
-  await page.goto('/login');
+  await page.goto('/tickets');
   await page.getByLabel('Email address').fill(requester.email);
   await page.getByLabel('Password', { exact: true }).fill(e2ePassword);
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();

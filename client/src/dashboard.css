@@ -1,0 +1,23 @@
+.lab4-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.lab4-metric { display: flex; flex-direction: column; gap: 8px; min-height: 150px; color: #17352a; text-decoration: none; }
+.lab4-metric:hover, .lab4-breakdown a:hover { border-color: #006b3c; background: #eaf6ef; }
+.lab4-metric strong { font-size: 36px; line-height: 1; color: #006b3c; }
+.lab4-metric small, .lab4-asof, .lab4-recent small { color: #52665e; }
+.lab4-breakdown { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.lab4-breakdown-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.lab4-breakdown a { border: 1px solid #ccd8d2; border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; gap: 8px; color: #17352a; text-decoration: none; }
+.lab4-recent { margin: 0; padding: 0; list-style: none; }
+.lab4-recent li { display: flex; justify-content: space-between; gap: 16px; align-items: center; border-top: 1px solid #ccd8d2; padding: 16px 0; }
+.lab4-recent a { color: #006b3c; font-weight: 600; overflow-wrap: anywhere; }
+.lab4-recent small { display: block; margin-top: 4px; }
+.lab4-recent-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.lab4-asof { font-size: 14px; }
+.lab4-dashboard { display: grid; gap: 24px; }
+.lab4-dashboard .wf-panel { min-width: 0; margin-bottom: 0; }
+.lab4-dashboard .wf-heading { margin-bottom: 0; }
+.lab4-dashboard-staff .lab4-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab4-recent li > div { min-width: 0; }
+.lab4-breakdown a { min-height: 44px; align-items: center; }
+.lab4-metric:focus-visible, .lab4-breakdown a:focus-visible, .lab4-recent a:focus-visible { outline: 3px solid #006b3c; outline-offset: 3px; }
+@media (max-width: 991px) { .lab4-metrics, .lab4-dashboard-staff .lab4-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .lab4-breakdown { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .lab4-metrics, .lab4-dashboard-staff .lab4-metrics { grid-template-columns: 1fr; } .lab4-metric { min-height: 120px; } .lab4-recent li { align-items: flex-start; flex-direction: column; } }

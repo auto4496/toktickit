@@ -14,6 +14,7 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 // Queue internals are covered by StaffWorkflow.test.tsx; shell tests exercise
 // identity, role navigation and cache clearing without feature data requests.
 vi.mock('../../src/StaffTicketQueue', () => ({ default: () => <main>Queue workspace</main> }));
+vi.mock('../../src/Dashboard', () => ({ default: () => <main>Dashboard workspace</main> }));
 // User forms have their own behavior tests; keep shell fixtures about identity.
 vi.mock('../../src/UserManagement', () => ({ default: () => <main>Users workspace</main> }));
 describe('Authenticated application shell (replaces development selector/system-check UI)', () => {
@@ -42,7 +43,7 @@ describe('Authenticated application shell (replaces development selector/system-
     expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
     expect(fetch).toHaveBeenCalledTimes(1);
   });
-  it.each([['IT_STAFF', '/staff/tickets', 'Ticket Queue'], ['ADMINISTRATOR', '/admin/users', 'Users']])('lands %s on its own navigation', async (role, path, label) => {
+  it.each([['IT_STAFF', '/staff/dashboard', 'Dashboard'], ['ADMINISTRATOR', '/admin/users', 'Users']])('lands %s on its own navigation', async (role, path, label) => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(json({ user: { ...user, role } })));
     render(<App />);
     expect(await screen.findByRole('link', { name: label })).toHaveAttribute('href', path);

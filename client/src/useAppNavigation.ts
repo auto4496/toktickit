@@ -5,7 +5,8 @@ const position = () => Number.isSafeInteger(history.state?.toktickitPosition) ? 
 // Only the router owns history positions. A blocked Back/Forward is restored
 // before asking, then replayed on confirmation, preserving the forward stack.
 export function useAppNavigation() {
-  const [path, setPath] = useState(location.pathname);
+  const [route, setRoute] = useState(location.pathname + location.search);
+  const path = route.split('?')[0];
   const [pending, setPending] = useState<(() => void) | null>(null);
   const dirty = useRef(false);
   const current = useRef(position() ?? 0);
@@ -15,7 +16,7 @@ export function useAppNavigation() {
   const push = useCallback((next: string, intended: string | null = null) => {
     current.current += 1;
     history.pushState({ toktickitPosition: current.current, ...(intended ? { toktickitReturnTo: intended } : {}) }, '', next);
-    setPath(next);
+    setRoute(location.pathname + location.search);
   }, []);
   const forceNavigate = useCallback((next: string, intended: string | null = null) => {
     // Authentication changes cannot be vetoed by an unsaved form.
@@ -25,7 +26,7 @@ export function useAppNavigation() {
     else go();
   }, [push]);
   const navigate = useCallback((next: string) => {
-    if (next === location.pathname || traversal.current) return;
+    if (next === location.pathname + location.search || traversal.current) return;
     const go = () => push(next);
     if (dirty.current) setPending(() => go);
     else go();
@@ -43,7 +44,7 @@ export function useAppNavigation() {
       if (traversal.current === 'replay') {
         traversal.current = null; current.current = next ?? current.current;
         const done = afterTraversal.current; afterTraversal.current = null;
-        if (done) done(); else setPath(location.pathname);
+        if (done) done(); else setRoute(location.pathname + location.search);
         return;
       }
       if (dirty.current && next !== null && next !== current.current) {
@@ -54,12 +55,12 @@ export function useAppNavigation() {
         return;
       }
       current.current = next ?? current.current;
-      setPath(location.pathname);
+      setRoute(location.pathname + location.search);
     };
     window.addEventListener('popstate', pop);
     return () => window.removeEventListener('popstate', pop);
   }, []);
   const cancel = () => setPending(null);
   const confirm = () => { const go = pending; setPending(null); dirty.current = false; go?.(); };
-  return { path, navigate, forceNavigate, setDirty, blocked: !!pending, cancel, confirm };
+  return { path, route, navigate, forceNavigate, setDirty, blocked: !!pending, cancel, confirm };
 }

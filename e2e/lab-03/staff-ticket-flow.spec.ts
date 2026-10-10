@@ -1,6 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { e2ePassword, requesterA, expectNoHorizontalOverflow } from '../lab-02/helpers';
+import { completeResolutionAction } from '../lab-04/helpers';
 const origin = () => `http://127.0.0.1:${process.env.E2E_CLIENT_PORT ?? '3100'}`;
 async function login(page: Page, email: string, destination: string) {
   await page.context().clearCookies(); await page.goto(destination);
@@ -36,6 +37,7 @@ test('E2E-02 staff workflow, public/private conversation, indication, Admin rest
   await expect(page.getByRole('heading', { name: 'Ticket oversight' })).toBeVisible(); await expect(page.getByRole('button', { name: 'Claim ticket' })).toHaveCount(0); await expect(page.getByLabel('Next status')).toHaveCount(0); await expect(page.getByRole('textbox')).toHaveCount(0);
   await page.getByRole('tab', { name: /Internal Notes/ }).click(); await expect(page.getByText('Private diagnostic: inspect the switch port.', { exact: true })).toBeVisible();
   await login(page, 'e2e.staff@example.test', `/staff/tickets/${ticket.id}`);
+  await completeResolutionAction(page);
   for (const state of ['RESOLVED', 'CLOSED', 'REOPENED']) {
     await page.getByLabel('Next status').selectOption(state); await page.getByRole('button', { name: 'Update status' }).click(); await expect(page.getByRole('dialog')).toContainText(ticket.ticketNumber); await page.getByRole('button', { name: 'Confirm', exact: true }).click(); await expect(page.getByLabel('Next status')).toHaveValue('');
   }

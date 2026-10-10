@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient, Priority, TicketStatus } from '@prisma/client';
+import { openTicketStatuses } from './ticket-scopes.js';
 
 const POSTGRES_INTEGER_MAX = 2_147_483_647;
 const PAGE_SIZES = [10, 20, 50] as const;
@@ -16,6 +17,7 @@ const SUPPORTED_PARAMETERS = new Set([
   'categoryId',
   'requestedPriority',
   'currentStatus',
+  'status',
   'sortBy',
   'sortDirection',
   'page',
@@ -31,6 +33,7 @@ export type TicketListQuery = {
   categoryId?: number;
   requestedPriority?: Priority;
   currentStatus?: TicketStatus;
+  status?: 'open';
   sortBy: TicketSortBy;
   sortDirection: TicketSortDirection;
   page: number;
@@ -108,6 +111,8 @@ export const parseTicketListQuery = (
   const rawCategoryId = readSingleString(query, 'categoryId', fieldErrors);
   const rawPriority = readSingleString(query, 'requestedPriority', fieldErrors);
   const rawStatus = readSingleString(query, 'currentStatus', fieldErrors);
+  const rawScope = readSingleString(query, 'status', fieldErrors);
+  if (rawScope !== undefined && rawScope !== 'open') fieldErrors.status = 'status must be open.';
   const rawSortBy = readSingleString(query, 'sortBy', fieldErrors);
   const rawSortDirection = readSingleString(query, 'sortDirection', fieldErrors);
   const rawPage = readSingleString(query, 'page', fieldErrors);
@@ -197,6 +202,7 @@ export const parseTicketListQuery = (
       ...(categoryId ? { categoryId } : {}),
       ...(requestedPriority ? { requestedPriority } : {}),
       ...(currentStatus ? { currentStatus } : {}),
+      ...(rawScope === 'open' ? { status: 'open' as const } : {}),
       sortBy,
       sortDirection,
       page,
@@ -257,6 +263,7 @@ const buildWhere = (requesterId: string, query: TicketListQuery) => ({
     ? { requestedPriority: query.requestedPriority }
     : {}),
   ...(query.currentStatus ? { currentStatus: query.currentStatus } : {}),
+  ...(query.status === 'open' ? { AND: [{ currentStatus: { in: openTicketStatuses } }] } : {}),
 }) satisfies Prisma.TicketWhereInput;
 
 export const mapTicketSummary = (ticket: TicketSummaryRecord) => ({

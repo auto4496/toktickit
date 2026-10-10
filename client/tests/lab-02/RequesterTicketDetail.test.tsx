@@ -96,7 +96,7 @@ describe('Requester Ticket Detail', () => {
     expect(screen.getByText('malware.exe')).toBeInTheDocument();
     expect(screen.getByText(/Choose a JPG, PNG, WEBP, or PDF/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Remove selection' })).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls.every(([url]) => !String(url).endsWith('/attachments'))).toBe(true);
   });
 
   it('keeps a safe failed upload row and retries it successfully', async () => {

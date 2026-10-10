@@ -37,6 +37,7 @@ type TicketQuery = {
   categoryId: string;
   requestedPriority: '' | Priority;
   currentStatus: '' | TicketStatus;
+  status: '' | 'open';
   sortBy: SortBy;
   sortDirection: SortDirection;
   page: number;
@@ -49,6 +50,7 @@ const defaultQuery: TicketQuery = {
   categoryId: '',
   requestedPriority: '',
   currentStatus: '',
+  status: '',
   sortBy: 'updatedAt',
   sortDirection: 'desc',
   page: 1,
@@ -56,6 +58,16 @@ const defaultQuery: TicketQuery = {
 };
 
 const apiUrl = () => import.meta.env.VITE_API_URL ?? '';
+const initialQuery = (): TicketQuery => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    ...defaultQuery,
+    status: params.get('status') === 'open' ? 'open' : '',
+    currentStatus: statuses.includes(params.get('currentStatus') as TicketStatus) ? params.get('currentStatus') as TicketStatus : '',
+    sortBy: isSortBy(params.get('sortBy')) ? params.get('sortBy') as SortBy : defaultQuery.sortBy,
+    sortDirection: isSortDirection(params.get('sortDirection')) ? params.get('sortDirection') as SortDirection : defaultQuery.sortDirection,
+  };
+};
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 const isCategory = (value: unknown): value is Category =>
@@ -122,6 +134,7 @@ const buildQueryString = (query: TicketQuery) => {
     parameters.set('requestedPriority', query.requestedPriority);
   }
   if (query.currentStatus) parameters.set('currentStatus', query.currentStatus);
+  if (query.status) parameters.set('status', query.status);
   parameters.set('sortBy', query.sortBy);
   parameters.set('sortDirection', query.sortDirection);
   parameters.set('page', String(query.page));
@@ -161,7 +174,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
   );
   const [categoryAttempt, setCategoryAttempt] = useState(0);
   const [searchDraft, setSearchDraft] = useState('');
-  const [query, setQuery] = useState<TicketQuery>(defaultQuery);
+  const [query, setQuery] = useState<TicketQuery>(initialQuery);
   const [tickets, setTickets] = useState<TicketSummary[]>([]);
   const [meta, setMeta] = useState<TicketMeta | null>(null);
   const [listState, setListState] = useState<'loading' | 'loaded' | 'failure'>(
@@ -243,12 +256,13 @@ export default function MyTickets({ requester }: { requester: Requester }) {
       categoryId: '',
       requestedPriority: '',
       currentStatus: '',
+      status: '',
       page: 1,
     }));
   };
 
   const hasFilters = Boolean(
-    query.search || query.categoryId || query.requestedPriority || query.currentStatus,
+    query.search || query.categoryId || query.requestedPriority || query.currentStatus || query.status,
   );
   const resultStart = meta && tickets.length > 0
     ? (meta.page - 1) * meta.pageSize + 1
@@ -288,6 +302,7 @@ export default function MyTickets({ requester }: { requester: Requester }) {
         </form>
 
         <div className="ticket-filter-grid">
+          <label htmlFor="ticket-scope">Ticket scope<select id="ticket-scope" value={query.status} onChange={event => replaceQuery({ status: event.target.value as '' | 'open' })}><option value="">All tickets</option><option value="open">Open tickets</option></select></label>
           <label htmlFor="ticket-category">
             Category
             <select

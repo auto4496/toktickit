@@ -1,0 +1,43 @@
+* 4ab9c79 (HEAD -> codex/lab4-6-release-evidence) test(lab4): capture Action forms and dashboard feedback for final review
+* 403e044 test(lab4): scope polish error checks to authenticated routes
+* 7ec3be3 test(lab4): add final regression and dashboard scale verification
+*   72c5553 (origin/codex/lab4-staging) Merge pull request #47 from auto4496/codex/lab4-5-role-dashboards
+|\
+| * 884df39 (origin/codex/lab4-5-role-dashboards, codex/lab4-5-role-dashboards) fix(lab4): resolve dashboard fixture Prisma client from server
+| * 1f1adc2 docs(lab4): record dashboard review PR
+| * e0c3a98 feat(lab4): add role dashboards and accurate Ticket drill-down filters
+|/
+*   69b32d6 Merge pull request #45 from auto4496/codex/lab4-4-ticket-workflow
+|\
+| * a1d1fce (origin/codex/lab4-4-ticket-workflow, codex/lab4-4-ticket-workflow) docs(lab4): record workflow review PR
+| * 46ac747 feat(lab4): enforce Ticket resolution gate and recoverable readiness UI
+|/
+*   68a88cc Merge pull request #43 from auto4496/codex/lab4-3-actions
+|\
+| * 935bcdf (origin/codex/lab4-3-actions, codex/lab4-3-actions) fix(lab4): release creation recovery after definitive rejection
+| * 25b478c fix(lab4): recover ambiguous Action creation and isolate evidence capture
+| * 29480eb docs(lab4): record Actions review PR and text wrapping
+| * f9f33b3 style(lab4): normalize Actions stylesheet whitespace
+| * 84c07eb feat(lab4): add Actions Taken API UI and Start recovery
+|/
+*   c039a7d Merge pull request #41 from auto4496/codex/lab4-2-data-foundation
+|\
+| * 301c902 (origin/codex/lab4-2-data-foundation, codex/lab4-2-data-foundation) docs(lab4): record data foundation review PR
+| * ad32c82 feat(lab4): add data foundation and isolated migration recovery
+|/
+*   b5bee16 Merge pull request #39 from auto4496/codex/lab4-1-engineering-contract
+|\
+| * 4886585 (origin/codex/lab4-1-engineering-contract, codex/lab4-1-engineering-contract) docs(lab4): address recovery and action-start review findings
+| * 1c7a0d8 docs(lab4): record contract PR and pending review
+| * fa29374 docs(lab4): link contract issue and clarify dashboard scopes
+| * dd34049 (codex/lab4-implementation) docs(lab4): define engineering contract and test plan
+|/
+*   da5a566 (origin/main, origin/HEAD, codex/lab4-staging, codex/lab4-actions-dashboards) Merge pull request #37 from auto4496/codex/lab3-copy-corrections
+|\
+| * baedb61 (origin/codex/lab3-copy-corrections, codex/lab3-copy-corrections) fix(lab3): replace stale requester authentication labels
+|/
+*   b3a6594 Merge pull request #36 from auto4496/lab3-staging
+|\
+| * e37379b (origin/lab3-staging, lab3-staging) docs(lab3): record release PR 36 handoff and remaining acceptance
+| * 58e1efb docs(lab3): add inspected release review PDF and provenance
+| * aab88a1 docs(lab3): refine report tables and directory links

@@ -7,6 +7,8 @@ import { getOwnedTicketDetail } from './attachment-service.js';
 import { parseTicketListQuery, mapTicketSummary, ticketSummarySelect } from './ticket-query.js';
 import { lockAccounts } from './account-lock.js';
 import { canIndicate, needsConfirmation, needsOwner, normalizeContent, statusTransitions, terminal } from './workflow-rules.js';
+import { getResolutionGate } from './resolution-gate.js';
+import { openTicketStatuses } from './ticket-scopes.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 class WorkflowError extends Error {
@@ -64,6 +66,8 @@ workflowRouter.get('/staff/eligible-owners', requireRole('IT_STAFF'), wrap(async
 workflowRouter.get('/staff/tickets', requireRole('IT_STAFF', 'ADMINISTRATOR'), wrap(async (req, res) => {
   const raw = { ...req.query } as Record<string, unknown>;
   const owner = raw.owner ?? 'all'; delete raw.owner;
+  const actionAssignee = raw.actionAssignee; delete raw.actionAssignee;
+  if (actionAssignee !== undefined && actionAssignee !== 'me') invalid();
   if (typeof owner !== 'string' || (!['all', 'unassigned', 'me'].includes(owner) && !uuid.test(owner))) invalid();
   if ('requestedPriority' in raw || raw.sortBy === 'requestedPriority') invalid();
   if ('itPriority' in raw) { raw.requestedPriority = raw.itPriority; delete raw.itPriority; }
@@ -72,6 +76,8 @@ workflowRouter.get('/staff/tickets', requireRole('IT_STAFF', 'ADMINISTRATOR'), w
   const parsed = parseTicketListQuery(raw); if (!parsed.success) return invalid();
   const q = parsed.value;
   const where: Prisma.TicketWhereInput = {
+    ...(q.status === 'open' || actionAssignee === 'me' ? { AND: [{ currentStatus: { in: openTicketStatuses } }] } : {}),
+    ...(actionAssignee === 'me' ? { actionsTaken: { some: { assignedToId: req.auth!.user.id, followUpRequired: true, status: { in: ['PLANNED', 'IN_PROGRESS'] } } } } : {}),
     ...(q.categoryId ? { categoryId: q.categoryId } : {}), ...(q.currentStatus ? { currentStatus: q.currentStatus } : {}),
     ...(q.requestedPriority ? { itPriority: q.requestedPriority } : {}),
     ...(owner === 'unassigned' ? { ownerId: null } : owner === 'me' ? { ownerId: req.auth!.user.id } : owner !== 'all' ? { ownerId: owner as string } : {}),
@@ -102,9 +108,17 @@ workflowRouter.get('/staff/tickets', requireRole('IT_STAFF', 'ADMINISTRATOR'), w
   res.json(result);
 }));
 workflowRouter.get('/staff/tickets/:ticketId', requireRole('IT_STAFF', 'ADMINISTRATOR'), wrap(async (req, res) => {
-  const id = ticketId(req); await authorizedTicket(prisma, req, id);
-  res.json({ data: await getOwnedTicketDetail(prisma, undefined, id) });
+  const id = ticketId(req);
+  const data = await prisma.$transaction(async tx => {
+    await authorizedTicket(tx, req, id);
+    return staffDetail(tx, id);
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
+  res.json({ data });
 }));
+
+async function staffDetail(tx: Prisma.TransactionClient, id: string) {
+  return { ...await getOwnedTicketDetail(tx, undefined, id), resolutionGate: await getResolutionGate(tx, id) };
+}
 
 type Operation = 'claim' | 'owner' | 'priority' | 'status' | 'indication';
 const operate = (operation: Operation) => wrap(async (req, res) => {
@@ -137,6 +151,9 @@ const operate = (operation: Operation) => wrap(async (req, res) => {
       if (!statusTransitions[ticket.currentStatus].includes(next)) fail(409, 'INVALID_STATUS_TRANSITION', 'This status transition is not allowed.');
       const owner = ticket.ownerId ? await tx.user.findUnique({ where: { id: ticket.ownerId } }) : null;
       if (needsOwner(next) && (!owner?.isActive || !['IT_STAFF', 'ADMINISTRATOR'].includes(owner.role))) fail(409, 'ACTIVE_OWNER_REQUIRED', 'Assign an active owner before changing to this status.');
+      if (next === 'RESOLVED' && !(await getResolutionGate(tx, id)).ready) {
+        fail(409, 'ACTIONS_INCOMPLETE', 'Resolve requires at least one completed Action with a Result and no planned or in-progress Actions.');
+      }
       update.currentStatus = next; if (next === 'REOPENED') update.requesterResolvedAt = null;
     } else {
       if (!canIndicate(ticket.currentStatus)) fail(409, 'RESOLUTION_INDICATION_NOT_ALLOWED', 'Resolution can only be reported while this ticket is being handled.');
@@ -144,7 +161,7 @@ const operate = (operation: Operation) => wrap(async (req, res) => {
       update.requesterResolvedAt = new Date();
     }
     await tx.ticket.update({ where: { id }, data: update });
-    return getOwnedTicketDetail(tx, undefined, id);
+    return req.auth!.user.role === 'REQUESTER' ? getOwnedTicketDetail(tx, undefined, id) : staffDetail(tx, id);
   });
   res.json({ data });
 });

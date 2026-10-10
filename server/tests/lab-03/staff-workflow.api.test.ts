@@ -27,11 +27,16 @@ beforeAll(async () => {
     ownerId: i % 2 ? ids[2] : null,
   } })).id);
   ticketId = ticketIds[0];
+  // The retained transition matrix now resolves against a valid Lab 4 Action fixture.
+  await prisma.actionTaken.create({ data: { ticketId, assignedToId: ids[2], createdById: ids[2], performedById: ids[2], actionAt: new Date(), description: 'Verified connection recovery', result: 'Connection restored', status: 'COMPLETED' } });
 });
 beforeEach(async () => {
   await prisma.ticket.update({ where: { id: ticketId }, data: { currentStatus: 'NEW', ownerId: null, version: 1, itPriority: 'HIGH', requesterResolvedAt: null } });
 });
 afterAll(async () => {
+  await prisma.actionRevision.deleteMany({ where: { action: { ticketId: { in: ticketIds } } } });
+  await prisma.actionCreateRequest.deleteMany({ where: { action: { ticketId: { in: ticketIds } } } });
+  await prisma.actionTaken.deleteMany({ where: { ticketId: { in: ticketIds } } });
   await prisma.publicComment.deleteMany({ where: { ticketId: { in: ticketIds } } });
   await prisma.internalNote.deleteMany({ where: { ticketId: { in: ticketIds } } });
   await prisma.ticket.deleteMany({ where: { id: { in: ticketIds } } });

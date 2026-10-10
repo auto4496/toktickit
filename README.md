@@ -1,12 +1,12 @@
-# TokTickIT - Lab 3 Service Desk
+# TokTickIT - Lab 4 Service Desk
 
-TokTickIT is an IT service-desk application with session authentication, Requester tickets and attachments, an IT Staff queue and workflow, and Administrator account management. See [foundation setup and migration](docs/lab-03/foundation.md) before upgrading an existing Lab 2 database, [staff workflow](docs/lab-03/staff-workflow.md), and [user management](docs/lab-03/user-management.md). Integrated verification in [Issue #29](https://github.com/auto4496/toktickit/issues/29) is peer-approved and merged. The [release checklist and review-report command](docs/lab-03/release.md) track [Issue #30](https://github.com/auto4496/toktickit/issues/30), including the remaining final-main checks and submission PDF.
+TokTickIT is an IT service-desk application with session authentication, Requester Tickets and attachments, Staff workflow, Administrator account management, audited Actions Taken and role dashboards. LAB4 feature work #38-46 is independently approved and merged into `codex/lab4-staging`. [Final hardening and release #48](https://github.com/auto4496/toktickit/issues/48) tracks regression, report preparation and the remaining reviewed staging-to-main release. See [LAB4 release checklist](docs/lab-04/release.md), [specification](docs/lab-04/specification.md), [API](docs/lab-04/api-spec.md), and [test results](docs/lab-04/tests.md).
 
 | Role | Main screens | Responsibilities |
 |---|---|---|
-| Requester | `/tickets`, `/tickets/new`, `/tickets/:id` | Own tickets, attachments, public comments and resolution indication |
-| IT Staff | `/staff/tickets`, `/staff/tickets/:id` | Search/filter queue, claim/assign, priority/status, public comments and private notes |
-| Administrator | `/admin/users`, `/staff/tickets` | Create/edit/reset accounts; read ticket conversations and change IT Priority |
+| Requester | `/dashboard`, `/tickets`, `/tickets/new`, `/tickets/:id` | Owned metrics, Tickets, attachments, public comments, read-only Actions and advisory resolution indication |
+| IT Staff | `/staff/dashboard`, `/staff/tickets`, `/staff/tickets/:id` | Metrics, queue, owner/priority/status, conversations and Actions Taken |
+| Administrator | `/admin/users`, `/staff/dashboard`, `/staff/tickets` | Accounts, operational dashboard, IT Priority and Actions; Ticket Owner/status changes remain Staff-only |
 
 Initial-password accounts must change their password before using the application. There is no self-registration, email reset or account deletion. Authorization is enforced by the API as well as the interface.
 
@@ -34,22 +34,28 @@ toktickit/
 │   ├── tests/
 │   │   ├── lab-01/
 │   │   ├── lab-02/
-│   │   └── lab-03/
+│   │   ├── lab-03/
+│   │   └── lab-04/
 │   └── package.json
 ├── e2e/
 │   ├── lab-02/
-│   └── lab-03/
+│   ├── lab-03/
+│   └── lab-04/
 ├── artifacts/
 │   ├── lab-02/screenshots/
-│   └── lab-03/screenshots/
+│   ├── lab-03/screenshots/
+│   └── lab-04/release/
 ├── docs/
 │   ├── lab-01/
 │   ├── lab-02/
-│   └── lab-03/
+│   ├── lab-03/
+│   └── lab-04/
+├── scripts/lab-04/
 ├── .env.example
 ├── .gitignore
 ├── package.json
 ├── playwright.config.ts
+├── playwright.release.config.ts
 └── vitest.config.ts
 ```
 
@@ -111,7 +117,7 @@ npm run prisma:seed
 cd ..
 ```
 
-For existing Lab 2 data, complete the private account initialization in [the migration guide](docs/lab-03/foundation.md) before restarting the application. Seed is idempotent and preserves existing edits/passwords. It includes accounts, sample Tickets/conversations and these category names:
+For existing Lab 2 data, complete the private account initialization in [the migration guide](docs/lab-03/foundation.md) before restarting the application. For Lab 3 upgrades, back up the database and attachment storage before applying the additive `20261004000000_lab4_actions` migration; follow [the tested migration/recovery procedure](docs/lab-04/data-foundation.md). Existing Tickets require no Action backfill, but new formal resolution requires completed documented work. Seed is idempotent, rejects production use and preserves existing edits/passwords/history. It includes all roles, varied Tickets/conversations, zero/one/multiple Actions, and these categories:
 
 1. Account and Access
 2. Hardware
@@ -191,7 +197,7 @@ Run all currently implemented automated tests. Vitest fails fast unless
 
 ```bash
 npm test
-npm run test:e2e:lab3
+npm run test:e2e:release
 ```
 
 `npm run test:e2e` writes generated screenshots only under the ignored
@@ -211,7 +217,7 @@ npm run build:server
 npm run build:client
 ```
 
-`test:e2e:lab3` includes the retained Lab 2 journeys plus authentication, Staff and Administrator workflows and cross-role system verification. `test:e2e` remains the Lab 2 subset. Override `E2E_CLIENT_PORT` and `E2E_API_PORT` if the defaults are already in use. Never run two suites against the same test database concurrently.
+`test:e2e:release` selects every browser spec from Labs 2-4, including the complete retained responsive/visual suite, auth, accounts, Staff operations, Actions, workflow and dashboards. `test:e2e` remains the Lab 2 subset. The release config allows 120 seconds for cold server startup while retaining per-test limits/readiness checks. Override `E2E_CLIENT_PORT` and `E2E_API_PORT` if needed. Run database suites sequentially.
 
 ```bash
 npm run test:e2e:capture:lab3
@@ -220,3 +226,28 @@ npm run test:e2e:capture:lab3
 This explicit command runs the complete browser suite, then copies its Lab 3 screenshots to `artifacts/lab-03/screenshots/system/` only after success. A manifest records the capture time, Git baseline/working-tree state and PNG checksums. Routine runs write only to ignored `test-results/`. Synthetic failure/empty-state captures are labelled in filenames; they do not prove server behavior. Real HTTP/database tests provide that evidence separately.
 
 See [system verification](docs/lab-03/system-verification.md), [test traceability](docs/lab-03/tests.md), [review history](docs/lab-03/reviewer.md), [AI use and reflection draft](docs/lab-03/ai-use.md), and the [nine-part submission draft](docs/lab-03/submission-draft.md). Historical run results are dated and are not final-main acceptance.
+
+## LAB4 verification and demonstration
+
+Focused commands:
+
+```bash
+npm run test:e2e:actions
+npm run test:e2e:workflow
+npm run test:e2e:dashboards
+npm run test:perf:dashboards
+npm run test:e2e:capture:release
+```
+
+The last command runs the entire integrated browser suite and validates all 75 selected PNGs before refreshing `artifacts/lab-04/release/`. Routine runs write only ignored `test-results/`; they preserve curated evidence. The scale test creates and removes only its own guarded random test schema (5,000 Tickets / 10,000 Actions), checks exact metrics and bounded responses, and writes natural PostgreSQL query plans to ignored `tmp/dashboard-smoke.json`. It is a local smoke test, not a production load benchmark. Complete database recovery checks additionally require Docker and the dedicated PostgreSQL test container described in the recovery guide.
+
+Demo sequence using privately provisioned or seeded development accounts:
+
+1. Requester signs in, opens the Dashboard, follows an open/waiting card, creates a Ticket and uploads an attachment.
+2. Staff opens the Dashboard and matching queue, claims the Ticket, sets IT Priority and moves it through Open to In Progress. Ticket Owner and Action assignee may differ.
+3. Add multiple Actions: assign active Staff/Admin, enter date/time and description; a follow-up flag requires its note. Start, edit, complete with Result or cancel; verify the actor/revision history.
+4. Confirm Resolve remains unavailable while Actions are unfinished or no documented completion exists. Complete work and Resolve; close/reopen retains Action history. Requester indication alone does not change Ticket status.
+5. Requester reads shared Actions/comments/files; private notes and other Requesters' Tickets stay inaccessible. Admin demonstrates account creation/reset and its separate operational Dashboard without Staff-only status/owner controls.
+6. Repeat at desktop/tablet/mobile, use keyboard links, and demonstrate empty/error/conflict recovery described in [UI specification](docs/lab-04/ui-spec.md).
+
+Demo passwords are supplied privately through the existing seed/password-initialization process, never committed to the repository. The nine-part [submission draft](docs/lab-04/submission-draft.md), [current verification](docs/lab-04/final-verification.md), [peer review history](docs/lab-04/reviewer.md), and [AI use](docs/lab-04/ai-use.md) distinguish author checks from final-main acceptance.
