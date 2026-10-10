@@ -1,0 +1,33 @@
+Prisma schema loaded from server\prisma\schema.prisma
+Datasource "db": PostgreSQL database "lab3_test", schema "lab4_main_test_20261010" at "127.0.0.1:55433"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20260810155801_init`
+Applying migration `20260831003000_lab2_data_requester_context`
+Applying migration `20260913060000_lab3_accounts`
+Applying migration `20261004000000_lab4_actions`
+
+┌─────────────────────────────────────────────────────────┐
+│  Update available 6.19.3 -> 8.0.0-rc.22                 │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260810155801_init/
+    └─ migration.sql
+  └─ 20260831003000_lab2_data_requester_context/
+    └─ migration.sql
+  └─ 20260913060000_lab3_accounts/
+    └─ migration.sql
+  └─ 20261004000000_lab4_actions/
+    └─ migration.sql
+
+All migrations have been successfully applied.

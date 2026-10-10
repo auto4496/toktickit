@@ -1,0 +1,73 @@
+
+> toktickit-monorepo@1.0.0 test:e2e:capture:release
+> node e2e/lab-04/capture-release-evidence.mjs
+
+[WebServer] (node:22796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:47828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:45664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+Prisma schema loaded from server\prisma\schema.prisma
+Datasource "db": PostgreSQL database "lab3_test", schema "lab4_main_e2e_test_20261010" at "127.0.0.1:55433"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20260810155801_init`
+Applying migration `20260831003000_lab2_data_requester_context`
+Applying migration `20260913060000_lab3_accounts`
+Applying migration `20261004000000_lab4_actions`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260810155801_init/
+    └─ migration.sql
+  └─ 20260831003000_lab2_data_requester_context/
+    └─ migration.sql
+  └─ 20260913060000_lab3_accounts/
+    └─ migration.sql
+  └─ 20261004000000_lab4_actions/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+
+Running 32 tests using 1 worker
+
+(node:7916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 e2e\lab-02\authentication.spec.ts:5:5 › AUTH-E2E initial-password gate, change, role landing and logout on a real browser (2.7s)
+  ok  2 e2e\lab-02\requester-ticket-flow.spec.ts:14:5 › E2E-01 creates a Ticket, finds it in My Tickets, and opens owned detail (1.6s)
+  ok  3 e2e\lab-02\requester-ticket-flow.spec.ts:44:5 › E2E-02 switches requester and protects direct Ticket and Attachment access (2.4s)
+  ok  4 e2e\lab-02\requester-ticket-flow.spec.ts:78:5 › E2E-03 exercises invalid, limit, download, and soft-removal Attachment states (2.1s)
+  ok  5 e2e\lab-02\responsive-visual.spec.ts:25:7 › RESP-01 keeps every requester screen usable at desktop (2.0s)
+  ok  6 e2e\lab-02\responsive-visual.spec.ts:25:7 › RESP-01 keeps every requester screen usable at tablet (1.8s)
+  ok  7 e2e\lab-02\responsive-visual.spec.ts:25:7 › RESP-01 keeps every requester screen usable at mobile (1.7s)
+  ok  8 e2e\lab-02\responsive-visual.spec.ts:66:5 › VIS-01 captures the complete Zen Green screenshot contract (6.4s)
+  ok  9 e2e\lab-03\admin-users.spec.ts:8:5 › E2E-03 Admin creates, edits and resets an account; new credentials require password change (4.0s)
+  ok 10 e2e\lab-03\admin-users.spec.ts:26:5 › RESP/VIS administrator directory, editor and reset dialog at four widths (3.2s)
+  ok 11 e2e\lab-03\admin-users.spec.ts:43:5 › Admin dirty edits survive cancelled shell navigation and browser Back (1.4s)
+  ok 12 e2e\lab-03\staff-ticket-flow.spec.ts:12:5 › E2E-02 staff workflow, public/private conversation, indication, Admin restriction and reopening (5.2s)
+  ok 13 e2e\lab-03\staff-ticket-flow.spec.ts:47:5 › RESP/VIS staff queue and private detail remain usable at desktop, tablet, mobile and 320px (3.6s)
+  ok 14 e2e\lab-03\system-verification.spec.ts:15:7 › SYSTEM responsive authentication, recovery and role evidence: desktop (10.1s)
+  ok 15 e2e\lab-03\system-verification.spec.ts:15:7 › SYSTEM responsive authentication, recovery and role evidence: tablet (8.7s)
+  ok 16 e2e\lab-03\system-verification.spec.ts:15:7 › SYSTEM responsive authentication, recovery and role evidence: mobile (8.9s)
+  ok 17 e2e\lab-03\system-verification.spec.ts:15:7 › SYSTEM responsive authentication, recovery and role evidence: narrow (8.5s)
+  ok 18 e2e\lab-04\action-create-recovery.spec.ts:6:5 › recovers committed creation after a lost response, retaining edits without duplicate Actions (1.7s)
+  ok 19 e2e\lab-04\action-create-recovery.spec.ts:46:5 › releases a definitively rejected creation after its response is lost so the corrected draft can be saved (1.5s)
+  ok 20 e2e\lab-04\action-start.spec.ts:36:7 › E2E-04 e2e.staff@example.test starts with keyboard/busy protection; Requester remains read-only (3.0s)
+  ok 21 e2e\lab-04\action-start.spec.ts:36:7 › E2E-04 e2e.admin@example.test starts with keyboard/busy protection; Requester remains read-only (2.2s)
+  ok 22 e2e\lab-04\action-start.spec.ts:69:5 › E2E-04 reloads a real competing edit before retrying Start with the latest version (2.3s)
+  ok 23 e2e\lab-04\action-start.spec.ts:94:5 › E2E-04 reloads after an ambiguous network failure and keeps terminal Actions/Tickets read-only (2.3s)
+  ok 24 e2e\lab-04\actions-taken-flow.spec.ts:6:5 › E2E-L4-01 different staff and Admin record Actions visible read-only to Requester (5.6s)
+  ok 25 e2e\lab-04\dashboards.spec.ts:63:5 › E2E-03 Requester Dashboard metrics, filtered lists, history, detail and responsive keyboard links (1.9s)
+  ok 26 e2e\lab-04\dashboards.spec.ts:84:5 › E2E-03 Staff counts and distinct follow-up drill-down preserve intersecting filters (1.9s)
+  ok 27 e2e\lab-04\dashboards.spec.ts:100:5 › E2E-03 Admin Dashboard retains Users and scopes follow-ups to the current Admin (1.2s)
+  ok 28 e2e\lab-04\dashboards.spec.ts:107:5 › E2E-03 Dashboard loading, safe failure, retry, zero and forbidden states (2.4s)
+  ok 29 e2e\lab-04\release-polish.spec.ts:6:5 › RELEASE real role routes have no browser errors, broken API reads or hidden keyboard focus (4.2s)
+  ok 30 e2e\lab-04\release-polish.spec.ts:42:5 › RELEASE Action create, validation and edit forms retain accessible data at three widths (2.8s)
+  ok 31 e2e\lab-04\ticket-resolution.spec.ts:31:5 › E2E-02 indication is advisory; gate refresh enables resolution then close/reopen preserves Actions (5.7s)
+  ok 32 e2e\lab-04\ticket-resolution.spec.ts:61:5 › E2E-02 server rejects stale readiness after a competing Action; explicit retry refreshes the gate (2.9s)
+
+  32 passed (2.2m)
+Published 75 integrated release screenshots with SHA-256 manifest.

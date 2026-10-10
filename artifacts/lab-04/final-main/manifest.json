@@ -1,0 +1,542 @@
+{
+  "observedAt": "2026-10-10T16:57:46.118Z",
+  "suite": "playwright.release.config.ts: all Lab 2-4 browser specs passed",
+  "baseline": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+  "branch": "",
+  "workingTree": "",
+  "viewports": [
+    "1440x900",
+    "834x1112",
+    "390x844",
+    "320x900 overflow checks"
+  ],
+  "note": "Fresh final-main capture from the exact peer-reviewed main merge in a clean detached checkout. The tool default note above is retained verbatim; capture SHA/time/source state are unchanged.",
+  "files": [
+    {
+      "path": "screenshots/actions/requester-read-only-1440.png",
+      "width": 1440,
+      "height": 2049,
+      "bytes": 199999,
+      "sha256": "25dfde1e3a843547914b9a8054de07d3ce4396330f441bf33fa48023f6c759b3"
+    },
+    {
+      "path": "screenshots/actions/staff-started-1440.png",
+      "width": 1440,
+      "height": 2404,
+      "bytes": 216390,
+      "sha256": "5004c0cfe0354c3b78514c4590a12bf5554b26388bd1460c4214584a30b2eab2"
+    },
+    {
+      "path": "screenshots/actions/start-conflict-1440.png",
+      "width": 1440,
+      "height": 2424,
+      "bytes": 218222,
+      "sha256": "f27c79c6d54a7d1f44569279ae26b3b04a929c3bd2ecc4f598637cec87bb81f5"
+    },
+    {
+      "path": "screenshots/workflow/resolution-blocked-1440.png",
+      "width": 1440,
+      "height": 1993,
+      "bytes": 197581,
+      "sha256": "f0971b9c1673ffa83a51096a2c4ec5240a561fbe9ba4754031d205387e4cc1a6"
+    },
+    {
+      "path": "screenshots/workflow/resolution-ready-1440.png",
+      "width": 1440,
+      "height": 2454,
+      "bytes": 224192,
+      "sha256": "ebf9677200ed7608be17b5a652136e2afbebe9ae1ea697415106480cb5137b50"
+    },
+    {
+      "path": "screenshots/workflow/resolution-closed-1440.png",
+      "width": 1440,
+      "height": 2141,
+      "bytes": 211139,
+      "sha256": "fc52ec901b0fb358c643bf4a8cdec54e2aa02de6255d99c363939a1d7ae14791"
+    },
+    {
+      "path": "screenshots/workflow/resolution-gate-rejected-1440.png",
+      "width": 1440,
+      "height": 2542,
+      "bytes": 226831,
+      "sha256": "9788155b8c68cf78b35088de4190751a5361f53ea924b9dcde022329bf163fbc"
+    },
+    {
+      "path": "screenshots/dashboards/requester-1440.png",
+      "width": 1440,
+      "height": 1118,
+      "bytes": 191710,
+      "sha256": "3ff21b932b1d6b3c5ff497681377321635ec5c3ac413aa29c0a2be3e9dea4d84"
+    },
+    {
+      "path": "screenshots/dashboards/staff-1440.png",
+      "width": 1440,
+      "height": 1442,
+      "bytes": 209878,
+      "sha256": "c4a81ddb06f8bf708e71c433b90041eb501bacf9fc99ccef0068b08fe2944945"
+    },
+    {
+      "path": "screenshots/dashboards/admin-1440.png",
+      "width": 1440,
+      "height": 1442,
+      "bytes": 211302,
+      "sha256": "5a408e38bf5092403f8c65528d672cf8ab6906879d530f527a1642b5f38dbc42"
+    },
+    {
+      "path": "screenshots/dashboards/loading-simulated-1440.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 95350,
+      "sha256": "f9dfc6a4c1cc3a50276e640e573446bf5e363e4a1aff8596f2de38b15ac31be9"
+    },
+    {
+      "path": "screenshots/dashboards/failure-simulated-1440.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 91949,
+      "sha256": "64ee8b8c9b0a628cfcdb87d766d337531dfae6ea7733da546d8accc01265e147"
+    },
+    {
+      "path": "screenshots/dashboards/empty-1440.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 104550,
+      "sha256": "b633e63f8174ccfbbf5c865e4a7afadeb1b3fda80feb527d3c631fa2f62d37be"
+    },
+    {
+      "path": "screenshots/dashboards/forbidden-simulated-1440.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 93066,
+      "sha256": "7fa1e6ac52425a9a70240c25217b78975c2f73efb3323e4cc235e15dff5df891"
+    },
+    {
+      "path": "screenshots/forms/action-create-1440.png",
+      "width": 1440,
+      "height": 2701,
+      "bytes": 206786,
+      "sha256": "1f350eaf602e7f6505e272386b3c5032c2e3863828204f60a86b728d05462b19"
+    },
+    {
+      "path": "screenshots/forms/action-validation-1440.png",
+      "width": 1440,
+      "height": 2701,
+      "bytes": 205680,
+      "sha256": "abf210784e12770417b910a4479e4bf444f16ee0170b71e765203f8317db83da"
+    },
+    {
+      "path": "screenshots/forms/action-edit-1440.png",
+      "width": 1440,
+      "height": 2701,
+      "bytes": 210468,
+      "sha256": "44a8c4aa9f3b1496673184254f087e16239e041672ca829884e0f8023475dee1"
+    },
+    {
+      "path": "screenshots/multiple-actions/staff-1440.png",
+      "width": 1440,
+      "height": 1859,
+      "bytes": 202857,
+      "sha256": "51af19059137e7111b4837060b33ead1ab52018b70e8834c35ceb2fc7f2adc96"
+    },
+    {
+      "path": "screenshots/multiple-actions/requester-1440.png",
+      "width": 1440,
+      "height": 2177,
+      "bytes": 215151,
+      "sha256": "e1620a9ab277bb1e87b41ce1aafc39acf2f3af752c4949e648d8d27f0fc92581"
+    },
+    {
+      "path": "screenshots/actions/requester-read-only-834.png",
+      "width": 834,
+      "height": 2110,
+      "bytes": 178323,
+      "sha256": "1ee8818244ef11d88d2c09ce8571f1c4599ea16442ec8edb246a3c3873dfc9b9"
+    },
+    {
+      "path": "screenshots/actions/staff-started-834.png",
+      "width": 834,
+      "height": 3049,
+      "bytes": 195508,
+      "sha256": "ee98edabfc7847aae0c3ae138b0e067442fdfd0be6b4883c91aec409b9a93314"
+    },
+    {
+      "path": "screenshots/actions/start-conflict-834.png",
+      "width": 834,
+      "height": 3069,
+      "bytes": 197403,
+      "sha256": "67ee32ffdf8da4d618f7f128a16b25b186f627fd974b3f9e1d7d67ceb2a623c3"
+    },
+    {
+      "path": "screenshots/workflow/resolution-blocked-834.png",
+      "width": 834,
+      "height": 2637,
+      "bytes": 169452,
+      "sha256": "65a45b1060db108e9d588bb39f32d582d821aec1430e33bc4add15e403b0636b"
+    },
+    {
+      "path": "screenshots/workflow/resolution-ready-834.png",
+      "width": 834,
+      "height": 3120,
+      "bytes": 203927,
+      "sha256": "89e8b537aed99433cf4a9a9fe5ee8071b83b9135f48de00da26a6d8b2bd6d3e6"
+    },
+    {
+      "path": "screenshots/workflow/resolution-closed-834.png",
+      "width": 834,
+      "height": 2783,
+      "bytes": 190903,
+      "sha256": "c249f6b548ed3b69ab54485ef74148a34a62a05b70e4c2b06ec0c2cc2a1ca4a4"
+    },
+    {
+      "path": "screenshots/workflow/resolution-gate-rejected-834.png",
+      "width": 834,
+      "height": 3136,
+      "bytes": 205068,
+      "sha256": "debe4b69f9dc4f62aee3d4d3de5675fb7d6d237687e2ecd928e981438d9526dc"
+    },
+    {
+      "path": "screenshots/dashboards/requester-834.png",
+      "width": 834,
+      "height": 1313,
+      "bytes": 174134,
+      "sha256": "b8326fc1803199489d67c986351ab4445d579cfc83d0bce7e0de44ff89336103"
+    },
+    {
+      "path": "screenshots/dashboards/staff-834.png",
+      "width": 834,
+      "height": 1855,
+      "bytes": 178566,
+      "sha256": "e1796f76e5fa13be4daabe348846e72a6f49d1c19fa435d57a915f03a8626a60"
+    },
+    {
+      "path": "screenshots/dashboards/admin-834.png",
+      "width": 834,
+      "height": 1855,
+      "bytes": 179358,
+      "sha256": "8259cc5f85e0af9d1f6263681724c136c0c17bb8ae7d8467bcf1433f11ca29c4"
+    },
+    {
+      "path": "screenshots/dashboards/loading-simulated-834.png",
+      "width": 834,
+      "height": 1112,
+      "bytes": 73917,
+      "sha256": "a3293868f58343234ed631904a028492f2036883253be15ad13e6779506cceec"
+    },
+    {
+      "path": "screenshots/dashboards/failure-simulated-834.png",
+      "width": 834,
+      "height": 1112,
+      "bytes": 71098,
+      "sha256": "30c05f734053885daa8d817167245bbfe8a9566eba6663282504c6cf2505e11a"
+    },
+    {
+      "path": "screenshots/dashboards/empty-834.png",
+      "width": 834,
+      "height": 1112,
+      "bytes": 86031,
+      "sha256": "a9cdc7391d9c4b3a90dccf4d5109b5a3f2971dc64ae23a498b8831626bf01a1f"
+    },
+    {
+      "path": "screenshots/dashboards/forbidden-simulated-834.png",
+      "width": 834,
+      "height": 1112,
+      "bytes": 72635,
+      "sha256": "6375914e2944c0676f74463bf9161cbeb80dd1a22c8c7edba1924e133d7a6059"
+    },
+    {
+      "path": "screenshots/forms/action-create-834.png",
+      "width": 834,
+      "height": 3309,
+      "bytes": 190201,
+      "sha256": "f13789d4286655d70292cf378d47481a97a64d7ac7f417896af143b7b47770d0"
+    },
+    {
+      "path": "screenshots/forms/action-validation-834.png",
+      "width": 834,
+      "height": 3309,
+      "bytes": 188072,
+      "sha256": "efc2fd99e9158779a98818939c701e920edb68e3509939fd84ae7266606821ba"
+    },
+    {
+      "path": "screenshots/forms/action-edit-834.png",
+      "width": 834,
+      "height": 3309,
+      "bytes": 189587,
+      "sha256": "ffd187b6cb436beb61c6b9015d4af33fb28ccb3c06bd7937b8d1583f88848a76"
+    },
+    {
+      "path": "screenshots/multiple-actions/staff-834.png",
+      "width": 834,
+      "height": 2350,
+      "bytes": 177116,
+      "sha256": "aee92b18d6d26055f14a13e27926fc3b41900783b59c95894d35c12b1d6e5585"
+    },
+    {
+      "path": "screenshots/multiple-actions/requester-834.png",
+      "width": 834,
+      "height": 2312,
+      "bytes": 191059,
+      "sha256": "edc0b6da4854299581c25ede36f512ec32aaa50ef242bf9698808c16b9385c35"
+    },
+    {
+      "path": "screenshots/actions/requester-read-only-390.png",
+      "width": 390,
+      "height": 2677,
+      "bytes": 155820,
+      "sha256": "f5da7fe9128de2eee12c6dbf6a3a133f0658e8eb2998ef82abf78e63d65dfbec"
+    },
+    {
+      "path": "screenshots/actions/staff-started-390.png",
+      "width": 390,
+      "height": 3637,
+      "bytes": 176606,
+      "sha256": "6493c75444c3e7715fb5ee92bfad2f7546ce7586c77a530a69485b8b0e11a13d"
+    },
+    {
+      "path": "screenshots/actions/start-conflict-390.png",
+      "width": 390,
+      "height": 3657,
+      "bytes": 178200,
+      "sha256": "b95475e15d5f5f6605e78b8c670797724b4d7e624920c27c9aff0e90c206905d"
+    },
+    {
+      "path": "screenshots/workflow/resolution-blocked-390.png",
+      "width": 390,
+      "height": 3007,
+      "bytes": 156944,
+      "sha256": "072fea2adc2e871968c757cd23105174869376bc7819e6c7e8f1744c17f4ba44"
+    },
+    {
+      "path": "screenshots/workflow/resolution-ready-390.png",
+      "width": 390,
+      "height": 3657,
+      "bytes": 180787,
+      "sha256": "833d7e4e7d762ff6c5f27c129fcf7f5b4cf838007a422c66099eff49092b930a"
+    },
+    {
+      "path": "screenshots/workflow/resolution-closed-390.png",
+      "width": 390,
+      "height": 3323,
+      "bytes": 169050,
+      "sha256": "c49df6dbf03749ab54d197003726a0bb2c17766d6fb96da3a9ca174069053896"
+    },
+    {
+      "path": "screenshots/workflow/resolution-gate-rejected-390.png",
+      "width": 390,
+      "height": 3721,
+      "bytes": 184683,
+      "sha256": "f93932b38142b5652d3aa09cb85bce0c5dc43d71a22dcc4a38ccf245a2414561"
+    },
+    {
+      "path": "screenshots/dashboards/requester-390.png",
+      "width": 390,
+      "height": 2124,
+      "bytes": 150403,
+      "sha256": "00e849821aaea02178a9c4391f1bed9f97b6e4aafc1a95a9bfb390f75c63bbbf"
+    },
+    {
+      "path": "screenshots/dashboards/staff-390.png",
+      "width": 390,
+      "height": 2501,
+      "bytes": 165542,
+      "sha256": "c33b92079809c9de61efab9d2349a04f01193b66e625d0487d1290da60afe827"
+    },
+    {
+      "path": "screenshots/dashboards/admin-390.png",
+      "width": 390,
+      "height": 2501,
+      "bytes": 165529,
+      "sha256": "5b6d72017757abb6d6cb0d8a694d56f39130ace8270467422bd8190d380babc6"
+    },
+    {
+      "path": "screenshots/dashboards/loading-simulated-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 55897,
+      "sha256": "de04c6625ab8cb411a5ca632c7396b0719942e51cfbc98628492fa28d8091487"
+    },
+    {
+      "path": "screenshots/dashboards/failure-simulated-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 49754,
+      "sha256": "8fffbed23c91f607590bcf331d1150a3dfda05920125237e9a50aa1217e5c25d"
+    },
+    {
+      "path": "screenshots/dashboards/empty-390.png",
+      "width": 390,
+      "height": 1098,
+      "bytes": 71598,
+      "sha256": "c8169887af7a5450ed41fd5e27f407d41f1af1ea91d56a99f16be0b80dc493bd"
+    },
+    {
+      "path": "screenshots/dashboards/forbidden-simulated-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 50234,
+      "sha256": "3ed30ccdee078d9a01b91c7698b68e003d4b789745b176f351f0c004c4aa8234"
+    },
+    {
+      "path": "screenshots/forms/action-create-390.png",
+      "width": 390,
+      "height": 3598,
+      "bytes": 162827,
+      "sha256": "8a8e374c334858d1d0ce479b491b7771f389b37a899a8aaed249b1731f84163f"
+    },
+    {
+      "path": "screenshots/forms/action-validation-390.png",
+      "width": 390,
+      "height": 3598,
+      "bytes": 160167,
+      "sha256": "cfbdb4a63065eb52b7bd958a3ea1c5c7c65f7725983bd4aff50a01664a088c69"
+    },
+    {
+      "path": "screenshots/forms/action-edit-390.png",
+      "width": 390,
+      "height": 3598,
+      "bytes": 167555,
+      "sha256": "ecd4ab44ebe9c65d32e138ee7d8fbb0bbde3f0a85943e82ecadb7634d137ac3c"
+    },
+    {
+      "path": "screenshots/multiple-actions/staff-390.png",
+      "width": 390,
+      "height": 2949,
+      "bytes": 152947,
+      "sha256": "54ac4f7c23aa3173831d368e41bbe51f48dbf79636b9fdae4051a4aa27894e15"
+    },
+    {
+      "path": "screenshots/multiple-actions/requester-390.png",
+      "width": 390,
+      "height": 2912,
+      "bytes": 163682,
+      "sha256": "5bd0265663b80d49ed39f6de76c1dc3492f3a174f44a0df0c8ba13941023a545"
+    },
+    {
+      "path": "screenshots/regression/desktop-login-ready.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 28351,
+      "sha256": "b9ddc7f1f42e213867835d723013f959a5f2fac1f42f11a0e22d63a4918cdbe0"
+    },
+    {
+      "path": "screenshots/regression/desktop-staff-public.png",
+      "width": 1440,
+      "height": 1941,
+      "bytes": 192134,
+      "sha256": "b7a3829e82d25b619ff7990052daba7c0fc36523c41f434859527cb7905029b2"
+    },
+    {
+      "path": "screenshots/regression/desktop-staff-private.png",
+      "width": 1440,
+      "height": 1941,
+      "bytes": 196424,
+      "sha256": "cce5957e0b209ac4c9bcadb4cdc150e6f067491e52430906deec016fe5c6496a"
+    },
+    {
+      "path": "screenshots/regression/desktop-staff-conflict.png",
+      "width": 1440,
+      "height": 2245,
+      "bytes": 209787,
+      "sha256": "689e3801863ed5f8848b2d34396aec1dbe65079fa196c6cc5f2f82e0db111da9"
+    },
+    {
+      "path": "screenshots/regression/desktop-requester-public-attachment.png",
+      "width": 1440,
+      "height": 2037,
+      "bytes": 209854,
+      "sha256": "a586bca0def1d77eb4562b0dd38afffb950ea1a8f59f80df6df42f6800613e2f"
+    },
+    {
+      "path": "screenshots/regression/desktop-admin-create-validation.png",
+      "width": 1440,
+      "height": 2428,
+      "bytes": 265698,
+      "sha256": "ed54618f6494cad15ac7f1d6a2d9a561b9121579290c42b00f9c6d5d6274b8e4"
+    },
+    {
+      "path": "screenshots/regression/tablet-login-ready.png",
+      "width": 834,
+      "height": 1112,
+      "bytes": 27476,
+      "sha256": "dda2ff33d530a7a1944b5fa15f883e0256129bfb2ef120b1fe5505992732ebb3"
+    },
+    {
+      "path": "screenshots/regression/tablet-staff-public.png",
+      "width": 834,
+      "height": 2596,
+      "bytes": 168677,
+      "sha256": "2ee49f6419f68a864351db2a3baaa004b4936b26d6d72a0f38dc8a2e6be3e6c2"
+    },
+    {
+      "path": "screenshots/regression/tablet-staff-private.png",
+      "width": 834,
+      "height": 2596,
+      "bytes": 172663,
+      "sha256": "9a63e1e7ca628579dc9784804f22f9446fd1ef91598bcf183f2ee4bafbfd78e7"
+    },
+    {
+      "path": "screenshots/regression/tablet-staff-conflict.png",
+      "width": 834,
+      "height": 2876,
+      "bytes": 184224,
+      "sha256": "dd4001e8ba3d9c12bc0e4e82c3566949ca4436c8b2aba9003f55abab630bdd09"
+    },
+    {
+      "path": "screenshots/regression/tablet-requester-public-attachment.png",
+      "width": 834,
+      "height": 2142,
+      "bytes": 194340,
+      "sha256": "89ab7cc6a8485c31484d353bf2c14c679481b3f10212aa763f4f65beb5b43c1c"
+    },
+    {
+      "path": "screenshots/regression/tablet-admin-create-validation.png",
+      "width": 834,
+      "height": 1225,
+      "bytes": 68757,
+      "sha256": "13b2468a957c234b6f2853ceda70469f4862b43b843f96ec1348930d91483e9f"
+    },
+    {
+      "path": "screenshots/regression/mobile-login-ready.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 23061,
+      "sha256": "28c05ca0066c9bf825c8bc85d75bb2e376d0700e36244350a6361154aeed7ef5"
+    },
+    {
+      "path": "screenshots/regression/mobile-staff-public.png",
+      "width": 390,
+      "height": 3056,
+      "bytes": 153791,
+      "sha256": "64ddee6308cebbf59a2c04b6441905750cca9208679fa3fa7ba862de4d6e5e43"
+    },
+    {
+      "path": "screenshots/regression/mobile-staff-private.png",
+      "width": 390,
+      "height": 3056,
+      "bytes": 156334,
+      "sha256": "71025ebd7aba05bd17ce0d49fa97c1a789a911387d8e75b1fb60bc0aedb009f0"
+    },
+    {
+      "path": "screenshots/regression/mobile-staff-conflict.png",
+      "width": 390,
+      "height": 3408,
+      "bytes": 167647,
+      "sha256": "909829919c2fd74e6da23b5b5e827c2dd68efa15f0b771a767fef5bae2b21a98"
+    },
+    {
+      "path": "screenshots/regression/mobile-requester-public-attachment.png",
+      "width": 390,
+      "height": 2668,
+      "bytes": 165244,
+      "sha256": "23abec7701fd71a94a1e398d9a30c58e2ea2184ebf16f4b01c5717010f7ffa3a"
+    },
+    {
+      "path": "screenshots/regression/mobile-admin-create-validation.png",
+      "width": 390,
+      "height": 1263,
+      "bytes": 56179,
+      "sha256": "bf1d48219fcc98bb948bb8aa909ccb3ebbba14289f61a472a85b5c57c3c2ade1"
+    }
+  ],
+  "captureToolNote": "Author feature-branch evidence. Final-main evidence requires a fresh run after reviewed integration."
+}

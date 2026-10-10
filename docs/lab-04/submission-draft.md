@@ -1,10 +1,10 @@
 # LAB4 Submission - Review Draft
 
-Prepared for Phanuwit Butchari (67070501070), GitHub auto4496. Independent peer: Pitchai Chadchuangchot (67070501068), GitHub Datakung, as recorded in the prior submission/review history. The repository and actual final main remain authoritative. This draft contains author feature-branch evidence; final-main release, final Project completion and student model/Reflection confirmation are pending.
+Prepared for Phanuwit Butchari (67070501070), GitHub auto4496. Independent peer: Pitchai Chadchuangchot (67070501068), GitHub Datakung, as recorded in the prior submission/review history. The repository and actual final main remain authoritative. This draft uses fresh evidence from reviewed main merge 7a697d2. Final student review/demonstration/native zoom and all-Issues-Done closeout remain pending.
 
 ## Answer Part 1 - Git Use with Engineering Workflow
 
-Repository: [auto4496/toktickit](https://github.com/auto4496/toktickit). [Project](https://github.com/users/auto4496/projects/1). Six work items are mapped in [issue-plan.md](issue-plan.md). Five feature Issues are closed/Done with independent approvals/merges recorded in [reviewer.md](reviewer.md). The engineering contract #39 predates the feature PRs. The final hardening branch targets `codex/lab4-staging`, followed by a separately reviewed release to main; these last gates remain pending. Include current README, .gitignore, directory tree and Git graph, then refresh the graph/Project after main acceptance.
+Repository: [auto4496/toktickit](https://github.com/auto4496/toktickit). [Project](https://github.com/users/auto4496/projects/1). Six work items are mapped in [issue-plan.md](issue-plan.md). Five feature Issues are closed/Done with independent approvals/merges recorded in [reviewer.md](reviewer.md). The engineering contract #39 predates the feature PRs. The final hardening branch targets `codex/lab4-staging`, followed by a separately reviewed release to main; both integrations are now independently approved and merged; see main-verification.md. Include current README, .gitignore, directory tree and Git graph, then refresh the graph/Project after main acceptance.
 
 ## Answer Part 2 - Spec DD
 
@@ -12,11 +12,11 @@ Render and link [specification.md](specification.md). It numbers FR-01 to FR-09,
 
 ## Answer Part 3 - Test DD and Traceability
 
-Render [tests.md](tests.md); actual execution is in [final-verification.md](final-verification.md). Include complete unit/API/integration/component and browser outputs, production builds, recovery and natural query-plan evidence. Current results are on the author branch; refresh them from the actual reviewed main merge before final submission.
+Render [tests.md](tests.md); actual execution is in [final-verification.md](final-verification.md). Include complete unit/API/integration/component and browser outputs, production builds, recovery and natural query-plan evidence. Fresh complete main results and clean-source provenance are in [main-verification.md](main-verification.md).
 
 ## Answer Part 4 - AI Use with Reflection
 
-Render [ai-use.md](ai-use.md), containing eight selected real prompts. Exact model names need student confirmation. The Thai Reflection is explicitly an AI-assisted draft for student revision; do not present it as verified personal experience.
+Render [ai-use.md](ai-use.md), containing eight edited technical prompt summaries, verified gpt-6-sol / gpt-6.1-sol IDs, specification/coding-agent roles and a project-based Thai Reflection. Summaries are explicitly distinguished from verbatim chat messages; no student-performed testing is invented.
 
 ## Answer Part 5 - Working IT Staff Dashboard UI
 
