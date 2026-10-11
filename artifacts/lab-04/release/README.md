@@ -15,3 +15,17 @@ Other files in this directory remain historical author feature-branch runtime ev
 Regenerate the current report with node scripts/lab-04/build-review-report.cjs. It validates the main capture manifest, reads current repository documents and writes output/pdf/lab-4-review-draft.pdf plus tmp/pdfs/report-provenance.json. Inspect the rendered pages before replacing the stable review copy/provenance.
 
 See [current release gates](../../../docs/lab-04/release.md) and [main verification](../../../docs/lab-04/main-verification.md).
+
+## PR #51 approval and reproducible source hashes
+
+Datakung approved report head `01a5fd64075fa4ed3368ba4810922f760dae4e29` on 2026-10-11 at 02:47:35 Asia/Bangkok; [PR #51](https://github.com/auto4496/toktickit/pull/51) merged at 02:47:59 as `827dca9665a365931758137c25d174faa5d69c87`. No blocking findings were reported. The PDF above is the exact approved 30-page snapshot; its pre-approval status text is historical, not a claim that the review is still pending.
+
+The review suggested supplementing Windows working-file checksums with reproducible committed-source hashes. [committed-source-hashes.json](committed-source-hashes.json) records immutable Git blob IDs, byte lengths, SHA-256 and explicitly defined UTF-8/LF hashes for the AI-use source and report builder, plus the unchanged reviewed PDF SHA-256. Original generation-time provenance remains intact.
+
+Reproduce and verify from the repository root:
+
+```powershell
+node scripts/lab-04/verify-report-sources.cjs
+```
+
+The agent attempted native Edge zoom verification on 2026-10-11, but Computer Use stopped because it could not establish the current browser URL confidently. This is not a zoom pass. The isolated demo services were stopped afterward. Student read-through, live demonstration/native zoom and actual submission remain unconfirmed; Issue #48 must remain open until those closeout gates are complete.

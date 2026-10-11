@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "827dca9665a365931758137c25d174faa5d69c87",
+  "sourceReview": "https://github.com/auto4496/toktickit/pull/51",
+  "method": "Read exact Git blob bytes with git show <commit>:<path>. SHA-256 hashes those bytes. utf8LfSha256 decodes UTF-8 and changes CRLF to LF; it performs no trimming or other normalization.",
+  "scope": "Supplement to the original workingFileHashes, which describe Windows checkout bytes at report generation. This does not rewrite original report provenance or claim a new render.",
+  "files": [
+    {
+      "path": "docs/lab-04/ai-use.md",
+      "gitBlobOid": "d5994809d5ec4c8cb934dc41093204f61497407b",
+      "committedBytes": 10174,
+      "committedSha256": "bab576d2dedefbd457a65c9f58c95427097dd3d831687937a8b6aa80ef89228c",
+      "utf8LfSha256": "bab576d2dedefbd457a65c9f58c95427097dd3d831687937a8b6aa80ef89228c"
+    },
+    {
+      "path": "scripts/lab-04/build-review-report.cjs",
+      "gitBlobOid": "f7ebdbfdc6bbc1257d66e1c50e546388b57b6df9",
+      "committedBytes": 22390,
+      "committedSha256": "6ad9410991f1f1fccdae19c6287ee20568ed279790972d5f92bf065de8121366",
+      "utf8LfSha256": "6ad9410991f1f1fccdae19c6287ee20568ed279790972d5f92bf065de8121366"
+    }
+  ],
+  "report": {
+    "path": "artifacts/lab-04/release/lab-4-review-draft.pdf",
+    "committedBytes": 2515935,
+    "sha256": "748908a98e95b9ec483c5a421f3ac1cc06a779c0d20063c742aa84b0dd5b7aa5"
+  }
+}
